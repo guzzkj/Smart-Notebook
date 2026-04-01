@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F8">
+
+    <!-- ============================================================
+         CONTAINER PRINCIPAL (centralizado verticalmente)
+         ============================================================ -->
+    <LinearLayout
+        android:id="@+id/container_main"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- ============================================================
+             SEÇÃO LOGO
+             ============================================================ -->
+        <LinearLayout
+            android:id="@+id/logo_section"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="32dp">
+
+            <!-- Ícone do app -->
+            <!-- Arquivo: res/drawable/ic_logo.png -->
+            <ImageView
+                android:id="@+id/img_logo"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_logo"
+                android:contentDescription="Smart Notebook logo"
+                android:scaleType="fitCenter" />
+
+            <!-- Nome do app -->
+            <TextView
+                android:id="@+id/tv_app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="Smart Notebook"
+                android:textColor="#0F172A"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <!-- Subtítulo -->
+            <TextView
+                android:id="@+id/tv_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Bem-vindo ao Smart Notebook"
+                android:textSize="15sp"
+                android:textColor="#64748B"
+                android:fontFamily="sans-serif" />
+
+        </LinearLayout>
+
+        <!-- ============================================================
+             SEÇÃO FORMULÁRIO
+             ============================================================ -->
+
+        <!-- Label Email -->
+        <TextView
+            android:id="@+id/tv_label_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="Email"
+            android:textColor="#334155"
+            android:textSize="14sp" />
+
+        <!-- Campo Email -->
+        <LinearLayout
+            android:id="@+id/input_email_container"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input"
+            android:gravity="center_vertical"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <!-- Ícone email -->
+            <!-- Arquivo: res/drawable/ic_email.png -->
+            <ImageView
+                android:id="@+id/ic_email"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_email"
+                android:contentDescription="Ícone de email"
+                android:scaleType="fitCenter" />
+
+            <!-- EditText Email -->
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:hint="seuemail@exemplo.com"
+                android:textColorHint="#94A3B8"
+                android:textColor="#0F172A"
+                android:textSize="15sp"
+
+                android:inputType="textEmailAddress"
+                android:background="@null"
+                android:fontFamily="@font/inter"
+                android:singleLine="true"
+                android:imeOptions="actionNext" />
+
+        </LinearLayout>
+
+        <!-- Label Senha -->
+        <TextView
+            android:id="@+id/tv_label_senha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Senha"
+            android:textSize="14sp"
+            android:textColor="#334155"
+            android:fontFamily="@font/inter_medium"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Campo Senha -->
+        <LinearLayout
+            android:id="@+id/input_senha_container"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_input"
+            android:gravity="center_vertical"
+            android:paddingStart="14dp"
+            android:paddingEnd="4dp">
+
+            <!-- Ícone cadeado -->
+            <!-- Arquivo: res/drawable/ic_password.png -->
+            <ImageView
+                android:id="@+id/ic_password"
+                android:layout_width="16dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_password"
+                android:contentDescription="Ícone de senha"
+                android:scaleType="fitCenter" />
+
+            <!-- EditText Senha -->
+            <EditText
+                android:id="@+id/et_senha"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:hint="Digite sua senha"
+                android:textColorHint="#94A3B8"
+                android:textColor="#0F172A"
+                android:textSize="15sp"
+                android:inputType="textPassword"
+                android:background="@null"
+                android:fontFamily="sans-serif"
+                android:singleLine="true"
+                android:imeOptions="actionDone" />
+
+            <!-- Botão mostrar/ocultar senha -->
+            <!-- Arquivo: res/drawable/ic_eye.png -->
+            <ImageButton
+                android:id="@+id/btn_toggle_senha"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:src="@drawable/ic_eye"
+                android:contentDescription="Mostrar ou ocultar senha"
+                android:scaleType="fitCenter"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+        </LinearLayout>
+
+        <!-- Botão Entrar -->
+        <Button
+            android:id="@+id/btn_entrar"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="Entrar"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter"
+            android:backgroundTint="#5C6BC0"
+            android:stateListAnimator="@null"
+            app:cornerRadius="27dp" />
+
+        <!-- Link Esqueceu a senha -->
+        <TextView
+            android:id="@+id/tv_esqueceu_senha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14dp"
+            android:text="Esqueceu a senha?"
+            android:textSize="14sp"
+            android:textColor="#5C6BC0"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter"
+            android:paddingVertical="6dp"
+            android:paddingHorizontal="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+        <!-- Linha: Não tem uma conta? Cadastre-se -->
+        <LinearLayout
+            android:id="@+id/container_cadastro"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_nao_tem_conta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Não tem uma conta? "
+                android:textSize="14sp"
+                android:textColor="#64748B"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:id="@+id/tv_cadastre_se"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/inter_medium"
+                android:text="Cadastre-se"
+                android:textColor="#5C6BC0"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+    <!-- ============================================================
+         ESTRELAS DECORATIVAS (canto inferior esquerdo)
+         Arquivo: res/drawable/ic_stars.png
+         ============================================================ -->
+    <ImageView
+        android:id="@+id/img_stars"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:src="@drawable/ic_stars"
+        android:contentDescription=""
+        android:scaleType="fitCenter"
+        android:alpha="0.18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

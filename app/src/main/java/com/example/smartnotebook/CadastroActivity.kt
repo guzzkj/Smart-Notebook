@@ -1,0 +1,135 @@
+package com.example.smartnotebook
+
+import android.os.Bundle
+import android.text.InputType
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.util.Patterns
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.example.smartnotebook.databinding.ActivityCadastroBinding
+
+class CadastroActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityCadastroBinding
+    private var senhaVisivel = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityCadastroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        configurarBotaoVoltar()
+        configurarToggleSenha()
+        configurarTextosClicaveis()
+        configurarBotaoCadastrar()
+        configurarFazerLogin()
+    }
+
+    private fun configurarBotaoVoltar() {
+        binding.btnVoltar.setOnClickListener { finish() }
+    }
+
+    private fun configurarToggleSenha() {
+        binding.btnToggleSenha.setOnClickListener {
+            senhaVisivel = !senhaVisivel
+            binding.etSenha.inputType = if (senhaVisivel) {
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            } else {
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+            binding.etSenha.setSelection(binding.etSenha.text?.length ?: 0)
+        }
+    }
+
+    private fun configurarTextosClicaveis() {
+        val textoCompleto = "Eu li e aceito os Termos de Uso e a Política de Privacidade."
+        val spannable = SpannableString(textoCompleto)
+        val corRoxa = ContextCompat.getColor(this, R.color.roxo_primario)
+
+        val inicioTermos = textoCompleto.indexOf("Termos de Uso")
+        val fimTermos = inicioTermos + "Termos de Uso".length
+        spannable.setSpan(ForegroundColorSpan(corRoxa), inicioTermos, fimTermos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                Toast.makeText(this@CadastroActivity, "Termos de Uso", Toast.LENGTH_SHORT).show()
+            }
+        }, inicioTermos, fimTermos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        val inicioPriv = textoCompleto.indexOf("Política de Privacidade")
+        val fimPriv = inicioPriv + "Política de Privacidade".length
+        spannable.setSpan(ForegroundColorSpan(corRoxa), inicioPriv, fimPriv, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                Toast.makeText(this@CadastroActivity, "Política de Privacidade", Toast.LENGTH_SHORT).show()
+            }
+        }, inicioPriv, fimPriv, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        binding.tvTermos.text = spannable
+        binding.tvTermos.movementMethod = LinkMovementMethod.getInstance()
+        binding.tvTermos.highlightColor = android.graphics.Color.TRANSPARENT
+    }
+
+    private fun configurarBotaoCadastrar() {
+        binding.btnCadastrar.setOnClickListener {
+            val nome           = binding.etNome.text.toString().trim()
+            val email          = binding.etEmail.text.toString().trim()
+            val senha          = binding.etSenha.text.toString().trim()
+            val confirmarSenha = binding.etConfirmarSenha.text.toString().trim()
+            val termosAceitos  = binding.cbTermos.isChecked
+
+            if (!validarCampos(nome, email, senha, confirmarSenha, termosAceitos)) return@setOnClickListener
+
+            Toast.makeText(this, "Conta criada com sucesso! Faça login.", Toast.LENGTH_LONG).show()
+            finish()
+        }
+    }
+
+    private fun validarCampos(
+        nome: String, email: String, senha: String,
+        confirmarSenha: String, termosAceitos: Boolean
+    ): Boolean {
+        if (nome.isEmpty()) {
+            binding.etNome.error = "Informe seu nome"
+            binding.etNome.requestFocus(); return false
+        }
+        if (nome.length < 3) {
+            binding.etNome.error = "Nome muito curto"
+            binding.etNome.requestFocus(); return false
+        }
+        if (email.isEmpty()) {
+            binding.etEmail.error = "Informe seu e-mail"
+            binding.etEmail.requestFocus(); return false
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.etEmail.error = "E-mail inválido"
+            binding.etEmail.requestFocus(); return false
+        }
+        if (senha.isEmpty()) {
+            binding.etSenha.error = "Crie uma senha"
+            binding.etSenha.requestFocus(); return false
+        }
+        if (senha.length < 6) {
+            binding.etSenha.error = "Mínimo 6 caracteres"
+            binding.etSenha.requestFocus(); return false
+        }
+        if (confirmarSenha != senha) {
+            binding.etConfirmarSenha.error = "As senhas não coincidem"
+            binding.etConfirmarSenha.requestFocus(); return false
+        }
+        if (!termosAceitos) {
+            Toast.makeText(this, "Aceite os Termos de Uso para continuar", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
+    private fun configurarFazerLogin() {
+        binding.tvFazerLogin.setOnClickListener { finish() }
+    }
+}

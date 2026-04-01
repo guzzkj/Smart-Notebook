@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F8"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="32dp">
+
+        <!-- HEADER -->
+        <LinearLayout
+            android:id="@+id/header"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btn_voltar"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="Voltar"
+                android:scaleType="fitCenter"
+                android:padding="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Sobre"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#0F172A"
+                android:fontFamily="@font/inter" />
+
+        </LinearLayout>
+
+        <!-- LOGO + NOME + VERSÃO -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="24dp"
+            android:paddingBottom="28dp">
+
+            <ImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/ic_logo"
+                android:contentDescription="Logo"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Smart Notebook"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#5C6BC0"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="VERSÃO 0.5"
+                android:textSize="12sp"
+                android:textColor="#94A3B8"
+                android:letterSpacing="0.1"
+                android:fontFamily="@font/inter" />
+
+        </LinearLayout>
+
+        <!-- DESCRIÇÃO -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp"
+            android:layout_marginBottom="24dp">
+
+            <!-- "Smart Notebook" será colorido via SpannableString no Kotlin -->
+            <TextView
+                android:id="@+id/tv_descricao_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="O Smart Notebook é uma plataforma dedicada a transformar a rotina de estudos de milhares de alunos."
+                android:textSize="15sp"
+                android:textColor="#334155"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nosso foco é proporcionar máxima produtividade através de uma organização inteligente, permitindo que você foque no que realmente importa: o aprendizado constante e eficaz."
+                android:textSize="15sp"
+                android:textColor="#334155"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="@font/inter" />
+
+        </LinearLayout>
+
+        <!-- FUNCIONALIDADES -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp">
+
+            <!-- Título da seção -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <!-- ic_check_badge = Container__1_.png renomeado -->
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_check_badge"
+                    android:contentDescription=""
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Principais Funcionalidades"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="#0F172A"
+                    android:fontFamily="@font/inter" />
+
+            </LinearLayout>
+
+            <!-- Card 1: Organização Inteligente -->
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_card"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_lightning"
+                    android:contentDescription=""
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="12dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Organização Inteligente"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#0F172A"
+                        android:fontFamily="@font/inter" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Categorização automática de conteúdos por IA."
+                        android:textSize="13sp"
+                        android:textColor="#64748B"
+                        android:lineSpacingExtra="2dp"
+                        android:fontFamily="@font/inter" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Card 2: Revisão Espaçada -->
+            <!-- ic_clock = Icon__1_.png renomeado -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_card"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_clock"
+                    android:contentDescription=""
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="12dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Revisão Espaçada"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#0F172A"
+                        android:fontFamily="@font/inter" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Algoritmo que sugere o melhor momento para revisar."
+                        android:textSize="13sp"
+                        android:textColor="#64748B"
+                        android:lineSpacingExtra="2dp"
+                        android:fontFamily="@font/inter" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Card 3: Sincronização Nuvem -->
+            <!-- ic_cloud = Icon.png renomeado -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_card"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_cloud"
+                    android:contentDescription=""
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="12dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sincronização Nuvem"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#0F172A"
+                        android:fontFamily="@font/inter" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Acesse suas anotações de qualquer dispositivo."
+                        android:textSize="13sp"
+                        android:textColor="#64748B"
+                        android:lineSpacingExtra="2dp"
+                        android:fontFamily="@font/inter" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

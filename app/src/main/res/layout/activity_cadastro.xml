@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F8"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="32dp">
+
+        <!-- ============================================================
+             BOTÃO VOLTAR + TÍTULO DA PÁGINA
+             ============================================================ -->
+        <LinearLayout
+            android:id="@+id/header"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_voltar"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="Voltar"
+                android:scaleType="fitCenter"
+                android:padding="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:id="@+id/tv_titulo_pagina"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Criar Conta"
+                android:textSize="16sp"
+                android:textColor="#0F172A"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter" />
+
+        </LinearLayout>
+
+        <!-- ============================================================
+             TÍTULO E SUBTÍTULO
+             ============================================================ -->
+        <TextView
+            android:id="@+id/tv_titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="Comece sua jornada no\nSmart Notebook"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#0F172A"
+            android:fontFamily="@font/inter"
+            android:lineSpacingExtra="2dp"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_subtitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Preencha os dados abaixo para criar sua conta institucional."
+            android:textSize="14sp"
+            android:textColor="#64748B"
+            android:fontFamily="@font/inter"
+            android:lineSpacingExtra="2dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_titulo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- ============================================================
+             FORMULÁRIO
+             ============================================================ -->
+        <LinearLayout
+            android:id="@+id/form_section"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitulo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Nome Completo -->
+            <TextView
+                android:id="@+id/tv_label_nome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome Completo"
+                android:textSize="14sp"
+                android:textColor="#334155"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:id="@+id/input_nome_container"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_input"
+                android:gravity="center_vertical"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <EditText
+                    android:id="@+id/et_nome"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="Digite seu nome"
+                    android:textColorHint="#94A3B8"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:inputType="textPersonName|textCapWords"
+                    android:background="@null"
+                    android:fontFamily="@font/inter"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext" />
+
+                <!-- Arquivo: res/drawable/ic_person.png -->
+                <ImageView
+                    android:id="@+id/ic_person"
+                    android:layout_width="18dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_person"
+                    android:contentDescription="Ícone de pessoa"
+                    android:scaleType="fitCenter" />
+
+            </LinearLayout>
+
+            <!-- E-mail Institucional -->
+            <TextView
+                android:id="@+id/tv_label_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="E-mail Institucional"
+                android:textSize="14sp"
+                android:textColor="#334155"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:id="@+id/input_email_container"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_input"
+                android:gravity="center_vertical"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="exemplo@instituicao.edu"
+                    android:textColorHint="#94A3B8"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:inputType="textEmailAddress"
+                    android:background="@null"
+                    android:fontFamily="@font/inter"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext" />
+
+                <!-- Arquivo: res/drawable/ic_email.png -->
+                <ImageView
+                    android:id="@+id/ic_email"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_email"
+                    android:contentDescription="Ícone de email"
+                    android:scaleType="fitCenter" />
+
+            </LinearLayout>
+
+            <!-- Senha -->
+            <TextView
+                android:id="@+id/tv_label_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Senha"
+                android:textSize="14sp"
+                android:textColor="#334155"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:id="@+id/input_senha_container"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_input"
+                android:gravity="center_vertical"
+                android:paddingStart="14dp"
+                android:paddingEnd="4dp">
+
+                <EditText
+                    android:id="@+id/et_senha"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="Crie uma senha forte"
+                    android:textColorHint="#94A3B8"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:inputType="textPassword"
+                    android:background="@null"
+                    android:fontFamily="@font/inter"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext" />
+
+                <!-- Arquivo: res/drawable/ic_eye.png -->
+                <ImageButton
+                    android:id="@+id/btn_toggle_senha"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_eye"
+                    android:contentDescription="Mostrar ou ocultar senha"
+                    android:scaleType="fitCenter"
+                    android:padding="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+
+            </LinearLayout>
+
+            <!-- Confirmar Senha -->
+            <TextView
+                android:id="@+id/tv_label_confirmar_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Confirmar Senha"
+                android:textSize="14sp"
+                android:textColor="#334155"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:id="@+id/input_confirmar_senha_container"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_input"
+                android:gravity="center_vertical"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <EditText
+                    android:id="@+id/et_confirmar_senha"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="Repita sua senha"
+                    android:textColorHint="#94A3B8"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:inputType="textPassword"
+                    android:background="@null"
+                    android:fontFamily="@font/inter"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone" />
+
+                <!-- Arquivo: res/drawable/ic_password.png -->
+                <ImageView
+                    android:id="@+id/ic_confirmar_senha"
+                    android:layout_width="16dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_password"
+                    android:contentDescription="Ícone de cadeado"
+                    android:scaleType="fitCenter" />
+
+            </LinearLayout>
+
+            <!-- Checkbox Termos -->
+            <LinearLayout
+                android:id="@+id/container_termos"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_termos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#5C6BC0"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- Texto com partes clicáveis (definido via SpannableString no Kotlin) -->
+                <TextView
+                    android:id="@+id/tv_termos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eu li e aceito os Termos de Uso e a Política de Privacidade."
+                    android:textSize="13sp"
+                    android:textColor="#64748B"
+                    android:fontFamily="@font/inter"
+                    android:lineSpacingExtra="2dp" />
+
+            </LinearLayout>
+
+            <!-- Botão Cadastrar -->
+            <Button
+                android:id="@+id/btn_cadastrar"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:text="Cadastrar"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter"
+                android:backgroundTint="#5C6BC0"
+                android:stateListAnimator="@null"
+                app:cornerRadius="27dp" />
+
+            <!-- Já possui uma conta? Fazer Login -->
+            <LinearLayout
+                android:id="@+id/container_login"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="14dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Já possui uma conta? "
+                    android:textSize="14sp"
+                    android:textColor="#64748B"
+                    android:fontFamily="@font/inter" />
+
+                <TextView
+                    android:id="@+id/tv_fazer_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fazer Login"
+                    android:textSize="14sp"
+                    android:textColor="#5C6BC0"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/inter"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

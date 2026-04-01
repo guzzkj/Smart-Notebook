@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/bg_input.xml -->
+<!-- Fundo branco com borda arredondada e stroke roxo claro -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="#FFFFFF" />
+
+    <stroke
+        android:width="1.5dp"
+        android:color="#C5CAE9" />
+
+    <corners android:radius="14dp" />
+
+</shape>

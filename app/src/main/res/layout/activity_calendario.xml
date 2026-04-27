@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TELA 10: Calendário — visualização mensal com eventos e atividades.
+    Header roxo com hambúrguer + título + ícone de calendário.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_tela">
+
+    <!-- Header roxo -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="@color/roxo_primario"
+        android:paddingHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnMenu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_nav_menu"
+            android:tint="@color/fundo_card"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Smart Notebook"
+            android:textColor="@color/fundo_card"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:fontFamily="@font/inter_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnCalendarioIcn"
+            app:layout_constraintStart_toEndOf="@id/btnMenu"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnCalendarioIcn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_nav_calendario"
+            android:tint="@color/fundo_card"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Conteúdo rolável: calendário + eventos -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Navegação do mês -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnMesAnterior"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_media_previous"
+                    android:tint="@color/texto_secundario" />
+
+                <TextView
+                    android:id="@+id/tvMesAno"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Outubro 2023"
+                    android:textColor="@color/texto_primario"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/btnProximoMes"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_media_next"
+                    android:tint="@color/texto_secundario" />
+            </LinearLayout>
+
+            <!-- Cabeçalho dos dias da semana -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:columnCount="7">
+
+                <TextView android:layout_width="0dp" android:layout_columnWeight="1"
+                    android:gravity="center" android:text="Dom" android:textColor="@color/texto_hint" android:textSize="12sp" />
+                <TextView android:layout_width="0dp" android:layout_columnWeight="1"
+                    android:gravity="center" android:text="Seg" android:textColor="@color/texto_hint" android:textSize="12sp" />
+                <TextView android:layout_width="0dp" android:layout_columnWeight="1"
+                    android:gravity="center" android:text="Ter" android:textColor="@color/texto_hint" android:textSize="12sp" />
+                <TextView android:layout_width="0dp" android:layout_columnWeight="1"
+                    android:gravity="center" android:text="Qua" android:textColor="@color/texto_hint" android:textSize="12sp" />
+                <TextView android:layout_width="0dp" android:layout_columnWeight="1"
+                    android:gravity="center" android:text="Qui" android:textColor="@color/texto_hint" android:textSize="12sp" />
+                <TextView android:layout_width="0dp" android:layout_columnWeight="1"
+                    android:gravity="center" android:text="Sex" android:textColor="@color/texto_hint" android:textSize="12sp" />
+                <TextView android:layout_width="0dp" android:layout_columnWeight="1"
+                    android:gravity="center" android:text="Sáb" android:textColor="@color/texto_hint" android:textSize="12sp" />
+            </GridLayout>
+
+            <!-- Grade do calendário (preenchida via código) -->
+            <GridLayout
+                android:id="@+id/gridCalendario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:columnCount="7" />
+
+            <!-- Legenda de cores -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="6dp"
+                    android:background="#EF4444" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="Avaliação"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="6dp"
+                    android:background="#22C55E" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Atividades"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Cabeçalho de eventos do dia selecionado -->
+            <TextView
+                android:id="@+id/tvDiaSelecionado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Segunda-feira, 20 de Outubro"
+                android:textColor="@color/texto_primario"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <!-- Lista de eventos do dia (RecyclerView) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvEventos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Barra de navegação inferior -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/fundo_card"
+        app:menu="@menu/menu_bottom_nav"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

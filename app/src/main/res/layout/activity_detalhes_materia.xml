@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TELA 6: Detalhes da Matéria — mostra anotações e atividades de uma matéria.
+    Header com nome da matéria + ícones de editar e excluir. FAB para nova atividade/anotação.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_tela">
+
+    <!-- Header com título e ações -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="@color/fundo_card"
+        android:paddingHorizontal="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Botão voltar -->
+        <ImageButton
+            android:id="@+id/btnVoltar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:scaleType="fitCenter"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Nome da matéria (preenchido via código) -->
+        <TextView
+            android:id="@+id/tvNomeMateriaHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Web Services"
+            android:textColor="@color/texto_primario"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnEditar"
+            app:layout_constraintStart_toEndOf="@id/btnVoltar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Botão editar (lápis) -->
+        <ImageButton
+            android:id="@+id/btnEditar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_editar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnExcluir"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Botão excluir (lixeira) -->
+        <ImageButton
+            android:id="@+id/btnExcluir"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_excluir"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Conteúdo rolável -->
+    <ScrollView
+        android:id="@+id/scrollConteudo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Cabeçalho da seção Anotações -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Anotações"
+                    android:textColor="@color/texto_primario"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- Link "Ver todas" → abre TodasAnotacoesActivity -->
+                <TextView
+                    android:id="@+id/tvVerTodasAnotacoes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ver todas"
+                    android:textColor="@color/roxo_primario"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- RecyclerView de anotações (máx. 3 itens exibidos) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAnotacoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Cabeçalho da seção Tarefas e Provas -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Tarefas e Provas"
+                android:textColor="@color/texto_primario"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- RecyclerView de atividades -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAtividades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Botão flutuante para nova anotação ou atividade -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNovaAcao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/roxo_primario"
+        app:tint="@color/fundo_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Barra de navegação inferior -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/fundo_card"
+        app:menu="@menu/menu_bottom_nav"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

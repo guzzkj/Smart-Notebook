@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Menu do BottomNavigationView: 3 destinos principais do app -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Item 1: Tela inicial com lista de matérias -->
+    <item
+        android:id="@+id/nav_inicio"
+        android:icon="@drawable/ic_nav_inicio"
+        android:title="@string/nav_inicio" />
+
+    <!-- Item 2: Calendário de atividades e avaliações -->
+    <item
+        android:id="@+id/nav_calendario"
+        android:icon="@drawable/ic_nav_calendario"
+        android:title="@string/nav_calendario" />
+
+    <!-- Item 3: Menu institucional (sobre, perfil, sair) -->
+    <item
+        android:id="@+id/nav_menu"
+        android:icon="@drawable/ic_nav_menu"
+        android:title="@string/nav_menu" />
+
+</menu>

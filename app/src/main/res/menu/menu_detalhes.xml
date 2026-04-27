@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Options Menu da tela de detalhes da anotação -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Editar nota: visível diretamente na toolbar -->
+    <item
+        android:id="@+id/action_editar"
+        android:title="Editar"
+        android:icon="@android:drawable/ic_menu_edit"
+        app:showAsAction="ifRoom" />
+
+    <!-- Marcar/desmarcar como favorita -->
+    <item
+        android:id="@+id/action_favoritar"
+        android:title="Favoritar"
+        android:icon="@android:drawable/btn_star_big_off"
+        app:showAsAction="ifRoom" />
+
+    <!-- Excluir nota: ação destrutiva, fica no overflow (...) -->
+    <item
+        android:id="@+id/action_excluir"
+        android:title="Excluir"
+        app:showAsAction="never" />
+
+</menu>

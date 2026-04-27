@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Smart Notebook</string>
-    <string name="title_activity_cadastro">CadastroActivity</string>
+
+    <!-- Rótulos da barra de navegação inferior (3 abas) -->
+    <string name="nav_inicio">Início</string>
+    <string name="nav_calendario">Calendário</string>
+    <string name="nav_menu">Menu</string>
 </resources>

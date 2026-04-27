@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TELA 5 – Lista de Anotações
+    Exibe todas as anotações em um RecyclerView vertical.
+    A Toolbar possui Options Menu (buscar, ordenar, configurações).
+    O FAB abre a criação de nova nota.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_tela">
+
+    <!-- ============================================================
+         TOOLBAR com título e Options Menu (menu_notas.xml)
+         ============================================================ -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_notas"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="@color/roxo_primario"
+        app:title="Minhas Anotações"
+        app:titleTextColor="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- ============================================================
+         RECYCLERVIEW – lista vertical de anotações
+         Cada item usa o layout: item_nota.xml
+         ============================================================ -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_anotacoes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_notas"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Mensagem exibida quando não há anotações (visibilidade controlada no Kotlin) -->
+    <LinearLayout
+        android:id="@+id/layout_vazio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📝"
+            android:textSize="56sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Nenhuma anotação ainda"
+            android:textColor="@color/texto_secundario"
+            android:textSize="16sp"
+            android:fontFamily="@font/inter_medium" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Toque no + para criar sua primeira nota"
+            android:textColor="@color/texto_hint"
+            android:textSize="14sp"
+            android:fontFamily="@font/inter" />
+    </LinearLayout>
+
+    <!-- ============================================================
+         FAB – botão para criar nova anotação
+         ============================================================ -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_criar_nota"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Nova anotação"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/roxo_primario"
+        app:tint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

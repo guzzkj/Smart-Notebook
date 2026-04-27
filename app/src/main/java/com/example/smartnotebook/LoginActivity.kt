@@ -6,8 +6,10 @@ import android.text.InputType
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.smartnotebook.activities.MinhasMateriasActivity
 import com.example.smartnotebook.databinding.ActivityLoginBinding
 
+// TELA 2: Login — autenticação do usuário para acesso ao app
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -24,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
         configurarCadastreSe()
     }
 
+    // Alterna visibilidade da senha ao clicar no ícone de olho
     private fun configurarToggleSenha() {
         binding.btnToggleSenha.setOnClickListener {
             senhaVisivel = !senhaVisivel
@@ -36,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    // Valida os campos e navega para a tela principal após login
     private fun configurarBotaoEntrar() {
         binding.btnEntrar.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
@@ -43,9 +47,9 @@ class LoginActivity : AppCompatActivity() {
 
             if (!validarCampos(email, senha)) return@setOnClickListener
 
-            // Navega direto para SobreActivity
-            startActivity(Intent(this, SobreActivity::class.java))
-            finish()
+            // Intent explícita para a tela principal (Minhas Matérias)
+            startActivity(Intent(this, MinhasMateriasActivity::class.java))
+            finish() // Remove o Login da pilha — usuário não pode voltar
         }
     }
 
@@ -73,12 +77,14 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 
+    // Link "Esqueceu a senha?" → abre a tela de recuperação via Intent explícita
     private fun configurarEsqueceuSenha() {
         binding.tvEsqueceuSenha.setOnClickListener {
-            Toast.makeText(this, "Recuperação de senha em breve", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, EsqueceuSenhaActivity::class.java))
         }
     }
 
+    // Link "Cadastre-se" → abre a tela de Cadastro via Intent explícita
     private fun configurarCadastreSe() {
         binding.tvCadastreSe.setOnClickListener {
             startActivity(Intent(this, CadastroActivity::class.java))

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TELA 8: Nova Anotação — editor de texto com título e conteúdo.
+    Header com voltar e botão de salvar. Barra de formatação no rodapé.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_card">
+
+    <!-- Header: voltar + título + salvar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="@color/fundo_card"
+        android:elevation="4dp"
+        android:paddingHorizontal="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnVoltar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:scaleType="fitCenter"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nova Anotação"
+            android:textColor="@color/texto_primario"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnSalvar"
+            app:layout_constraintStart_toEndOf="@id/btnVoltar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Botão salvar (✓) em roxo -->
+        <Button
+            android:id="@+id/btnSalvar"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:backgroundTint="@color/roxo_primario"
+            android:layout_marginEnd="8dp"
+            android:paddingHorizontal="16dp"
+            android:text="✓"
+            android:textColor="@color/fundo_card"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Campo de título -->
+    <EditText
+        android:id="@+id/etTituloAnotacao"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="12dp"
+        android:background="@null"
+        android:hint="Título da anotação"
+        android:inputType="textCapSentences"
+        android:textColor="@color/texto_primario"
+        android:textColorHint="@color/texto_hint"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
+
+    <!-- Divisor -->
+    <View
+        android:id="@+id/divisor"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/divisoria"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etTituloAnotacao" />
+
+    <!-- Campo de conteúdo da anotação -->
+    <EditText
+        android:id="@+id/etConteudoAnotacao"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="12dp"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="Comece a escrever sua anotação..."
+        android:inputType="textCapSentences|textMultiLine"
+        android:textColor="@color/texto_primario"
+        android:textColorHint="@color/texto_hint"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@id/barraFormatacao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divisor" />
+
+    <!-- Barra de formatação no rodapé -->
+    <LinearLayout
+        android:id="@+id/barraFormatacao"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@color/fundo_tela"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Botão Negrito -->
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:text="B"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/texto_secundario" />
+
+        <!-- Botão Itálico -->
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:text="I"
+            android:textStyle="italic"
+            android:textSize="16sp"
+            android:textColor="@color/texto_secundario" />
+
+        <!-- Botão Lista -->
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:tint="@color/texto_secundario" />
+
+        <!-- Botão Imagem -->
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_gallery"
+            android:tint="@color/texto_secundario" />
+
+        <!-- Overflow de formatação -->
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_more"
+            android:tint="@color/texto_secundario" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

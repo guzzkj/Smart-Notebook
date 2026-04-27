@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Options Menu exibido na Toolbar da tela de anotações -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Ação de busca: aparece direto na toolbar -->
+    <item
+        android:id="@+id/action_buscar"
+        android:title="Buscar"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="ifRoom" />
+
+    <!-- Ordenar notas: aparece no menu overflow (...) -->
+    <item
+        android:id="@+id/action_ordenar"
+        android:title="Ordenar"
+        app:showAsAction="never" />
+
+    <!-- Atalho para configurações gerais -->
+    <item
+        android:id="@+id/action_configuracoes"
+        android:title="Configurações"
+        app:showAsAction="never" />
+
+</menu>

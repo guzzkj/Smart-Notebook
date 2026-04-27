@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Item de matéria para o RecyclerView da tela Minhas Matérias.
+    Exibe nome, professor, dias de aula, pendências e botão "Ver Matéria".
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_nota"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
+
+    <!-- Nome da matéria -->
+    <TextView
+        android:id="@+id/tvNomeMateria"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Web Services"
+        android:textColor="@color/texto_primario"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/inter_medium"
+        app:layout_constraintEnd_toStartOf="@id/tvPendentes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Badge de pendências (ex: "5 pendentes") -->
+    <TextView
+        android:id="@+id/tvPendentes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_pendentes"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="4dp"
+        android:text="5 pendentes"
+        android:textColor="@color/roxo_primario"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Dias de aula -->
+    <TextView
+        android:id="@+id/tvDiasAula"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Seg, Qua"
+        android:textColor="@color/texto_secundario"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNomeMateria" />
+
+    <!-- Nome do professor -->
+    <TextView
+        android:id="@+id/tvProfessor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Prof. Anderson Souza"
+        android:textColor="@color/texto_hint"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDiasAula" />
+
+    <!-- Botão Ver Matéria -->
+    <Button
+        android:id="@+id/btnVerMateria"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="12dp"
+        android:text="Ver Matéria"
+        android:textColor="@color/roxo_primario"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvProfessor" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

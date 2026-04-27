@@ -11,24 +11,91 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartNotebook">
+
+        <!-- TELA 1: Splash — ponto de entrada do app (LAUNCHER) -->
+        <activity
+            android:name=".activities.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SmartNotebook">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- TELA 2: Login — autenticação do usuário -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <!-- Cadastro — criação de conta (tela existente, mantida) -->
         <activity
             android:name=".CadastroActivity"
             android:exported="false"
-            android:label="@string/title_activity_cadastro"
-            android:theme="@style/Theme.SmartNotebook" />
+            android:label="Criar Conta" />
+
+        <!-- Sobre — informações do aplicativo (tela existente, acessível pelo Menu) -->
         <activity
             android:name=".SobreActivity"
             android:exported="false" />
 
+        <!-- TELA 3: Esqueci Minha Senha — recuperação via e-mail acadêmico -->
         <activity
-            android:name=".LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".EsqueceuSenhaActivity"
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!-- TELA 4: Minhas Matérias — tela principal (Home) com lista de matérias -->
+        <!-- Classe MinhasMateriasActivity está no arquivo HomeActivity.kt -->
+        <activity
+            android:name=".activities.MinhasMateriasActivity"
+            android:exported="false" />
+
+        <!-- TELA 5: Nova Matéria — formulário de cadastro de matéria -->
+        <!-- Classe NovaMateriaActivity está no arquivo CategoriasActivity.kt -->
+        <activity
+            android:name=".activities.NovaMateriaActivity"
+            android:exported="false" />
+
+        <!-- TELA 6: Detalhes da Matéria — anotações e atividades de uma matéria -->
+        <!-- Classe DetalhesMateriaActivity está no arquivo DetalhesNotaActivity.kt -->
+        <activity
+            android:name=".activities.DetalhesMateriaActivity"
+            android:exported="false" />
+
+        <!-- TELA 7: Todas as Anotações — lista completa de anotações de uma matéria -->
+        <!-- Classe TodasAnotacoesActivity está no arquivo NotasActivity.kt -->
+        <activity
+            android:name=".activities.TodasAnotacoesActivity"
+            android:exported="false" />
+
+        <!-- TELA 8: Nova Anotação — editor de texto para criar anotações -->
+        <!-- Classe NovaAnotacaoActivity está no arquivo BuscaActivity.kt -->
+        <activity
+            android:name=".activities.NovaAnotacaoActivity"
+            android:exported="false" />
+
+        <!-- TELA 9: Nova Atividade — formulário de tarefa ou prova -->
+        <!-- Classe NovaAtividadeActivity está no arquivo FavoritosActivity.kt -->
+        <activity
+            android:name=".activities.NovaAtividadeActivity"
+            android:exported="false" />
+
+        <!-- TELA 10: Calendário — visualização mensal com eventos -->
+        <activity
+            android:name=".activities.CalendarioActivity"
+            android:exported="false" />
+
+        <!-- TELA 11: Menu Institucional — perfil, links e opção de sair -->
+        <!-- Classe MenuInstitucionalActivity está no arquivo ConfiguracoesActivity.kt -->
+        <activity
+            android:name=".activities.MenuInstitucionalActivity"
+            android:exported="false" />
+
+        <!-- TELA 12: Editar Perfil — alteração de dados do usuário -->
+        <!-- Classe EditarPerfilActivity está no arquivo PerfilActivity.kt -->
+        <activity
+            android:name=".activities.EditarPerfilActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

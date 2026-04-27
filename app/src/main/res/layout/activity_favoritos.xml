@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TELA 8 – Favoritos
+    Lista as anotações marcadas como favoritas pelo usuário.
+    Reutiliza o mesmo item_nota.xml no RecyclerView.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_tela">
+
+    <!-- Toolbar com botão voltar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_favoritos"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="@color/roxo_primario"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationContentDescription="Voltar"
+        app:title="Favoritos ⭐"
+        app:titleTextColor="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- RecyclerView das notas favoritas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_favoritos"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_favoritos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Mensagem quando não há favoritos (visibilidade gerenciada no Kotlin) -->
+    <LinearLayout
+        android:id="@+id/layout_sem_favoritos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⭐"
+            android:textSize="56sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Nenhuma nota favorita"
+            android:textColor="@color/texto_secundario"
+            android:textSize="16sp"
+            android:fontFamily="@font/inter_medium" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Toque na estrela de uma nota para favoritar"
+            android:textColor="@color/texto_hint"
+            android:textSize="14sp"
+            android:fontFamily="@font/inter" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

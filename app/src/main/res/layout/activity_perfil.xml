@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TELA 9 – Perfil do Usuário
+    Exibe avatar, nome, email e estatísticas de uso.
+    Botões: Editar Perfil, Configurações e Sair.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_tela">
+
+    <!-- Header roxo com avatar e informações do usuário -->
+    <LinearLayout
+        android:id="@+id/header_perfil"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_toolbar"
+        android:paddingTop="48dp"
+        android:paddingBottom="28dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Botão voltar alinhado à esquerda no topo do header -->
+        <ImageView
+            android:id="@+id/btn_voltar_perfil"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Voltar"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Avatar circular com a inicial do nome -->
+        <TextView
+            android:id="@+id/tv_avatar_inicial"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:gravity="center"
+            android:background="@drawable/bg_avatar"
+            android:text="E"
+            android:textColor="@color/roxo_primario"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter_medium" />
+
+        <!-- Nome do usuário -->
+        <TextView
+            android:id="@+id/tv_nome_perfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Usuário"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter_medium" />
+
+        <!-- Email do usuário -->
+        <TextView
+            android:id="@+id/tv_email_perfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="usuario@email.com"
+            android:textColor="#DDEEFF"
+            android:textSize="14sp"
+            android:fontFamily="@font/inter" />
+    </LinearLayout>
+
+    <!-- Conteúdo rolável: estatísticas e botões de ação -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/header_perfil"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="32dp">
+
+            <!-- Linha de 3 estatísticas -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <!-- Stat: Total de notas -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_card_nota"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:elevation="2dp">
+                    <TextView
+                        android:id="@+id/tv_stat_notas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8"
+                        android:textColor="@color/roxo_primario"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notas"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <!-- Stat: Favoritas -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_card_nota"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:elevation="2dp">
+                    <TextView
+                        android:id="@+id/tv_stat_favoritas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3"
+                        android:textColor="@color/cor_favorito"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Favoritas"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <!-- Stat: Categorias -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_nota"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:elevation="2dp">
+                    <TextView
+                        android:id="@+id/tv_stat_categorias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4"
+                        android:textColor="@color/roxo_claro"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Categorias"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Título da seção de ações -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Conta"
+                android:textColor="@color/texto_primario"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Botão: Editar Perfil (outline roxo) -->
+            <Button
+                android:id="@+id/btn_editar_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="12dp"
+                android:text="Editar Perfil"
+                android:textColor="@color/roxo_primario"
+                android:textSize="15sp"
+                android:fontFamily="@font/inter_medium"
+                android:background="@drawable/bg_botao_outline"
+                android:stateListAnimator="@null" />
+
+            <!-- Botão: Configurações (outline roxo) -->
+            <Button
+                android:id="@+id/btn_configuracoes_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="24dp"
+                android:text="Configurações"
+                android:textColor="@color/roxo_primario"
+                android:textSize="15sp"
+                android:fontFamily="@font/inter_medium"
+                android:background="@drawable/bg_botao_outline"
+                android:stateListAnimator="@null" />
+
+            <!-- Botão: Sair da conta (vermelho, fecha sessão) -->
+            <Button
+                android:id="@+id/btn_sair"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Sair"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:fontFamily="@font/inter_medium"
+                android:backgroundTint="@color/cor_erro"
+                android:stateListAnimator="@null"
+                app:cornerRadius="27dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

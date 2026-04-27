@@ -2,5 +2,33 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Cor principal do app (roxo) -->
     <color name="roxo_primario">#5C6BC0</color>
+    <!-- Versão mais clara do roxo (usada em stats) -->
+    <color name="roxo_claro">#7986CB</color>
+
+    <!-- Fundos de tela e cards -->
+    <color name="fundo_tela">#F6F6F8</color>
+    <color name="fundo_card">#FFFFFF</color>
+
+    <!-- Cores de texto -->
+    <color name="texto_primario">#0F172A</color>
+    <color name="texto_secundario">#64748B</color>
+    <color name="texto_hint">#94A3B8</color>
+
+    <!-- Cor da estrela de favorito -->
+    <color name="cor_favorito">#F59E0B</color>
+
+    <!-- Linha divisória -->
+    <color name="divisoria">#E2E8F0</color>
+
+    <!-- Cor de erro / logout -->
+    <color name="cor_erro">#EF4444</color>
+
+    <!-- Cores de texto de cada categoria -->
+    <color name="cat_estudo_texto">#1565C0</color>
+    <color name="cat_trabalho_texto">#2E7D32</color>
+    <color name="cat_pessoal_texto">#E65100</color>
+    <color name="cat_ideia_texto">#6A1B9A</color>
 </resources>

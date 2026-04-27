@@ -25,23 +25,23 @@
 
         <!-- TELA 2: Login — autenticação do usuário -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:exported="false" />
 
         <!-- Cadastro — criação de conta (tela existente, mantida) -->
         <activity
-            android:name=".CadastroActivity"
+            android:name=".activities.CadastroActivity"
             android:exported="false"
             android:label="Criar Conta" />
 
         <!-- Sobre — informações do aplicativo (tela existente, acessível pelo Menu) -->
         <activity
-            android:name=".SobreActivity"
+            android:name=".activities.SobreActivity"
             android:exported="false" />
 
         <!-- TELA 3: Esqueci Minha Senha — recuperação via e-mail acadêmico -->
         <activity
-            android:name=".EsqueceuSenhaActivity"
+            android:name=".activities.EsqueceuSenhaActivity"
             android:exported="false" />
 
         <!-- TELA 4: Minhas Matérias — tela principal (Home) com lista de matérias -->

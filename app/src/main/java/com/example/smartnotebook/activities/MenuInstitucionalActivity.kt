@@ -4,9 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.smartnotebook.LoginActivity
 import com.example.smartnotebook.R
-import com.example.smartnotebook.SobreActivity
 import com.example.smartnotebook.databinding.ActivityMenuInstitucionalBinding
 
 // TELA 11: Menu Institucional — acesso ao perfil, links e opção de sair

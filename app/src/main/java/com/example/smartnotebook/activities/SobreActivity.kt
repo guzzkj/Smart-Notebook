@@ -1,4 +1,4 @@
-package com.example.smartnotebook
+package com.example.smartnotebook.activities
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.smartnotebook.R
 import com.example.smartnotebook.databinding.ActivitySobreBinding
 
 // Tela Sobre — informações do aplicativo, versão e funcionalidades

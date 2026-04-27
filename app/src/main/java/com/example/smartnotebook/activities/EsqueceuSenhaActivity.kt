@@ -1,4 +1,4 @@
-package com.example.smartnotebook
+package com.example.smartnotebook.activities
 
 import android.os.Bundle
 import android.util.Patterns

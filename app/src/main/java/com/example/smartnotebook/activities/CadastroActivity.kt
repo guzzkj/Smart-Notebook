@@ -1,4 +1,4 @@
-package com.example.smartnotebook
+package com.example.smartnotebook.activities
 
 import android.os.Bundle
 import android.text.InputType
@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.smartnotebook.R
 import com.example.smartnotebook.databinding.ActivityCadastroBinding
 
 // Tela de Cadastro — criação de nova conta no app

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import com.example.smartnotebook.LoginActivity
 import com.example.smartnotebook.databinding.ActivitySplashBinding
 
 // TELA 1: Splash Screen — exibida por 2 segundos ao abrir o app

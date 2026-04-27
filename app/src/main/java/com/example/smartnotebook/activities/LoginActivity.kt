@@ -1,4 +1,4 @@
-package com.example.smartnotebook
+package com.example.smartnotebook.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.text.InputType
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.smartnotebook.activities.MinhasMateriasActivity
 import com.example.smartnotebook.databinding.ActivityLoginBinding
 
 // TELA 2: Login — autenticação do usuário para acesso ao app

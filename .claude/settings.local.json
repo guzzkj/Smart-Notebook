@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv app/src/main/java/com/example/smartnotebook/activities/HomeActivity.kt app/src/main/java/com/example/smartnotebook/activities/MinhasMateriasActivity.kt)",
+      "Bash(mv app/src/main/java/com/example/smartnotebook/activities/CategoriasActivity.kt app/src/main/java/com/example/smartnotebook/activities/NovaMateriaActivity.kt)",
+      "Bash(mv app/src/main/java/com/example/smartnotebook/activities/DetalhesNotaActivity.kt app/src/main/java/com/example/smartnotebook/activities/DetalhesMateriaActivity.kt)",
+      "Bash(mv app/src/main/java/com/example/smartnotebook/activities/NotasActivity.kt app/src/main/java/com/example/smartnotebook/activities/TodasAnotacoesActivity.kt)",
+      "Bash(mv app/src/main/java/com/example/smartnotebook/activities/BuscaActivity.kt app/src/main/java/com/example/smartnotebook/activities/NovaAnotacaoActivity.kt)"
+    ]
+  }
+}

@@ -21,15 +21,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Avatar do usuário -->
+        <!-- Avatar do usuário — silhueta de pessoa como placeholder -->
         <ImageView
             android:id="@+id/imgAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_avatar"
             android:padding="8dp"
-            android:src="@android:drawable/ic_menu_myplaces"
-            android:tint="@color/roxo_primario"
+            android:src="@drawable/ic_avatar_placeholder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,6 +46,7 @@
             android:fontFamily="@font/inter_medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnBuscarHeader"
+            android:layout_marginEnd="8dp"
             app:layout_constraintStart_toEndOf="@id/imgAvatar"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,50 +59,24 @@
             android:src="@drawable/ic_buscar"
             android:tint="@color/texto_secundario"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnMenuOverflow"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Overflow menu -->
-        <ImageButton
-            android:id="@+id/btnMenuOverflow"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_more"
-            android:tint="@color/texto_secundario"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Rótulo da seção -->
-    <TextView
-        android:id="@+id/tvSecaoMaterias"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Suas Matérias"
-        android:textColor="@color/texto_primario"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
-
-    <!-- Lista de matérias -->
+    <!-- Lista de matérias (começa logo abaixo do header) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMaterias"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:paddingHorizontal="16dp"
         android:paddingBottom="16dp"
         android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSecaoMaterias" />
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
 
     <!-- Botão flutuante para nova matéria -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

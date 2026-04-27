@@ -3,14 +3,16 @@ package com.example.smartnotebook.models
 // Dados fictícios para simulação do app sem banco de dados
 object DadosMock {
 
-    // Matérias do semestre atual
+    // Matérias do semestre atual (dados de exemplo para a tela)
     val materias = listOf(
-        Materia(1, "Web Services", "Prof. Anderson Souza",
-            listOf("Seg", "Qua"), 5, "#5C6BC0"),
-        Materia(2, "Cálculo I", "Prof. Dr. Carlos Lima",
-            listOf("Ter", "Qui", "Sex"), 2, "#43A047"),
-        Materia(3, "Algoritmos", "Prof. Ana Paula Ramos",
-            listOf("Seg", "Qua", "Sex"), 3, "#E53935")
+        Materia(1, "Web Services", "Prof. Roberto Silva",
+            listOf("Segunda", "Quarta"), 5, "#5C6BC0", "Hoje, 14:30"),
+        Materia(2, "Banco de Dados", "Prof. Ana Oliveira",
+            listOf("Terça", "Quinta"), 0, "#5C6BC0", "Ontem"),
+        Materia(3, "Inteligência Artificial", "Prof. Marcos Souza",
+            listOf("Quarta", "Sexta"), 2, "#5C6BC0", "2 dias atrás"),
+        Materia(4, "Sistemas Distribuídos", "Prof. Carlos Mendes",
+            listOf(), 0, "#5C6BC0", "1 semana atrás")
     )
 
     // Anotações vinculadas a cada matéria

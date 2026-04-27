@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Badge de pendências no card de matéria — fundo roxo claro -->
+<!-- Badge vermelho para matérias com atividades pendentes -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <!-- Cinza neutro para matérias sem pendências -->
-    <solid android:color="#F1F5F9" />
+    <solid android:color="#FEE2E2" />
     <corners android:radius="12dp" />
 </shape>

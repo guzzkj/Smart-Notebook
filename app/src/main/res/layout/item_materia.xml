@@ -1,83 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Item de matéria para o RecyclerView da tela Minhas Matérias.
-    Exibe nome, professor, dias de aula, pendências e botão "Ver Matéria".
+    Estrutura: CardView → LinearLayout (horizontal) → [barra acento | conteúdo].
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_card_nota"
-    android:padding="16dp"
-    android:layout_marginBottom="12dp">
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/divisoria"
+    app:strokeWidth="1dp">
 
-    <!-- Nome da matéria -->
-    <TextView
-        android:id="@+id/tvNomeMateria"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Web Services"
-        android:textColor="@color/texto_primario"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/inter_medium"
-        app:layout_constraintEnd_toStartOf="@id/tvPendentes"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Badge de pendências (ex: "5 pendentes") -->
-    <TextView
-        android:id="@+id/tvPendentes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_pendentes"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="4dp"
-        android:text="5 pendentes"
-        android:textColor="@color/roxo_primario"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Dias de aula -->
-    <TextView
-        android:id="@+id/tvDiasAula"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Seg, Qua"
-        android:textColor="@color/texto_secundario"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNomeMateria" />
-
-    <!-- Nome do professor -->
-    <TextView
-        android:id="@+id/tvProfessor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:text="Prof. Anderson Souza"
-        android:textColor="@color/texto_hint"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDiasAula" />
-
-    <!-- Botão Ver Matéria -->
-    <Button
-        android:id="@+id/btnVerMateria"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+    <!-- LinearLayout horizontal para posicionar a barra de acento ao lado do conteúdo -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="12dp"
-        android:text="Ver Matéria"
-        android:textColor="@color/roxo_primario"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvProfessor" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Barra de acento roxa na borda esquerda do card -->
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/roxo_primario" />
+
+        <!-- Área de conteúdo: todos os textos e botão do card -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="16dp">
+
+            <!-- Nome da matéria (bold, escuro, canto superior esquerdo) -->
+            <TextView
+                android:id="@+id/tvNomeMateria"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Web Services"
+                android:textColor="@color/texto_primario"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter_medium"
+                app:layout_constraintEnd_toStartOf="@id/tvPendentes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Badge de pendências (canto superior direito) -->
+            <TextView
+                android:id="@+id/tvPendentes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_pendentes"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="0 pendentes"
+                android:textColor="@color/texto_secundario"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Dias de aula (ex: "Segunda e Quarta") — oculto se a lista estiver vazia -->
+            <TextView
+                android:id="@+id/tvDiasAula"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Segunda e Quarta"
+                android:textColor="@color/texto_hint"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvNomeMateria" />
+
+            <!-- Nome do professor -->
+            <TextView
+                android:id="@+id/tvProfessor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Prof. Roberto Silva"
+                android:textColor="@color/texto_secundario"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDiasAula" />
+
+            <!-- Ícone de calendário ao lado do texto de última atualização -->
+            <ImageView
+                android:id="@+id/imgCalendario"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_calendario"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProfessor" />
+
+            <!-- Data da última atualização da matéria -->
+            <TextView
+                android:id="@+id/tvUltimaAtualizacao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="Última atualização: Hoje, 14:30"
+                android:textColor="@color/texto_hint"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="@id/imgCalendario"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imgCalendario"
+                app:layout_constraintTop_toTopOf="@id/imgCalendario" />
+
+            <!-- Botão "Ver Matéria" — preenchido roxo, alinhado à direita -->
+            <Button
+                android:id="@+id/btnVerMateria"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/roxo_primario"
+                android:text="Ver Matéria"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgCalendario" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

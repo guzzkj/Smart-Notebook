@@ -1,12 +1,13 @@
 package com.example.smartnotebook.activities
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smartnotebook.databinding.ActivityEsqueceuSenhaBinding
 
-// TELA 3: Esqueceu Minha Senha — recuperação de acesso via e-mail acadêmico
+// TELA 4: Esqueceu Minha Senha — recuperação de acesso via e-mail acadêmico
 class EsqueceuSenhaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEsqueceuSenhaBinding
@@ -18,6 +19,8 @@ class EsqueceuSenhaActivity : AppCompatActivity() {
 
         configurarBotaoEnviar()
         configurarVoltarLogin()
+        // Sublinha o link de suporte, fiel à referência visual
+        binding.tvSuporte.paintFlags = binding.tvSuporte.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
     // Valida o e-mail e simula o envio do código de recuperação

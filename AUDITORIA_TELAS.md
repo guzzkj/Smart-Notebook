@@ -13,7 +13,7 @@
 | 2 | **Tecnologia** | Layout em **XML** · Lógica em **Kotlin** puro |
 | 3 | **RecyclerView** | Toda tela com lista deve usar `RecyclerView` + Adapter básico + dados mockados (`DadosMock`) |
 | 4 | **Navegação** | Apenas **Intents explícitas** entre telas (`Intent(this, OutraActivity::class.java)`) |
-| 5 | **Assets** | Imagens faltantes → referenciar no XML e listar ao final. Nunca gerar PNG/SVG manualmente. |
+| 5 | **Assets** | Ícones e imagens faltantes ou incorretos → **nunca desenhar nem gerar o arquivo**. Apenas referenciar o nome correto no XML (ex.: `@drawable/ic_email`) e listar na seção "Assets faltantes" da tela. O usuário adicionará o arquivo ao projeto. Todos os ícones do projeto estão em formato **PNG**. |
 | 6 | **Comentários** | Comentários breves em **português** explicando o que cada bloco faz |
 | 7 | **Escopo** | Não precisa ser funcional — apenas estrutura estabelecida para implementar CRUD futuramente |
 
@@ -119,24 +119,33 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `EsqueceuSenhaActivity.kt` |
 | **Layout** | `activity_esqueceu_senha.xml` |
 | **Referência** | `TELAS/esqueci_minha_senha_smart_notebook/screen.png` · `code.html` |
 | **Adapter** | — (sem lista) |
-| **Navega para** | `LoginActivity` |
+| **Navega para** | `LoginActivity` (via `finish()` — correto para "voltar") |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (não aplicável — tela sem lista)
+- [x] Navegação via `finish()` (padrão correto para retorno ao Login)
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable`
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- Layout atualizado para referenciar `@drawable/ic_lock_reset` no lugar de `@android:drawable/ic_lock_lock`
+- Comentários corrigidos de `TELA 3` para `TELA 4` (ambos `.kt` e `.xml`)
+- Texto "Ainda precisa de ajuda? Contate o suporte" recebe sublinhado via `Paint.UNDERLINE_TEXT_FLAG` no `.kt`, fiel à referência visual
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_lock_reset.png` | PNG | ✅ presente |
+| `ic_email.png` | PNG | ✅ presente |
+| `ic_info.png` | PNG | ✅ presente |
 
 ---
 
@@ -408,7 +417,7 @@ Para cada tela, verificar:
 | 01 · Splash Screen | ⏳ Pendente |
 | 02 · Login | ⏳ Pendente |
 | 03 · Cadastro | ⏳ Pendente |
-| 04 · Esqueceu a Senha | ⏳ Pendente |
+| 04 · Esqueceu a Senha | ✅ Concluída |
 | 05 · Minhas Matérias | ✅ Concluída |
 | 06 · Detalhes da Matéria | ⏳ Pendente |
 | 07 · Nova Matéria | ⏳ Pendente |
@@ -420,7 +429,7 @@ Para cada tela, verificar:
 | 13 · Editar Perfil | ⏳ Pendente |
 | 14 · Sobre | ⏳ Pendente |
 
-**Concluídas: 1 / 14**
+**Concluídas: 2 / 14**
 
 ---
 
@@ -436,6 +445,30 @@ Para cada tela, verificar:
 | `AtividadesAdapter.kt` | Adapter | Tela 06 |
 | `DadosMock.kt` | Dados estáticos | Todas as telas com lista |
 | `menu_bottom_nav.xml` | Menu de navegação | Telas 05, 11, 12 |
+
+---
+
+## Limpeza Global de Assets — `res/drawable/`
+
+Realizada durante a auditoria da tela 04. Válida para todo o projeto.
+
+**Ícones XML substituídos por PNG:**
+| XML removido | PNG substituto |
+|---|---|
+| `ic_nav_inicio.xml` | `ic_nav_inicio.png` |
+| `ic_nav_calendario.xml` | `ic_nav_calendario.png` |
+| `ic_nav_menu.xml` | `ic_nav_menu.png` |
+| `ic_buscar.xml` | `ic_buscar.png` |
+| `ic_editar.xml` | `ic_editar.png` |
+| `ic_excluir.xml` | `ic_excluir.png` |
+| `ic_calendario.xml` | `ic_calendario.png` |
+| `ic_avatar_placeholder.xml` | `ic_avatar_placeholder.png` |
+
+**Backgrounds XML órfãos removidos** (sem referência em nenhum layout ou `.kt`):
+`bg_toolbar.xml` · `bg_busca.xml` · `bg_botao_outline.xml` · `bg_fab.xml`
+
+**Backgrounds XML mantidos** (são `<shape>` — não substituíveis por PNG):
+`bg_card` · `bg_input` · `bg_card_nota` · `bg_splash` · `bg_avatar` · `bg_tag_categoria` · `bg_campo` · `bg_dica` · `bg_chip_dia` · `bg_chip_selecionado` · `bg_dot` · `bg_badge_pendente` · `bg_pendentes`
 
 ---
 

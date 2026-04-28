@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.etEmail.text.toString().trim()
             val senha = binding.etSenha.text.toString().trim()
 
-            if (!validarCampos(email, senha)) return@setOnClickListener
+            // if (!validarCampos(email, senha)) return@setOnClickListener
 
             // Intent explícita para a tela principal (Minhas Matérias)
             startActivity(Intent(this, MinhasMateriasActivity::class.java))

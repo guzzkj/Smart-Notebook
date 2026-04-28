@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.SmartNotebook" parent="Base.Theme.SmartNotebook" />
+
+    <!-- Força o FAB a ser círculo perfeito (Material3 usa quadrado arredondado por padrão) -->
+    <style name="FABCircular">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

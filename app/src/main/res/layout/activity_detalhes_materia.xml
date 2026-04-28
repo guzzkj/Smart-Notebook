@@ -60,13 +60,14 @@
             app:layout_constraintEnd_toStartOf="@id/btnExcluir"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Botão excluir (lixeira) -->
+        <!-- Botão excluir (lixeira) — ícone vermelho como na referência -->
         <ImageButton
             android:id="@+id/btnExcluir"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_excluir"
+            android:tint="@color/cor_erro"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -133,12 +134,23 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- RecyclerView de atividades -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAtividades"
+            <!-- Container único para atividades — fiel à referência (card branco arredondado) -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/divisoria"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@color/fundo_card">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAtividades"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </ScrollView>
@@ -149,11 +161,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
-        android:src="@android:drawable/ic_input_add"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add"
+        app:fabSize="mini"
+        app:maxImageSize="18dp"
+        app:shapeAppearanceOverlay="@style/FABCircular"
         app:backgroundTint="@color/roxo_primario"
         app:tint="@color/fundo_card"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Barra de navegação inferior -->

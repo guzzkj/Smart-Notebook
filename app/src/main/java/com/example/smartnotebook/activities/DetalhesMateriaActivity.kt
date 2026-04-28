@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.adapters.AnotacoesAdapter
 import com.example.smartnotebook.adapters.AtividadesAdapter
@@ -59,6 +60,10 @@ class DetalhesMateriaActivity : AppCompatActivity() {
 
         binding.rvAtividades.layoutManager = LinearLayoutManager(this)
         binding.rvAtividades.adapter = adapter
+        // Divisor entre os itens de atividade dentro do container card
+        binding.rvAtividades.addItemDecoration(
+            DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
+        )
     }
 
     private fun configurarBotoes(materiaId: Int) {

@@ -44,7 +44,7 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `SplashActivity.kt` |
 | **Layout** | `activity_splash.xml` |
 | **Referência** | `TELAS/splash_screen_smart_notebook/screen.png` · `code.html` |
@@ -52,16 +52,29 @@ Para cada tela, verificar:
 | **Navega para** | `LoginActivity` |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (não aplicável — tela sem lista)
+- [x] Navegação via Intent explícita + `finish()` (usuário não pode voltar)
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable`
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- `bg_splash.xml` alterado de gradiente diagonal para cor sólida `#5C6BC0` (fiel à referência)
+- Logo redimensionado de 120dp para 72dp (`ic_logo.png` já inclui o container arredondado azul)
+- Slogan corrigido de "Organize suas ideias com inteligência" para "Seu Caderno Inteligente"
+- Cor do slogan corrigida de `#DDEEFF` para `#CCFFFFFF` (branco 80% da referência)
+- `ProgressBar` circular substituído por barra horizontal determinada (33%, 240dp × 6dp)
+- Adicionado `tv_versao` com texto "VERSION 2.0" ancorado ao rodapé
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_logo.png` | PNG | ✅ presente (inclui container arredondado) |
+| `bg_splash.xml` | XML shape | ✅ presente |
+
+> **Correção pós-auditoria (telas 05 e 06):** adicionado estilo `FABCircular` em `themes.xml` (`cornerSize=50%`) — o tema Material3 usa quadrado arredondado como padrão para FAB; sem esse override o botão não fica circular.
 
 ---
 
@@ -187,7 +200,7 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `DetalhesMateriaActivity.kt` |
 | **Layout** | `activity_detalhes_materia.xml` |
 | **Item de lista** | `item_anotacao.xml` · `item_atividade.xml` |
@@ -196,16 +209,32 @@ Para cada tela, verificar:
 | **Navega para** | `NovaAnotacaoActivity` · `NovaAtividadeActivity` · `TodasAnotacoesActivity` |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (AnotacoesAdapter + AtividadesAdapter + DadosMock)
+- [x] Navegação via Intent explícita
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable` (ver "Assets faltantes" abaixo)
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- `item_anotacao.xml`: removido `imgChevron` (seta `@android:drawable/ic_media_next`) ausente na referência; constraints de `tvTituloAnotacao` e `tvDataAnotacao` corrigidas para `toEndOf="parent"`
+- `item_atividade.xml`: removidos `android:background="@drawable/bg_card_nota"` e `android:layout_marginBottom="8dp"` — na referência as atividades ficam dentro de um container único, não em cards individuais
+- `activity_detalhes_materia.xml`: `rvAtividades` envolvido em `MaterialCardView` (16dp corners, borda `divisoria`, sem elevação) fiel ao container único branco arredondado da referência
+- `activity_detalhes_materia.xml`: adicionado `android:tint="@color/cor_erro"` ao `btnExcluir` — ícone vermelho como na referência
+- `activity_detalhes_materia.xml`: FAB trocado de `@android:drawable/ic_input_add` para `@drawable/ic_add` (PNG do projeto)
+- `DetalhesMateriaActivity.kt`: adicionado `DividerItemDecoration` ao `rvAtividades` para separar os itens dentro do container card
+
+**Assets faltantes**
+| Arquivo | Uso | Status |
+|---------|-----|--------|
+| `ic_add.png` | FAB "+" na tela (substituiu `@android:drawable/ic_input_add`) | ✅ adicionado pelo usuário |
+
+**Correções pós-auditoria**
+- FAB reposicionado: `constraintBottom_toTopOf="@id/bottomNav"` com `marginBottom="16dp"` (antes usava `toBottomOf="parent"` com margin fixo de 80dp, causando sobreposição na navbar)
+- FAB reduzido com `fabSize="mini"` (40dp) e `maxImageSize="18dp"`
+- FAB forçado a círculo com `app:shapeAppearanceOverlay="@style/FABCircular"` — necessário pois o tema Material3 usa quadrado arredondado por padrão
+- Mesmo ícone `@drawable/ic_add` aplicado também na tela 05 (Minhas Matérias)
 
 ---
 
@@ -414,12 +443,12 @@ Para cada tela, verificar:
 
 | Tela | Status |
 |------|--------|
-| 01 · Splash Screen | ⏳ Pendente |
+| 01 · Splash Screen | ✅ Concluída |
 | 02 · Login | ⏳ Pendente |
 | 03 · Cadastro | ⏳ Pendente |
 | 04 · Esqueceu a Senha | ✅ Concluída |
 | 05 · Minhas Matérias | ✅ Concluída |
-| 06 · Detalhes da Matéria | ⏳ Pendente |
+| 06 · Detalhes da Matéria | ✅ Concluída |
 | 07 · Nova Matéria | ⏳ Pendente |
 | 08 · Nova Anotação | ⏳ Pendente |
 | 09 · Nova Atividade | ⏳ Pendente |
@@ -429,7 +458,7 @@ Para cada tela, verificar:
 | 13 · Editar Perfil | ⏳ Pendente |
 | 14 · Sobre | ⏳ Pendente |
 
-**Concluídas: 2 / 14**
+**Concluídas: 4 / 14**
 
 ---
 

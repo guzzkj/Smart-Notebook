@@ -242,24 +242,38 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `NovaMateriaActivity.kt` |
 | **Layout** | `activity_nova_materia.xml` |
 | **Referência** | `TELAS/nova_mat_ria/screen.png` · `code.html` |
 | **Adapter** | — (formulário, sem lista) |
-| **Navega para** | `MinhasMateriasActivity` (volta) |
+| **Navega para** | `MinhasMateriasActivity` (via Intent + `FLAG_ACTIVITY_CLEAR_TOP`) |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (não aplicável — tela de formulário)
+- [x] Navegação via Intent explícita
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable`
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- Comentários corrigidos de `TELA 5` para `TELA 7` (`.kt` e `.xml`)
+- Ícone do card de dica: `@android:drawable/ic_dialog_info` → `@drawable/ic_info` (PNG do projeto, critério 5)
+- Chip selecionado: fundo roxo sólido + texto branco substituído por borda roxa + fundo `#1A5C6BC0` (roxo 10%) + texto roxo — fiel à referência
+- Criado `bg_chip_dia_selecionado.xml` dedicado (sem alterar `bg_chip_selecionado` que é compartilhado com tela 09)
+- Label "Nome da Matéria *": asterisco separado em `TextView` própria com `@color/cor_erro` (vermelho), fiel à referência
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_arrow_back.png` | PNG | ✅ presente |
+| `ic_info.png` | PNG | ✅ presente |
+| `bg_campo.xml` | XML shape | ✅ presente |
+| `bg_chip_dia.xml` | XML shape | ✅ presente |
+| `bg_chip_dia_selecionado.xml` | XML shape | ✅ criado nesta auditoria |
+| `bg_dica.xml` | XML shape | ✅ presente |
 
 ---
 
@@ -449,7 +463,7 @@ Para cada tela, verificar:
 | 04 · Esqueceu a Senha | ✅ Concluída |
 | 05 · Minhas Matérias | ✅ Concluída |
 | 06 · Detalhes da Matéria | ✅ Concluída |
-| 07 · Nova Matéria | ⏳ Pendente |
+| 07 · Nova Matéria | ✅ Concluída |
 | 08 · Nova Anotação | ⏳ Pendente |
 | 09 · Nova Atividade | ⏳ Pendente |
 | 10 · Todas as Anotações | ⏳ Pendente |
@@ -458,7 +472,7 @@ Para cada tela, verificar:
 | 13 · Editar Perfil | ⏳ Pendente |
 | 14 · Sobre | ⏳ Pendente |
 
-**Concluídas: 4 / 14**
+**Concluídas: 5 / 14**
 
 ---
 

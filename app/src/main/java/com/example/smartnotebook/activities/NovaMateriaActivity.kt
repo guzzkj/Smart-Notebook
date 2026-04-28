@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smartnotebook.databinding.ActivityNovaMateriaBinding
 
-// TELA 5: Nova Matéria — formulário para cadastrar uma nova matéria acadêmica
+// TELA 7: Nova Matéria — formulário para cadastrar uma nova matéria acadêmica
 class NovaMateriaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNovaMateriaBinding
@@ -37,15 +37,15 @@ class NovaMateriaActivity : AppCompatActivity() {
         chips.forEach { (chip, dia) ->
             chip.setOnClickListener {
                 if (diasSelecionados.contains(dia)) {
-                    // Deselecionar: volta ao estilo padrão (borda cinza)
+                    // Deselecionar: borda cinza, fundo branco, texto cinza
                     diasSelecionados.remove(dia)
                     chip.setBackgroundResource(com.example.smartnotebook.R.drawable.bg_chip_dia)
                     chip.setTextColor(getColor(com.example.smartnotebook.R.color.texto_secundario))
                 } else {
-                    // Selecionar: fundo roxo, texto branco
+                    // Selecionar: borda roxa, fundo roxo claro, texto roxo
                     diasSelecionados.add(dia)
-                    chip.setBackgroundResource(com.example.smartnotebook.R.drawable.bg_chip_selecionado)
-                    chip.setTextColor(getColor(com.example.smartnotebook.R.color.fundo_card))
+                    chip.setBackgroundResource(com.example.smartnotebook.R.drawable.bg_chip_dia_selecionado)
+                    chip.setTextColor(getColor(com.example.smartnotebook.R.color.roxo_primario))
                 }
             }
         }

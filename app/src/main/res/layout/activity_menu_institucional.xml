@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     TELA 12: Menu Institucional — perfil do usuário, links de navegação e opção de sair.
-    Cabeçalho fixo com botão voltar, card lavanda do usuário (clicável → Editar Perfil),
-    lista de itens com ícone circular e chevron, e botão Sair em vermelho.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,61 +9,13 @@
     android:layout_height="match_parent"
     android:background="@color/fundo_tela">
 
-    <!-- Cabeçalho com botão voltar e título centralizado -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/header"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:background="@color/fundo_card"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageButton
-            android:id="@+id/btnVoltar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="@color/texto_primario"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Título centralizado entre as extremidades do header -->
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_medium"
-            android:gravity="center"
-            android:text="Menu"
-            android:textColor="@color/texto_primario"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Linha divisória abaixo do cabeçalho -->
-    <View
-        android:id="@+id/divisoriaHeader"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/divisoria"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header" />
-
     <!-- Card do usuário — clique navega para Editar Perfil -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardUsuario"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/bg_card_usuario_menu"
         android:clickable="true"
         android:focusable="true"
@@ -73,7 +23,7 @@
         android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divisoriaHeader">
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- Avatar circular do usuário — fundo roxo + ícone branco centralizado -->
         <ImageView

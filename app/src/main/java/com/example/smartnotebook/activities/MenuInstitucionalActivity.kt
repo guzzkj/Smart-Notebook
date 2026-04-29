@@ -17,14 +17,8 @@ class MenuInstitucionalActivity : AppCompatActivity() {
         binding = ActivityMenuInstitucionalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        configurarHeader()
         configurarItensMenu()
         configurarBottomNav()
-    }
-
-    // Botão voltar do cabeçalho retorna à tela anterior
-    private fun configurarHeader() {
-        binding.btnVoltar.setOnClickListener { finish() }
     }
 
     private fun configurarItensMenu() {

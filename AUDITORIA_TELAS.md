@@ -281,24 +281,46 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | 🔄 Em andamento |
 | **Activity** | `NovaAnotacaoActivity.kt` |
 | **Layout** | `activity_nova_anotacao.xml` |
 | **Referência** | `TELAS/nova_anota_o/screen.png` · `code.html` |
 | **Adapter** | — (formulário, sem lista) |
-| **Navega para** | `DetalhesMateriaActivity` (volta) |
+| **Navega para** | `DetalhesMateriaActivity` (via `finish()`) |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (não aplicável — tela de formulário)
+- [x] Navegação via `finish()` (padrão correto para retorno)
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable` (ver "Assets faltantes" abaixo)
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- `btnSalvar`: trocado de `Button` com texto "✓" sólido roxo para `ImageButton` circular com fundo `bg_btn_salvar.xml` (roxo 10%) e ícone `@drawable/ic_check_circle` — fiel ao botão arredondado lavanda da referência
+- Criado `bg_btn_salvar.xml`: oval com cor `#1A5C6BC0` (roxo 10%)
+- Hint do título corrigido: `"Título da anotação"` → `"Título da Anotação"` (A maiúsculo, fiel à referência)
+- Hint do conteúdo corrigido: `"Comece a escrever sua anotação..."` → `"Comece a escrever sua nota aqui..."` (texto idêntico à referência)
+- Barra de formatação: adicionado botão **Checklist** (`@drawable/ic_checklist`) entre Lista e Imagem
+- Barra de formatação: adicionados **2 separadores verticais** (`View` 1dp × 24dp, `@color/divisoria`) entre grupos B/I e Lista/Checklist, e entre Imagem e Mais
+- Barra de formatação: adicionado **espaçador** (`layout_weight="1"`) para empurrar botão Mais para a extremidade direita
+- Ícones da barra substituídos: `@android:drawable/` → referências a PNGs do projeto (critério 5)
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_arrow_back.png` | PNG | ✅ presente |
+| `ic_check_circle.png` | PNG | ✅ presente |
+| `bg_btn_salvar.xml` | XML shape | ✅ criado nesta auditoria |
+
+**Assets faltantes**
+| Arquivo | Uso | Status |
+|---------|-----|--------|
+| `ic_lista.png` | Botão "Lista com marcadores" na barra de formatação | ✅ adicionado pelo usuário |
+| `ic_checklist.png` | Botão "Checklist" na barra de formatação | ✅ adicionado pelo usuário |
+| `ic_imagem.png` | Botão "Inserir imagem" na barra de formatação | ✅ adicionado pelo usuário |
+| `ic_mais_opcoes.png` | Botão "Mais opções" (⋮) na barra de formatação | ✅ adicionado pelo usuário |
 
 ---
 
@@ -464,7 +486,7 @@ Para cada tela, verificar:
 | 05 · Minhas Matérias | ✅ Concluída |
 | 06 · Detalhes da Matéria | ✅ Concluída |
 | 07 · Nova Matéria | ✅ Concluída |
-| 08 · Nova Anotação | ⏳ Pendente |
+| 08 · Nova Anotação | 🔄 Em andamento |
 | 09 · Nova Atividade | ⏳ Pendente |
 | 10 · Todas as Anotações | ⏳ Pendente |
 | 11 · Calendário | ⏳ Pendente |

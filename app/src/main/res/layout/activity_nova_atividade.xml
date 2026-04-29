@@ -2,6 +2,7 @@
 <!--
     TELA 9: Nova Atividade — formulário para cadastrar tarefa ou prova.
     Seletor de tipo (Tarefa/Prova), campos de título, matéria, data, hora e observações.
+    Botão salvar + BottomNavigationView fixos no rodapé.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,12 +11,12 @@
     android:layout_height="match_parent"
     android:background="@color/fundo_tela">
 
-    <!-- Header com voltar e título -->
+    <!-- Header: botão voltar + título da tela -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutHeader"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="@color/fundo_card"
+        android:background="@color/fundo_tela"
         android:paddingHorizontal="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,12 +24,12 @@
 
         <ImageButton
             android:id="@+id/btnVoltar"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
             android:scaleType="fitCenter"
-            android:padding="4dp"
+            android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,15 +48,25 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Conteúdo rolável -->
+    <!-- Linha divisória abaixo do header -->
+    <View
+        android:id="@+id/dividerHeader"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/divisoria"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
+
+    <!-- Conteúdo rolável com os campos do formulário -->
     <ScrollView
         android:id="@+id/scrollForm"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/btnSalvarAtividade"
+        app:layout_constraintBottom_toTopOf="@id/layoutRodape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
+        app:layout_constraintTop_toBottomOf="@id/dividerHeader">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,25 +77,26 @@
             <!-- Seletor de tipo: Tarefa / Prova -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_campo"
-                android:orientation="horizontal">
+                android:layout_height="48dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_seletor_tipo"
+                android:orientation="horizontal"
+                android:padding="4dp">
 
+                <!-- Tab Tarefa (selecionada por padrão) -->
                 <TextView
                     android:id="@+id/tabTarefa"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_chip_selecionado"
+                    android:background="@drawable/bg_tab_ativo"
                     android:gravity="center"
-                    android:layout_margin="4dp"
-                    android:padding="4dp"
                     android:text="Tarefa"
-                    android:textColor="@color/fundo_card"
+                    android:textColor="@color/roxo_primario"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
+                <!-- Tab Prova (não selecionada por padrão) -->
                 <TextView
                     android:id="@+id/tabProva"
                     android:layout_width="0dp"
@@ -96,54 +108,57 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- Campo: Título da atividade -->
+            <!-- Label: Título da Atividade -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Título"
-                android:textColor="@color/texto_primario"
+                android:text="Título da Atividade"
+                android:textColor="@color/texto_secundario"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/inter_medium" />
 
+            <!-- Campo de texto: título -->
             <EditText
                 android:id="@+id/etTituloAtividade"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/bg_campo"
-                android:hint="Ex: Relatório de Microserviços"
+                android:hint="Ex: Exercícios de Álgebra"
                 android:inputType="textCapSentences"
                 android:paddingHorizontal="16dp"
                 android:textColor="@color/texto_primario"
                 android:textColorHint="@color/texto_hint"
                 android:textSize="14sp" />
 
-            <!-- Campo: Matéria -->
+            <!-- Label: Matéria -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Matéria"
-                android:textColor="@color/texto_primario"
+                android:textColor="@color/texto_secundario"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/inter_medium" />
 
+            <!-- Spinner de seleção de matéria -->
             <Spinner
                 android:id="@+id/spinnerMateria"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/bg_campo"
                 android:paddingHorizontal="16dp" />
 
-            <!-- Linha com Data e Hora lado a lado -->
+            <!-- Linha: Data e Horário lado a lado -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
+                <!-- Coluna Data -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -156,23 +171,41 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:text="Data"
-                        android:textColor="@color/texto_primario"
+                        android:textColor="@color/texto_secundario"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/inter_medium" />
 
-                    <EditText
-                        android:id="@+id/etData"
+                    <!-- Campo data com ícone de calendário à esquerda -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:background="@drawable/bg_campo"
-                        android:hint="DD/MM/AAAA"
-                        android:inputType="date"
-                        android:paddingHorizontal="12dp"
-                        android:textColor="@color/texto_primario"
-                        android:textColorHint="@color/texto_hint"
-                        android:textSize="13sp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_calendario"
+                            android:tint="@color/texto_secundario" />
+
+                        <EditText
+                            android:id="@+id/etData"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:background="@null"
+                            android:hint="24/10/2023"
+                            android:inputType="date"
+                            android:textColor="@color/texto_primario"
+                            android:textColorHint="@color/texto_hint"
+                            android:textSize="13sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
+                <!-- Coluna Horário -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -183,42 +216,60 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="Hora"
-                        android:textColor="@color/texto_primario"
+                        android:text="Horário"
+                        android:textColor="@color/texto_secundario"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/inter_medium" />
 
-                    <EditText
-                        android:id="@+id/etHora"
+                    <!-- Campo hora com ícone de relógio à esquerda -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:background="@drawable/bg_campo"
-                        android:hint="HH:MM"
-                        android:inputType="time"
-                        android:paddingHorizontal="12dp"
-                        android:textColor="@color/texto_primario"
-                        android:textColorHint="@color/texto_hint"
-                        android:textSize="13sp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_clock"
+                            android:tint="@color/texto_secundario" />
+
+                        <EditText
+                            android:id="@+id/etHora"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:background="@null"
+                            android:hint="14:30"
+                            android:inputType="time"
+                            android:textColor="@color/texto_primario"
+                            android:textColorHint="@color/texto_hint"
+                            android:textSize="13sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Campo: Observações -->
+            <!-- Label: Observações -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Observações (Opcional)"
-                android:textColor="@color/texto_primario"
+                android:text="Observações"
+                android:textColor="@color/texto_secundario"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/inter_medium" />
 
+            <!-- Campo de texto multil-linha para observações -->
             <EditText
                 android:id="@+id/etObservacoes"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@drawable/bg_campo"
                 android:gravity="top|start"
-                android:hint="Adicione detalhes adicionais..."
+                android:hint="Adicione detalhes extras..."
                 android:inputType="textCapSentences|textMultiLine"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="12dp"
@@ -229,20 +280,47 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Botão Salvar Atividade fixo no rodapé -->
-    <Button
-        android:id="@+id/btnSalvarAtividade"
+    <!-- Rodapé fixo: botão salvar + BottomNavigationView -->
+    <LinearLayout
+        android:id="@+id/layoutRodape"
         android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/roxo_primario"
-        android:text="Salvar Atividade"
-        android:textColor="@color/fundo_card"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:background="@color/fundo_tela"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Linha divisória acima do botão -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divisoria" />
+
+        <!-- Botão salvar atividade -->
+        <Button
+            android:id="@+id/btnSalvarAtividade"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/roxo_primario"
+            android:text="Salvar Atividade"
+            android:textColor="@color/fundo_card"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Barra de navegação inferior com 3 destinos -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/fundo_card"
+            app:menu="@menu/menu_bottom_nav"
+            app:itemTextColor="@color/bottom_nav_color"
+            app:itemIconTint="@color/bottom_nav_color" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

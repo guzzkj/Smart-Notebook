@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    TELA 7: Todas as Anotações — lista completa de anotações de uma matéria.
-    Header com nome da matéria e botão de busca. FAB para nova anotação.
+    TELA 10: Todas as Anotações — lista completa de anotações de uma matéria.
+    Header com nome da matéria centralizado e botão de busca.
+    Filtro de ordenação. FAB para nova anotação. BottomNav fixo no rodapé.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,29 +11,31 @@
     android:layout_height="match_parent"
     android:background="@color/fundo_tela">
 
-    <!-- Header com voltar, nome da matéria e busca -->
+    <!-- Header: mesmo fundo da tela (fundo_tela), sem elevação -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutHeader"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="@color/fundo_card"
+        android:background="@color/fundo_tela"
         android:paddingHorizontal="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Botão voltar -->
         <ImageButton
             android:id="@+id/btnVoltar"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
             android:scaleType="fitCenter"
-            android:padding="4dp"
+            android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Nome da matéria centralizado entre os dois botões -->
         <TextView
             android:id="@+id/tvNomeMateriaHeader"
             android:layout_width="0dp"
@@ -42,11 +45,13 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="@font/inter_medium"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnBuscar"
             app:layout_constraintStart_toEndOf="@id/btnVoltar"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Botão de busca -->
         <ImageButton
             android:id="@+id/btnBuscar"
             android:layout_width="48dp"
@@ -57,33 +62,73 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Linha divisória abaixo do header -->
+    <View
+        android:id="@+id/viewDivisoriaHeader"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/divisoria"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
+
+    <!-- Barra de filtro/ordenação: alinhada à direita, fundo roxo 10% -->
+    <LinearLayout
+        android:id="@+id/layoutFiltro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewDivisoriaHeader">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOrdenar"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Mais Recentes"
+            android:textSize="13sp"
+            android:textColor="@color/roxo_primario"
+            android:paddingHorizontal="12dp"
+            app:icon="@drawable/ic_swap_vert"
+            app:iconTint="@color/roxo_primario"
+            app:backgroundTint="#1A5C6BC0"
+            app:strokeWidth="0dp"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
 
     <!-- Lista de anotações -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTodasAnotacoes"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:paddingHorizontal="16dp"
         android:paddingBottom="16dp"
         android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
+        app:layout_constraintTop_toBottomOf="@id/layoutFiltro" />
 
-    <!-- Botão flutuante para nova anotação -->
+    <!-- FAB para nova anotação: posicionado acima da navbar, circular -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabNovaAnotacao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
-        android:src="@android:drawable/ic_input_add"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add"
         app:backgroundTint="@color/roxo_primario"
         app:tint="@color/fundo_card"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:shapeAppearanceOverlay="@style/FABCircular"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Barra de navegação inferior -->

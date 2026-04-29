@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tab ativa do seletor (Tarefa/Prova) — branco com cantos arredondados -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/fundo_card" />
+    <corners android:radius="12dp" />
+</shape>

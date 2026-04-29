@@ -328,24 +328,47 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `NovaAtividadeActivity.kt` |
 | **Layout** | `activity_nova_atividade.xml` |
 | **Referência** | `TELAS/nova_atividade/screen.png` · `code.html` |
 | **Adapter** | — (formulário, sem lista) |
-| **Navega para** | `DetalhesMateriaActivity` (volta) |
+| **Navega para** | `DetalhesMateriaActivity` (via `finish()`) · `MinhasMateriasActivity` · `CalendarioActivity` · `MenuInstitucionalActivity` (BottomNav) |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (não aplicável — tela de formulário)
+- [x] Navegação via `finish()` (voltar) e Intent explícita (BottomNav)
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable`
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- Header: `background` de `fundo_card` → `fundo_tela`; adicionada linha divisória `View` 1dp abaixo do header
+- Seletor Tarefa/Prova: container `bg_campo` → `bg_seletor_tipo.xml` (cinza claro, `#E2E4ED`, radius 16dp); tab ativa `bg_chip_selecionado` (roxo sólido) → `bg_tab_ativo.xml` (branco, radius 12dp) + texto roxo; fiel à referência visual
+- Labels: `textStyle="bold"` → `fontFamily="inter_medium"` + `textColor="texto_secundario"` em todos os rótulos
+- Label "Título" → "Título da Atividade"
+- Placeholder do título: "Ex: Relatório de Microserviços" → "Ex: Exercícios de Álgebra"
+- Campo Data: ícone `@drawable/ic_calendario` adicionado à esquerda (dentro de LinearLayout container)
+- Label "Hora" → "Horário"
+- Campo Horário: ícone `@drawable/ic_clock` adicionado à esquerda (dentro de LinearLayout container)
+- "Observações (Opcional)" → "Observações"
+- Placeholder observações: "Adicione detalhes adicionais..." → "Adicione detalhes extras..."
+- `BottomNavigationView` adicionado ao rodapé fixo (ausente na versão anterior)
+- `ScrollView` constraint: `toTopOf="btnSalvarAtividade"` → `toTopOf="layoutRodape"` (engloba botão + BottomNav)
+- Spinner: adicionado item inicial "Selecione a matéria" como prompt
+- `.kt`: `configurarAbas()` atualizado para usar `bg_tab_ativo` + `roxo_primario`; adicionado `configurarBottomNav()`
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_arrow_back.png` | PNG | ✅ presente |
+| `ic_calendario.png` | PNG | ✅ presente |
+| `ic_clock.png` | PNG | ✅ presente |
+| `bg_campo.xml` | XML shape | ✅ presente |
+| `bg_seletor_tipo.xml` | XML shape | ✅ criado nesta auditoria |
+| `bg_tab_ativo.xml` | XML shape | ✅ criado nesta auditoria |
 
 ---
 
@@ -353,25 +376,49 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `TodasAnotacoesActivity.kt` |
 | **Layout** | `activity_todas_anotacoes.xml` |
 | **Item de lista** | `item_anotacao.xml` |
 | **Referência** | `TELAS/todas_as_anota_es_nav_simplificada/screen.png` · `code.html` |
 | **Adapter** | `AnotacoesAdapter.kt` |
-| **Navega para** | `NovaAnotacaoActivity` · `DetalhesMateriaActivity` |
+| **Navega para** | `NovaAnotacaoActivity` · `MinhasMateriasActivity` · `CalendarioActivity` · `MenuInstitucionalActivity` (BottomNav) |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (AnotacoesAdapter + DadosMock)
+- [x] Navegação via Intent explícita + `finish()` (voltar)
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable` (ver "Assets faltantes" abaixo)
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- Comentários corrigidos de `TELA 7` para `TELA 10` (`.kt` e `.xml`)
+- Header: `background` de `fundo_card` (branco) → `fundo_tela` (cinza claro), fiel à referência
+- Header: adicionada linha divisória `View` 1dp abaixo do header
+- Título: adicionado `android:gravity="center"` — centralizado entre os dois botões, fiel à referência
+- Barra de filtro "Mais Recentes": adicionado `LinearLayout` com `MaterialButton` (ícone `ic_swap_vert` + texto, fundo roxo 10%, radius 12dp), completamente ausente na versão anterior
+- FAB: `@android:drawable/ic_input_add` → `@drawable/ic_add` (PNG do projeto, critério 5)
+- FAB: reposicionado com `constraintBottom_toTopOf="@id/bottomNav"` + `marginBottom="16dp"` (antes usava `marginBottom="80dp"` fixo ancorado ao parent)
+- FAB: adicionado `app:shapeAppearanceOverlay="@style/FABCircular"` (mesmo padrão das telas 05 e 06)
+- `configurarBottomNav()` adicionado ao `.kt` (ausente na versão anterior) e chamado no `onCreate`
+- `btnOrdenar` recebe click listener com Toast ("Ordenação em breve")
+- `item_anotacao.xml`: adicionado `imgChevron` (`@drawable/ic_chevron_right`, 20dp, tint `texto_hint`) — referência da tela 10 mostra seta em todos os cards; constraints de título e data atualizadas para `End_toStartOf="@id/imgChevron"`
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_arrow_back.png` | PNG | ✅ presente |
+| `ic_buscar.png` | PNG | ✅ presente |
+| `ic_add.png` | PNG | ✅ presente |
+| `bg_card_nota.xml` | XML shape | ✅ presente |
+
+**Assets — placeholders XML criados (build funciona)**
+| Arquivo PNG desejado | Placeholder XML criado | Ação do usuário |
+|----------------------|------------------------|-----------------|
+| `ic_swap_vert.png` | `ic_swap_vert.xml` ✅ | Adicionar PNG → excluir o XML |
+| `ic_chevron_right.png` | `ic_chevron_right.xml` ✅ | Adicionar PNG → excluir o XML |
 
 ---
 
@@ -487,14 +534,14 @@ Para cada tela, verificar:
 | 06 · Detalhes da Matéria | ✅ Concluída |
 | 07 · Nova Matéria | ✅ Concluída |
 | 08 · Nova Anotação | 🔄 Em andamento |
-| 09 · Nova Atividade | ⏳ Pendente |
-| 10 · Todas as Anotações | ⏳ Pendente |
+| 09 · Nova Atividade | ✅ Concluída |
+| 10 · Todas as Anotações | ✅ Concluída |
 | 11 · Calendário | ⏳ Pendente |
 | 12 · Menu Institucional | ⏳ Pendente |
 | 13 · Editar Perfil | ⏳ Pendente |
 | 14 · Sobre | ⏳ Pendente |
 
-**Concluídas: 5 / 14**
+**Concluídas: 7 / 14**
 
 ---
 

@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smartnotebook.R
 import com.example.smartnotebook.adapters.AnotacoesAdapter
 import com.example.smartnotebook.databinding.ActivityTodasAnotacoesBinding
 import com.example.smartnotebook.models.DadosMock
 
-// TELA 7: Todas as Anotações — lista completa de anotações de uma matéria
+// TELA 10: Todas as Anotações — lista completa de anotações de uma matéria
 class TodasAnotacoesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTodasAnotacoesBinding
@@ -32,6 +33,7 @@ class TodasAnotacoesActivity : AppCompatActivity() {
 
         carregarAnotacoes(materiaId)
         configurarBotoes()
+        configurarBottomNav()
     }
 
     // Preenche o RecyclerView com todas as anotações da matéria
@@ -58,6 +60,35 @@ class TodasAnotacoesActivity : AppCompatActivity() {
         // Botão de busca — futura funcionalidade
         binding.btnBuscar.setOnClickListener {
             Toast.makeText(this, "Busca em breve", Toast.LENGTH_SHORT).show()
+        }
+
+        // Ordenação — futura funcionalidade
+        binding.btnOrdenar.setOnClickListener {
+            Toast.makeText(this, "Ordenação em breve", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Configura a navegação pelo BottomNavigationView
+    private fun configurarBottomNav() {
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_inicio -> {
+                    // Volta para a tela principal de matérias
+                    val intent = Intent(this, MinhasMateriasActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_calendario -> {
+                    startActivity(Intent(this, CalendarioActivity::class.java))
+                    true
+                }
+                R.id.nav_menu -> {
+                    startActivity(Intent(this, MenuInstitucionalActivity::class.java))
+                    true
+                }
+                else -> false
+            }
         }
     }
 }

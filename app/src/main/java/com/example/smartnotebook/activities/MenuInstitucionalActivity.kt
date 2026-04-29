@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.smartnotebook.R
 import com.example.smartnotebook.databinding.ActivityMenuInstitucionalBinding
 
-// TELA 11: Menu Institucional — acesso ao perfil, links e opção de sair
+// TELA 12: Menu Institucional — acesso ao perfil, links e opção de sair
 class MenuInstitucionalActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMenuInstitucionalBinding
@@ -17,13 +17,19 @@ class MenuInstitucionalActivity : AppCompatActivity() {
         binding = ActivityMenuInstitucionalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        configurarHeader()
         configurarItensMenu()
         configurarBottomNav()
     }
 
+    // Botão voltar do cabeçalho retorna à tela anterior
+    private fun configurarHeader() {
+        binding.btnVoltar.setOnClickListener { finish() }
+    }
+
     private fun configurarItensMenu() {
-        // Item: Editar Perfil → abre tela de edição
-        binding.itemEditarPerfil.setOnClickListener {
+        // Card do usuário → abre tela de edição de perfil
+        binding.cardUsuario.setOnClickListener {
             startActivity(Intent(this, EditarPerfilActivity::class.java))
         }
 
@@ -42,23 +48,23 @@ class MenuInstitucionalActivity : AppCompatActivity() {
             Toast.makeText(this, "Termos de Uso em breve", Toast.LENGTH_SHORT).show()
         }
 
-        // Botão Sair: limpa a pilha e volta ao Login
+        // Botão Sair: limpa a pilha de Activities e retorna ao Login
         binding.itemSair.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
-            // FLAG_ACTIVITY_CLEAR_TASK remove todas as Activities antes de abrir o Login
+            // FLAG_ACTIVITY_CLEAR_TASK garante que o usuário não volta ao app com o botão Voltar
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
     }
 
-    // Configura as 3 abas do BottomNavigationView — Menu já está selecionado
+    // Configura as 3 abas do BottomNavigationView — aba Menu já está selecionada
     private fun configurarBottomNav() {
         binding.bottomNav.selectedItemId = R.id.nav_menu
 
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_inicio -> {
-                    // Intent explícita para a tela inicial
+                    // Intent explícita para a tela inicial, limpando as telas intermediárias
                     val intent = Intent(this, MinhasMateriasActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    TELA 11: Menu Institucional — menu lateral com perfil, links e opção de sair.
-    Card do usuário no topo, lista de itens e botão "Sair" em vermelho.
+    TELA 12: Menu Institucional — perfil do usuário, links de navegação e opção de sair.
+    Cabeçalho fixo com botão voltar, card lavanda do usuário (clicável → Editar Perfil),
+    lista de itens com ícone circular e chevron, e botão Sair em vermelho.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,26 +11,79 @@
     android:layout_height="match_parent"
     android:background="@color/fundo_tela">
 
-    <!-- Card do usuário no topo -->
+    <!-- Cabeçalho com botão voltar e título centralizado -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cardUsuario"
+        android:id="@+id/header"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:background="@color/fundo_card"
-        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Avatar circular -->
+        <ImageButton
+            android:id="@+id/btnVoltar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@color/texto_primario"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Título centralizado entre as extremidades do header -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center"
+            android:text="Menu"
+            android:textColor="@color/texto_primario"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Linha divisória abaixo do cabeçalho -->
+    <View
+        android:id="@+id/divisoriaHeader"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/divisoria"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header" />
+
+    <!-- Card do usuário — clique navega para Editar Perfil -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardUsuario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_card_usuario_menu"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divisoriaHeader">
+
+        <!-- Avatar circular do usuário — fundo roxo + ícone branco centralizado -->
         <ImageView
             android:id="@+id/imgAvatarMenu"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/bg_avatar"
-            android:padding="12dp"
-            android:src="@android:drawable/ic_menu_myplaces"
-            android:tint="@color/roxo_primario"
+            android:background="@drawable/bg_avatar_roxo"
+            android:padding="14dp"
+            android:src="@drawable/ic_profile_menu"
+            android:tint="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,11 +93,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Carlos Eduardo Silva"
+            android:fontFamily="@font/inter_medium"
+            android:text="Usuário Smart"
             android:textColor="@color/texto_primario"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:fontFamily="@font/inter_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgAvatarMenu"
             app:layout_constraintTop_toTopOf="@id/imgAvatarMenu" />
@@ -55,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
-            android:text="carlos.eduardo@smartcaderno.com"
+            android:text="smartcaderno@exemplo.com"
             android:textColor="@color/texto_secundario"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,45 +117,17 @@
             app:layout_constraintTop_toBottomOf="@id/tvNomeUsuario" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Itens do menu -->
+    <!-- Itens do menu — cada item tem ícone circular, texto e chevron -->
     <LinearLayout
         android:id="@+id/layoutItensMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="@color/fundo_card"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardUsuario">
-
-        <!-- Item: Editar Perfil -->
-        <LinearLayout
-            android:id="@+id/itemEditarPerfil"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="20dp">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_editar"
-                android:tint="@color/texto_secundario" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Editar Perfil"
-                android:textColor="@color/texto_primario"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <View android:layout_width="match_parent" android:layout_height="1dp"
-            android:background="@color/divisoria" android:layout_marginHorizontal="20dp"/>
 
         <!-- Item: Sobre o Aplicativo -->
         <LinearLayout
@@ -113,23 +139,41 @@
             android:orientation="horizontal"
             android:paddingHorizontal="20dp">
 
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+            <!-- Ícone com fundo oval lavanda -->
+            <FrameLayout
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="16dp"
-                android:src="@android:drawable/ic_dialog_info"
-                android:tint="@color/texto_secundario" />
+                android:background="@drawable/bg_icone_menu">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_info"
+                    android:tint="@color/roxo_primario" />
+            </FrameLayout>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Sobre o Aplicativo"
                 android:textColor="@color/texto_primario"
                 android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_chevron_right"
+                android:tint="@color/texto_hint" />
         </LinearLayout>
 
-        <View android:layout_width="match_parent" android:layout_height="1dp"
-            android:background="@color/divisoria" android:layout_marginHorizontal="20dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@color/divisoria" />
 
         <!-- Item: Guia de Produtividade -->
         <LinearLayout
@@ -141,23 +185,40 @@
             android:orientation="horizontal"
             android:paddingHorizontal="20dp">
 
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+            <FrameLayout
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="16dp"
-                android:src="@android:drawable/ic_menu_help"
-                android:tint="@color/texto_secundario" />
+                android:background="@drawable/bg_icone_menu">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_guia"
+                    android:tint="@color/roxo_primario" />
+            </FrameLayout>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Guia de Produtividade"
                 android:textColor="@color/texto_primario"
                 android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_chevron_right"
+                android:tint="@color/texto_hint" />
         </LinearLayout>
 
-        <View android:layout_width="match_parent" android:layout_height="1dp"
-            android:background="@color/divisoria" android:layout_marginHorizontal="20dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@color/divisoria" />
 
         <!-- Item: Termos de Uso -->
         <LinearLayout
@@ -169,29 +230,45 @@
             android:orientation="horizontal"
             android:paddingHorizontal="20dp">
 
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+            <FrameLayout
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="16dp"
-                android:src="@android:drawable/ic_menu_agenda"
-                android:tint="@color/texto_secundario" />
+                android:background="@drawable/bg_icone_menu">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_termos"
+                    android:tint="@color/roxo_primario" />
+            </FrameLayout>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Termos de Uso"
                 android:textColor="@color/texto_primario"
                 android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_chevron_right"
+                android:tint="@color/texto_hint" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Botão Sair (vermelho) -->
+    <!-- Botão Sair — seção separada com fundo vermelho claro no ícone -->
     <LinearLayout
         android:id="@+id/itemSair"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
         android:background="@color/fundo_card"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="20dp"
@@ -199,26 +276,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutItensMenu">
 
+        <!-- Ícone com fundo oval vermelho claro -->
+        <FrameLayout
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_icone_sair">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_sair"
+                android:tint="@color/cor_erro" />
+        </FrameLayout>
+
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Sair"
             android:textColor="@color/cor_erro"
             android:textSize="15sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_chevron_right"
+            android:tint="@color/cor_erro" />
     </LinearLayout>
 
-    <!-- Barra de navegação inferior (Menu destacado) -->
+    <!-- Barra de navegação inferior — aba Menu destacada -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/fundo_card"
-        app:menu="@menu/menu_bottom_nav"
-        app:itemTextColor="@color/bottom_nav_color"
         app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

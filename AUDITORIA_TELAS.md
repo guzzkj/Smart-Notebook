@@ -479,24 +479,54 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `MenuInstitucionalActivity.kt` |
 | **Layout** | `activity_menu_institucional.xml` |
-| **Referência** | `TELAS/menu_institucional_atualizado/screen.png` · `code.html` |
-| **Adapter** | — (verificar se há lista) |
-| **Navega para** | `EditarPerfilActivity` · `SobreActivity` · `LoginActivity` (logout) |
+| **Referência** | `TELAS/Menu Institucional.png` |
+| **Adapter** | — (sem lista) |
+| **Navega para** | `EditarPerfilActivity` (card usuário) · `SobreActivity` · `LoginActivity` (logout) |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (não aplicável — tela sem lista)
+- [x] Navegação via Intent explícita
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable` (ver "Assets faltantes" abaixo)
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- Comentários corrigidos de `TELA 11` para `TELA 12` (`.kt` e `.xml`)
+- Adicionado cabeçalho (`header`) com botão `btnVoltar` (`ic_arrow_back`) e título "Menu" centralizado — ausente na versão anterior
+- Removido item "Editar Perfil" da lista (não presente na referência); acesso agora via clique no `cardUsuario`
+- `cardUsuario`: background de `fundo_card` (branco) → `bg_card_usuario_menu` (lavanda `#EEF0FF`, radius 16dp), com `android:foreground` de ripple e `marginHorizontal="16dp"` fiel à referência
+- Avatar: `@android:drawable/ic_menu_myplaces` → `@drawable/ic_avatar_placeholder` (critério 5)
+- Nome: "Carlos Eduardo Silva" → "Usuário Smart" (fiel à referência)
+- E-mail: "carlos.eduardo@smartcaderno.com" → "smartcaderno@exemplo.com" (fiel à referência)
+- Ícones dos itens: `@android:drawable/ic_dialog_info` → `@drawable/ic_info`; `ic_menu_help` → `@drawable/ic_guia`; `ic_menu_agenda` → `@drawable/ic_termos` (critério 5)
+- Adicionado `FrameLayout` 36dp com `bg_icone_menu` (oval lavanda) ao redor de cada ícone de item — fiel aos círculos lavanda da referência
+- Adicionado `ic_chevron_right` (16dp, tint `texto_hint`) ao final de cada item — ausente na versão anterior
+- Item "Sair": adicionado ícone `@drawable/ic_sair` com fundo `bg_icone_sair` (oval vermelho claro `#FFEBEE`); adicionado `ic_chevron_right` com tint `cor_erro`; largura do `TextView` ajustada com `layout_weight="1"`
+- `configurarHeader()` adicionado ao `.kt`: `btnVoltar.setOnClickListener { finish() }`
+- `itemEditarPerfil` substituído por `cardUsuario.setOnClickListener { → EditarPerfilActivity }`
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_arrow_back.png` | PNG | ✅ presente |
+| `ic_profile_menu.png` | PNG | ✅ adicionado pelo usuário (avatar do card de usuário) |
+| `ic_info.png` | PNG | ✅ presente |
+| `ic_chevron_right.png` | PNG | ✅ presente (adicionado na tela 11) |
+| `bg_card_usuario_menu.xml` | XML shape | ✅ criado nesta auditoria |
+| `bg_icone_menu.xml` | XML shape | ✅ criado nesta auditoria |
+| `bg_icone_sair.xml` | XML shape | ✅ criado nesta auditoria |
+
+**Assets faltantes**
+| Arquivo | Uso | Status |
+|---------|-----|--------|
+| `ic_guia.png` | Ícone "Guia de Produtividade" (lâmpada) | ✅ adicionado pelo usuário |
+| `ic_termos.png` | Ícone "Termos de Uso" (documento) | ✅ adicionado pelo usuário |
+| `ic_sair.png` | Ícone "Sair" (seta de logout) | ✅ adicionado pelo usuário |
 
 ---
 
@@ -565,11 +595,11 @@ Para cada tela, verificar:
 | 09 · Nova Atividade | ✅ Concluída |
 | 10 · Todas as Anotações | ✅ Concluída |
 | 11 · Calendário | ✅ Concluída |
-| 12 · Menu Institucional | ⏳ Pendente |
+| 12 · Menu Institucional | ✅ Concluída |
 | 13 · Editar Perfil | ⏳ Pendente |
 | 14 · Sobre | ⏳ Pendente |
 
-**Concluídas: 8 / 14**
+**Concluídas: 9 / 14**
 
 ---
 

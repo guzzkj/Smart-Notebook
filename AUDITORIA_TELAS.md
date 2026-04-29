@@ -534,24 +534,44 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `EditarPerfilActivity.kt` |
 | **Layout** | `activity_editar_perfil.xml` |
 | **Referência** | `TELAS/edi_o_de_perfil_finalizada/screen.png` · `code.html` |
 | **Adapter** | — (formulário, sem lista) |
-| **Navega para** | `MenuInstitucionalActivity` (volta) |
+| **Navega para** | `MenuInstitucionalActivity` (via `finish()`) |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada
+- [x] RecyclerView presente (não aplicável — tela de formulário)
+- [x] Navegação via `finish()` (padrão correto para retorno ao Menu)
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable` (ver "Assets faltantes" abaixo)
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- Comentários corrigidos de `TELA 12` para `TELA 13` (`.kt` e `.xml`)
+- Avatar: `@android:drawable/ic_menu_myplaces` + `tint` → `@drawable/ic_avatar_placeholder` sem tint e sem background (PNG já contém forma circular, critério 5)
+- Badge câmera: background inline `#22C55E` duplicado (`background` + `backgroundTint`) → `@drawable/bg_badge_camera` (oval shape criado nesta auditoria)
+- Badge câmera: ícone `@android:drawable/ic_menu_camera` → `@drawable/ic_camera` (PNG do projeto, critério 5)
+- Adicionada `View` divisória 1dp `@color/divisoria` ancorada ao rodapé do header (padrão das telas 09–12)
+- Botão "Salvar Alterações": `drawableStart` `@android:drawable/ic_menu_save` → `@drawable/ic_salvar` (PNG do projeto, critério 5)
+- Labels "Nome Completo" e "E-mail": `textStyle="bold"` → `fontFamily="@font/inter_medium"` (padrão das telas auditadas)
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_arrow_back.png` | PNG | ✅ presente |
+| `ic_avatar_placeholder.png` | PNG | ✅ presente |
+| `bg_campo.xml` | XML shape | ✅ presente |
+| `bg_badge_camera.xml` | XML shape | ✅ criado nesta auditoria |
+
+**Assets faltantes**
+| Arquivo | Uso | Status |
+|---------|-----|--------|
+| `ic_camera.png` | Ícone da câmera no badge do avatar | ✅ adicionado pelo usuário |
+| `ic_salvar.png` | Ícone do disquete no botão "Salvar Alterações" | ✅ adicionado pelo usuário |
 
 ---
 
@@ -596,10 +616,10 @@ Para cada tela, verificar:
 | 10 · Todas as Anotações | ✅ Concluída |
 | 11 · Calendário | ✅ Concluída |
 | 12 · Menu Institucional | ✅ Concluída |
-| 13 · Editar Perfil | ⏳ Pendente |
+| 13 · Editar Perfil | ✅ Concluída |
 | 14 · Sobre | ⏳ Pendente |
 
-**Concluídas: 9 / 14**
+**Concluídas: 10 / 14**
 
 ---
 

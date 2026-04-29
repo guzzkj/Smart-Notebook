@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    TELA 12: Editar Perfil — permite alterar nome, e-mail e foto do usuário.
+    TELA 13: Editar Perfil — permite alterar nome, e-mail e foto do usuário.
     Avatar com badge de câmera, campos de texto e botão de salvar.
 -->
 <ScrollView
@@ -50,6 +50,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <!-- Linha divisória abaixo do header -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/divisoria"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Seção do avatar com badge de câmera -->
@@ -67,26 +76,23 @@
                 android:id="@+id/imgAvatarPerfil"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:background="@drawable/bg_avatar"
-                android:padding="20dp"
-                android:src="@android:drawable/ic_menu_myplaces"
-                android:tint="#94A3B8" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_avatar_placeholder" />
 
-            <!-- Badge de câmera (verde) -->
+            <!-- Badge de câmera (verde circular) -->
             <FrameLayout
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_gravity="bottom|end"
-                android:background="#22C55E"
+                android:background="@drawable/bg_badge_camera"
                 android:layout_marginEnd="2dp"
-                android:layout_marginBottom="2dp"
-                android:backgroundTint="#22C55E">
+                android:layout_marginBottom="2dp">
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center"
-                    android:src="@android:drawable/ic_menu_camera"
+                    android:src="@drawable/ic_camera"
                     android:tint="@color/fundo_card" />
             </FrameLayout>
         </FrameLayout>
@@ -124,7 +130,7 @@
                 android:text="Nome Completo"
                 android:textColor="@color/texto_primario"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/inter_medium" />
 
             <EditText
                 android:id="@+id/etNomeCompleto"
@@ -146,7 +152,7 @@
                 android:text="E-mail"
                 android:textColor="@color/texto_primario"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/inter_medium" />
 
             <EditText
                 android:id="@+id/etEmailPerfil"
@@ -161,18 +167,19 @@
                 android:inputType="textEmailAddress" />
 
             <!-- Botão Salvar Alterações -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSalvarAlteracoes"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:backgroundTint="@color/roxo_primario"
-                android:drawableStart="@android:drawable/ic_menu_save"
-                android:drawableTint="@color/fundo_card"
-                android:drawablePadding="8dp"
                 android:text="Salvar Alterações"
                 android:textColor="@color/fundo_card"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:icon="@drawable/ic_salvar"
+                app:iconTint="@color/fundo_card"
+                app:iconPadding="8dp"
+                app:iconGravity="textStart" />
 
             <!-- Informação de sincronização -->
             <TextView

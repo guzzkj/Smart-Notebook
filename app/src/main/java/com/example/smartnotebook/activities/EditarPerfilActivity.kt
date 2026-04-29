@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smartnotebook.databinding.ActivityEditarPerfilBinding
 
-// TELA 12: Editar Perfil — permite alterar nome e e-mail do usuário
+// TELA 13: Editar Perfil — permite alterar nome e e-mail do usuário
 class EditarPerfilActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditarPerfilBinding

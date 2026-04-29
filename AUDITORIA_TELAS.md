@@ -426,24 +426,52 @@ Para cada tela, verificar:
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⏳ Pendente |
+| **Status** | ✅ Concluída |
 | **Activity** | `CalendarioActivity.kt` |
 | **Layout** | `activity_calendario.xml` |
 | **Referência** | `TELAS/calend_rio_em_portugu_s/screen.png` · `code.html` |
-| **Adapter** | — (verificar se há lista) |
+| **Adapter** | `EventosCalendarioAdapter.kt` |
 | **Navega para** | `MinhasMateriasActivity` · `MenuInstitucionalActivity` |
 
 **Checklist**
-- [ ] Layout fiel à referência
-- [ ] Sem lógica avançada
-- [ ] RecyclerView presente (se aplicável)
-- [ ] Navegação via Intent explícita
-- [ ] Comentários em português
-- [ ] Assets existem em `res/drawable`
-- [ ] ViewBinding sem referências quebradas
+- [x] Layout fiel à referência
+- [x] Sem lógica avançada (usa apenas `java.util.Calendar` — biblioteca padrão do Java)
+- [x] RecyclerView presente (EventosCalendarioAdapter + DadosMock)
+- [x] Navegação via Intent explícita
+- [x] Comentários em português
+- [x] Assets existem em `res/drawable` (ver "Assets faltantes" abaixo)
+- [x] ViewBinding sem referências quebradas
 
-**Observações**
-> _Registre aqui o que foi alterado ou o que falta._
+**O que foi corrigido**
+- Comentários corrigidos de `TELA 10` para `TELA 11` (`.kt` e `.xml`)
+- Cabeçalho dos dias da semana: "Dom, Seg, Ter..." → letras simples "D, S, T, Q, Q, S, S" (fiel à referência)
+- Grade do calendário envolvida em `MaterialCardView` branco arredondado (card ausente na versão anterior)
+- Legenda: pontos de cor passaram de `View` sem shape para `@drawable/bg_dot_vermelho` e `@drawable/bg_dot_teal` (oval, fiel à referência)
+- Setas de navegação: `@android:drawable/ic_media_previous/next` → `@drawable/ic_chevron_left` e `@drawable/ic_chevron_right` (critério 5)
+- Pontinhos de eventos: antes mudavam a **cor do número** (vermelho/verde) — agora são `View` 4dp oval abaixo do número, invisível por padrão e visível apenas nos dias com evento
+- Células vazias iniciais adicionadas via `java.util.Calendar.DAY_OF_WEEK` para alinhar o dia 1 à coluna correta do dia da semana
+- Botões `btnMesAnterior` e `btnProximoMes` receberam click listeners que chamam `calAtual.add(Calendar.MONTH, ±1)` e redesenham a grade
+- Criado `EventosCalendarioAdapter.kt` com `item_evento_calendario.xml` (card com ícone colorido, título, subtítulo tipo•matéria e hora) — visual fiel à referência
+
+**Assets confirmados em `res/drawable/`**
+| Arquivo | Formato | Status |
+|---------|---------|--------|
+| `ic_nav_menu.png` | PNG | ✅ presente |
+| `ic_nav_calendario.png` | PNG | ✅ presente |
+| `ic_chevron_right.xml` | XML placeholder | ✅ presente |
+| `ic_chevron_left.xml` | XML placeholder | ✅ criado nesta auditoria |
+| `bg_dot_vermelho.xml` | XML shape | ✅ criado nesta auditoria |
+| `bg_dot_teal.xml` | XML shape | ✅ criado nesta auditoria |
+| `bg_icone_avaliacao.xml` | XML shape | ✅ criado nesta auditoria |
+| `bg_icone_atividade.xml` | XML shape | ✅ criado nesta auditoria |
+| `ic_prova.png` | PNG | ✅ adicionado pelo usuário (cards de avaliação/prova) |
+| `ic_atividade.png` | PNG | ✅ adicionado pelo usuário (cards de tarefa/entrega) |
+
+**Assets faltantes**
+| Arquivo | Uso | Status |
+|---------|-----|--------|
+| `ic_chevron_left.png` | Seta mês anterior (substitui XML placeholder) | ✅ adicionado pelo usuário |
+| `ic_chevron_right.png` | Seta próximo mês (substitui XML placeholder) | ✅ adicionado pelo usuário |
 
 ---
 
@@ -536,12 +564,12 @@ Para cada tela, verificar:
 | 08 · Nova Anotação | 🔄 Em andamento |
 | 09 · Nova Atividade | ✅ Concluída |
 | 10 · Todas as Anotações | ✅ Concluída |
-| 11 · Calendário | ⏳ Pendente |
+| 11 · Calendário | ✅ Concluída |
 | 12 · Menu Institucional | ⏳ Pendente |
 | 13 · Editar Perfil | ⏳ Pendente |
 | 14 · Sobre | ⏳ Pendente |
 
-**Concluídas: 7 / 14**
+**Concluídas: 8 / 14**
 
 ---
 

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TELA 11: Card de evento para o RecyclerView do Calendário.
+    Exibe ícone colorido, título, subtítulo (tipo • matéria) e hora.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/divisoria"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Ícone colorido: fundo vermelho = avaliação, teal = atividade (cor definida via código) -->
+        <FrameLayout
+            android:id="@+id/layoutIcone"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_icone_atividade">
+
+            <ImageView
+                android:id="@+id/imgIconeEvento"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_atividade" />
+        </FrameLayout>
+
+        <!-- Título e subtítulo do evento -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTituloEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="Prova Web Services"
+                android:textColor="@color/texto_primario"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Subtítulo: "Tipo • Nome da Matéria" (preenchido via código) -->
+            <TextView
+                android:id="@+id/tvSubtituloEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Avaliação • Web Services"
+                android:textColor="@color/texto_hint"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Hora do evento -->
+        <TextView
+            android:id="@+id/tvHoraEvento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="14:00"
+            android:textColor="@color/texto_hint"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

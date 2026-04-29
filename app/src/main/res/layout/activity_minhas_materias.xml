@@ -73,7 +73,7 @@
         android:paddingHorizontal="16dp"
         android:paddingBottom="16dp"
         android:clipToPadding="false"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
@@ -91,10 +91,11 @@
         app:shapeAppearanceOverlay="@style/FABCircular"
         app:backgroundTint="@color/roxo_primario"
         app:tint="@color/fundo_card"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Barra de navegação inferior com 3 abas -->
+    <!-- Barra de navegação inferior com 3 abas — comentada temporariamente -->
+    <!--
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="0dp"
@@ -106,5 +107,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

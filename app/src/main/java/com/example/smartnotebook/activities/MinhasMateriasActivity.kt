@@ -20,7 +20,7 @@ class MinhasMateriasActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         configurarListaMaterias()
-        // configurarBottomNav()
+        configurarBottomNav()
         configurarBotoes()
     }
 
@@ -36,8 +36,7 @@ class MinhasMateriasActivity : AppCompatActivity() {
         binding.rvMaterias.adapter = adapter
     }
 
-    // Configura as 3 abas do BottomNavigationView — comentado temporariamente
-    /*
+    // Configura as 3 abas do BottomNavigationView
     private fun configurarBottomNav() {
         binding.bottomNav.selectedItemId = R.id.nav_inicio
 
@@ -59,7 +58,6 @@ class MinhasMateriasActivity : AppCompatActivity() {
             }
         }
     }
-    */
 
     private fun configurarBotoes() {
         // FAB (+) → abre tela para cadastrar nova matéria

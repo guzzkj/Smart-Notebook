@@ -1,10 +1,15 @@
 package com.example.smartnotebook.models
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 // Modelo de uma anotação vinculada a uma matéria
+@Serializable
 data class Anotacao(
-    val id: Int,
+    val id: String = "",
     val titulo: String,
-    val conteudo: String,
-    val data: String,      // Ex: "24 de Outubro, 2023"
-    val materiaId: Int
+    val conteudo: String = "",
+    @SerialName("created_at") val createdAt: String = "",
+    @SerialName("materia_id") val materiaId: String,
+    @SerialName("user_id") val userId: String = ""
 )

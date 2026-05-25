@@ -24,7 +24,8 @@ class MateriasAdapter(
             binding.tvNomeMateria.text = materia.nome
             binding.tvProfessor.text   = materia.professor
             binding.tvPendentes.text   = "${materia.pendentes} pendentes"
-            binding.tvUltimaAtualizacao.text = "Última atualização: ${materia.ultimaAtualizacao}"
+            // Exibe apenas a data (primeiros 10 caracteres do ISO timestamp)
+            binding.tvUltimaAtualizacao.text = "Última atualização: ${materia.createdAt.take(10)}"
 
             // Dias de aula: oculta a linha se a matéria não tiver dias cadastrados
             if (materia.diasAula.isEmpty()) {

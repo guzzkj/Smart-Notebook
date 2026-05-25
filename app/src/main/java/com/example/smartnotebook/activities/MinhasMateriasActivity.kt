@@ -2,12 +2,15 @@ package com.example.smartnotebook.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
+import com.example.smartnotebook.SupabaseRepository
 import com.example.smartnotebook.adapters.MateriasAdapter
 import com.example.smartnotebook.databinding.ActivityMinhasMateriasBinding
-import com.example.smartnotebook.models.DadosMock
+import kotlinx.coroutines.launch
 
 // TELA 4: Minhas Matérias — tela principal exibida após o login
 class MinhasMateriasActivity : AppCompatActivity() {
@@ -19,21 +22,43 @@ class MinhasMateriasActivity : AppCompatActivity() {
         binding = ActivityMinhasMateriasBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        configurarListaMaterias()
         configurarBottomNav()
         configurarBotoes()
     }
 
-    // Preenche o RecyclerView com a lista de matérias do mock
-    private fun configurarListaMaterias() {
-        val adapter = MateriasAdapter(DadosMock.materias) { materia ->
-            // Intent explícita ao clicar em uma matéria → abre os Detalhes
-            val intent = Intent(this, DetalhesMateriaActivity::class.java)
-            intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_ID, materia.id)
-            startActivity(intent)
+    override fun onResume() {
+        super.onResume()
+        // Recarrega a lista sempre que a tela volta ao foco (ex: após cadastrar matéria)
+        carregarMaterias()
+    }
+
+    // Busca matérias do Supabase e preenche o RecyclerView
+    private fun carregarMaterias() {
+        lifecycleScope.launch {
+            try {
+                val materias = SupabaseRepository.listarMaterias()
+
+                // Busca a contagem de pendentes de cada matéria e cria cópias atualizadas
+                val materiasComPendentes = materias.map { materia ->
+                    val count = SupabaseRepository.contarPendentes(materia.id)
+                    materia.copy(pendentes = count)
+                }
+
+                val adapter = MateriasAdapter(materiasComPendentes) { materia ->
+                    // Intent explícita ao clicar em uma matéria → abre os Detalhes
+                    val intent = Intent(this@MinhasMateriasActivity, DetalhesMateriaActivity::class.java)
+                    intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_ID, materia.id)
+                    intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_NOME, materia.nome)
+                    startActivity(intent)
+                }
+                binding.rvMaterias.layoutManager = LinearLayoutManager(this@MinhasMateriasActivity)
+                binding.rvMaterias.adapter = adapter
+
+            } catch (e: Exception) {
+                Toast.makeText(this@MinhasMateriasActivity,
+                    "Erro ao carregar matérias: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
-        binding.rvMaterias.layoutManager = LinearLayoutManager(this)
-        binding.rvMaterias.adapter = adapter
     }
 
     // Configura as 3 abas do BottomNavigationView
@@ -44,14 +69,11 @@ class MinhasMateriasActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_inicio    -> true // já está na Home
                 R.id.nav_calendario -> {
-                    // Intent explícita para o Calendário
                     startActivity(Intent(this, CalendarioActivity::class.java))
                     true
                 }
                 R.id.nav_menu -> {
-                    // Intent explícita para o Menu Institucional
-                    val intent = Intent(this, MenuInstitucionalActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, MenuInstitucionalActivity::class.java))
                     true
                 }
                 else -> false
@@ -67,8 +89,7 @@ class MinhasMateriasActivity : AppCompatActivity() {
 
         // Busca no header → futura tela de busca
         binding.btnBuscarHeader.setOnClickListener {
-            // Toast para feedback (funcionalidade a ser implementada)
-            android.widget.Toast.makeText(this, "Busca em breve", android.widget.Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Busca em breve", Toast.LENGTH_SHORT).show()
         }
     }
 }

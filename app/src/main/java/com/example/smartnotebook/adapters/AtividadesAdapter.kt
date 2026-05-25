@@ -20,7 +20,7 @@ class AtividadesAdapter(
         fun bind(atividade: Atividade) {
             binding.tvTituloAtividade.text = atividade.titulo
             binding.tvTipoStatus.text      = "${atividade.tipo} • ${atividade.status}"
-            binding.tvDataAtividade.text   = atividade.data
+            binding.tvDataAtividade.text   = atividade.dataEntrega
             binding.tvHoraAtividade.text   = atividade.hora
 
             // Ponto de cor: vermelho = atrasada/urgente | verde = em andamento

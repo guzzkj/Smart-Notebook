@@ -1,10 +1,12 @@
 package com.example.smartnotebook.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.smartnotebook.SupabaseRepository
 import com.example.smartnotebook.databinding.ActivityNovaMateriaBinding
+import kotlinx.coroutines.launch
 
 // TELA 7: Nova Matéria — formulário para cadastrar uma nova matéria acadêmica
 class NovaMateriaActivity : AppCompatActivity() {
@@ -51,7 +53,7 @@ class NovaMateriaActivity : AppCompatActivity() {
         }
     }
 
-    // Valida os campos e simula o cadastro da matéria
+    // Valida os campos e cadastra a matéria no Supabase
     private fun configurarBotaoCadastrar() {
         binding.btnCadastrarMateria.setOnClickListener {
             val nome = binding.etNomeMateria.text.toString().trim()
@@ -66,13 +68,26 @@ class NovaMateriaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Simulação de cadastro — em produção salvaria no banco de dados
-            Toast.makeText(this, "Matéria \"$nome\" cadastrada com sucesso!", Toast.LENGTH_SHORT).show()
+            // Desabilita o botão durante a operação para evitar cliques duplicados
+            binding.btnCadastrarMateria.isEnabled = false
 
-            // Retorna para a tela de Minhas Matérias
-            val intent = Intent(this, MinhasMateriasActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
+            lifecycleScope.launch {
+                try {
+                    SupabaseRepository.inserirMateria(
+                        nome      = nome,
+                        professor = "",
+                        diasAula  = diasSelecionados.toList(),
+                        corHex    = "#5C6BC0"
+                    )
+                    setResult(RESULT_OK)
+                    finish()
+                } catch (e: Exception) {
+                    Toast.makeText(this@NovaMateriaActivity,
+                        "Erro ao cadastrar matéria: ${e.message}", Toast.LENGTH_SHORT).show()
+                } finally {
+                    binding.btnCadastrarMateria.isEnabled = true
+                }
+            }
         }
     }
 }

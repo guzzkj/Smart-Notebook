@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.smartnotebook.R
 import com.example.smartnotebook.databinding.ItemEventoCalendarioBinding
 import com.example.smartnotebook.models.Atividade
-import com.example.smartnotebook.models.DadosMock
 
 // Adapter do RecyclerView para exibir eventos na tela do Calendário
 class EventosCalendarioAdapter(
-    private val lista: List<Atividade>
+    private val lista: List<Atividade>,
+    private val materiaIdParaNome: Map<String, String> = emptyMap()
 ) : RecyclerView.Adapter<EventosCalendarioAdapter.EventoViewHolder>() {
 
     // ViewHolder: guarda as referências das views de cada card de evento
@@ -23,7 +23,7 @@ class EventosCalendarioAdapter(
             binding.tvHoraEvento.text   = atividade.hora
 
             // Subtítulo: tipo formatado + nome da matéria
-            val nomeMateria = DadosMock.materiaPorId(atividade.materiaId)?.nome ?: ""
+            val nomeMateria = materiaIdParaNome[atividade.materiaId] ?: ""
             val tipoFormatado = when (atividade.tipo) {
                 "PROVA"   -> "Avaliação"
                 "TAREFA"  -> "Atividade"

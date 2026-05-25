@@ -9,12 +9,16 @@ import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
+import com.example.smartnotebook.SupabaseRepository
 import com.example.smartnotebook.adapters.EventosCalendarioAdapter
 import com.example.smartnotebook.databinding.ActivityCalendarioBinding
-import com.example.smartnotebook.models.DadosMock
+import com.example.smartnotebook.models.Atividade
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 // TELA 11: Calendário — visualização mensal com eventos e atividades
@@ -22,30 +26,80 @@ class CalendarioActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCalendarioBinding
 
-    // Calendário que rastreia o mês e ano sendo exibido (começa em Outubro 2023)
-    private val calAtual = Calendar.getInstance().apply {
-        set(2023, Calendar.OCTOBER, 1)
-    }
+    // Calendário que rastreia o mês e ano sendo exibido
+    private val calAtual = Calendar.getInstance()
 
-    // Nomes dos meses em português para o título (array indexado por Calendar.MONTH, começa em 0)
+    // Nomes dos meses em português para o título (indexado por Calendar.MONTH, começa em 0)
     private val nomesMeses = arrayOf(
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     )
 
-    // Dias com marcação mockados para demonstrar o visual (baseado nas atividades do DadosMock)
-    private val datasAvaliacao = setOf(12, 25)    // ponto vermelho
-    private val datasAtividade = setOf(18, 20, 25) // ponto teal (se não for avaliação)
+    // Atividades e mapa de nomes carregados do Supabase
+    private var todasAtividades   = listOf<Atividade>()
+    private var materiaIdParaNome = mapOf<String, String>()
+
+    // Conjuntos de dias com eventos no mês atual (recalculados ao trocar de mês)
+    private var datasAvaliacao = setOf<Int>()
+    private var datasAtividade = setOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCalendarioBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        preencherGradeCalendario()
-        carregarEventosDoDia()
         configurarNavegacaoMes()
         configurarBottomNav()
+        carregarDados()
+    }
+
+    // Busca atividades e matérias do Supabase e atualiza o calendário
+    private fun carregarDados() {
+        lifecycleScope.launch {
+            try {
+                todasAtividades = SupabaseRepository.listarTodasAtividades()
+
+                // Monta mapa materiaId → nome para o adapter usar no subtítulo
+                val materias = SupabaseRepository.listarMaterias()
+                materiaIdParaNome = materias.associate { it.id to it.nome }
+
+                atualizarCalendario()
+
+            } catch (e: Exception) {
+                Toast.makeText(this@CalendarioActivity,
+                    "Erro ao carregar eventos: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Recalcula os sets de dias e redesenha a grade + eventos do mês atual
+    private fun atualizarCalendario() {
+        val anoAtual = calAtual.get(Calendar.YEAR)
+        val mesAtual = calAtual.get(Calendar.MONTH) // 0-indexado
+
+        // Filtra atividades do mês/ano visível e extrai o dia do campo data_entrega (AAAA-MM-DD)
+        val atividadesDoMes = todasAtividades.filter { atividade ->
+            val partes = atividade.dataEntrega.split("-")
+            if (partes.size == 3) {
+                val ano = partes[0].toIntOrNull() ?: 0
+                val mes = (partes[1].toIntOrNull() ?: 0) - 1 // ajusta para índice 0
+                ano == anoAtual && mes == mesAtual
+            } else false
+        }
+
+        // Dias com prova → ponto vermelho | demais → ponto teal
+        datasAvaliacao = atividadesDoMes
+            .filter { it.tipo == "PROVA" }
+            .mapNotNull { it.dataEntrega.split("-").getOrNull(2)?.toIntOrNull() }
+            .toSet()
+
+        datasAtividade = atividadesDoMes
+            .filter { it.tipo != "PROVA" }
+            .mapNotNull { it.dataEntrega.split("-").getOrNull(2)?.toIntOrNull() }
+            .toSet()
+
+        preencherGradeCalendario()
+        carregarEventosDoDia(atividadesDoMes)
     }
 
     // Preenche a grade com células vazias de alinhamento + dias do mês
@@ -61,12 +115,10 @@ class CalendarioActivity : AppCompatActivity() {
          */
         val calTemp = calAtual.clone() as Calendar
         calTemp.set(Calendar.DAY_OF_MONTH, 1)
-        val diaDaSemana  = calTemp.get(Calendar.DAY_OF_WEEK) // 1 = Dom, ..., 7 = Sáb
-        val celulasVazias = diaDaSemana - 1                  // domingo = 0, quarta = 3, etc.
+        val diaDaSemana   = calTemp.get(Calendar.DAY_OF_WEEK)
+        val celulasVazias = diaDaSemana - 1
 
-        // Total de dias do mês (28, 29, 30 ou 31)
         val totalDias = calTemp.getActualMaximum(Calendar.DAY_OF_MONTH)
-
         val alturaCelulaPx = (44 * resources.displayMetrics.density).toInt()
 
         // Adiciona células vazias para empurrar o dia 1 até a coluna certa
@@ -76,13 +128,17 @@ class CalendarioActivity : AppCompatActivity() {
             grid.addView(vazia)
         }
 
+        // Hoje — para destacar visualmente se o mês atual estiver sendo exibido
+        val hoje = Calendar.getInstance()
+        val ehMesAtual = calAtual.get(Calendar.YEAR)  == hoje.get(Calendar.YEAR) &&
+                         calAtual.get(Calendar.MONTH) == hoje.get(Calendar.MONTH)
+
         // Cria uma célula para cada dia do mês
         for (dia in 1..totalDias) {
             /*
              * Cada célula é um LinearLayout vertical com dois filhos:
              *   1) TextView  → número do dia
              *   2) View (4dp oval) → ponto de evento, invisível por padrão
-             * Assim o ponto aparece abaixo do número, fiel à referência visual.
              */
             val celula = LinearLayout(this)
             celula.layoutParams = criarParamsGrade(alturaCelulaPx)
@@ -100,8 +156,8 @@ class CalendarioActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
 
-            // Destaca o dia 20 (dia selecionado na referência do Figma)
-            if (dia == 20) {
+            // Destaca o dia de hoje no mês corrente
+            if (ehMesAtual && dia == hoje.get(Calendar.DAY_OF_MONTH)) {
                 tvDia.setBackgroundColor(Color.parseColor("#E8EAF6"))
                 tvDia.setTypeface(tvDia.typeface, Typeface.BOLD)
             }
@@ -114,13 +170,13 @@ class CalendarioActivity : AppCompatActivity() {
             ponto.layoutParams = pontoParams
             ponto.visibility   = android.view.View.INVISIBLE
 
-            // Ponto vermelho: dia tem avaliação
+            // Ponto vermelho: dia tem prova
             if (datasAvaliacao.contains(dia)) {
                 ponto.visibility = android.view.View.VISIBLE
                 ponto.setBackgroundResource(R.drawable.bg_dot_vermelho)
             }
 
-            // Ponto teal: dia tem atividade (apenas se não for também avaliação)
+            // Ponto teal: dia tem atividade (apenas se não for também prova)
             if (datasAtividade.contains(dia) && !datasAvaliacao.contains(dia)) {
                 ponto.visibility = android.view.View.VISIBLE
                 ponto.setBackgroundResource(R.drawable.bg_dot_teal)
@@ -153,22 +209,20 @@ class CalendarioActivity : AppCompatActivity() {
         binding.btnMesAnterior.setOnClickListener {
             // Calendar.add() cuida automaticamente da virada de ano (Jan → Dez do ano anterior)
             calAtual.add(Calendar.MONTH, -1)
-            preencherGradeCalendario()
+            atualizarCalendario()
         }
         binding.btnProximoMes.setOnClickListener {
             calAtual.add(Calendar.MONTH, 1)
-            preencherGradeCalendario()
+            atualizarCalendario()
         }
     }
 
-    // Carrega os eventos do dia selecionado usando o EventosCalendarioAdapter
-    private fun carregarEventosDoDia() {
-        binding.tvDiaSelecionado.text = "Activities • Out 14"
+    // Exibe todas as atividades do mês atual na lista de eventos
+    private fun carregarEventosDoDia(atividadesDoMes: List<Atividade>) {
+        val mes = nomesMeses[calAtual.get(Calendar.MONTH)]
+        binding.tvDiaSelecionado.text = "Atividades • $mes"
 
-        // Filtra atividades atrasadas como mock dos eventos do dia
-        val eventos = DadosMock.atividades.filter { it.atrasada }
-        val adapter = EventosCalendarioAdapter(eventos)
-
+        val adapter = EventosCalendarioAdapter(atividadesDoMes, materiaIdParaNome)
         binding.rvEventos.layoutManager = LinearLayoutManager(this)
         binding.rvEventos.adapter = adapter
     }
@@ -180,7 +234,6 @@ class CalendarioActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_inicio -> {
-                    // Intent explícita para a tela inicial
                     val intent = Intent(this, MinhasMateriasActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
@@ -188,7 +241,6 @@ class CalendarioActivity : AppCompatActivity() {
                 }
                 R.id.nav_calendario -> true // já está no Calendário
                 R.id.nav_menu -> {
-                    // Intent explícita para o Menu Institucional
                     startActivity(Intent(this, MenuInstitucionalActivity::class.java))
                     true
                 }

@@ -19,7 +19,7 @@ class AnotacoesAdapter(
         // Preenche as views com os dados da anotação
         fun bind(anotacao: Anotacao) {
             binding.tvTituloAnotacao.text = anotacao.titulo
-            binding.tvDataAnotacao.text   = anotacao.data
+            binding.tvDataAnotacao.text   = anotacao.createdAt.take(10)
 
             // Dispara o callback ao clicar — navega para os detalhes
             binding.root.setOnClickListener { aoClicar(anotacao) }

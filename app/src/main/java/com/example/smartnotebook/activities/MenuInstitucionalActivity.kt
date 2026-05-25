@@ -4,8 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.smartnotebook.R
 import com.example.smartnotebook.databinding.ActivityMenuInstitucionalBinding
+import com.example.smartnotebook.supabase
+import io.github.jan.supabase.auth.auth
+import kotlinx.coroutines.launch
 
 // TELA 12: Menu Institucional — acesso ao perfil, links e opção de sair
 class MenuInstitucionalActivity : AppCompatActivity() {
@@ -42,12 +46,19 @@ class MenuInstitucionalActivity : AppCompatActivity() {
             Toast.makeText(this, "Termos de Uso em breve", Toast.LENGTH_SHORT).show()
         }
 
-        // Botão Sair: limpa a pilha de Activities e retorna ao Login
+        // Botão Sair: encerra a sessão no Supabase e retorna ao Login
         binding.itemSair.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            // FLAG_ACTIVITY_CLEAR_TASK garante que o usuário não volta ao app com o botão Voltar
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            lifecycleScope.launch {
+                try {
+                    supabase.auth.signOut()
+                } catch (e: Exception) {
+                    // Mesmo com erro no signOut, redireciona para o Login
+                }
+                val intent = Intent(this@MenuInstitucionalActivity, LoginActivity::class.java)
+                // FLAG_ACTIVITY_CLEAR_TASK garante que o usuário não volta ao app com o botão Voltar
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
         }
     }
 
@@ -58,7 +69,6 @@ class MenuInstitucionalActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_inicio -> {
-                    // Intent explícita para a tela inicial, limpando as telas intermediárias
                     val intent = Intent(this, MinhasMateriasActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)

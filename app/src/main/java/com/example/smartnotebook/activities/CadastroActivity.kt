@@ -12,8 +12,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.smartnotebook.R
 import com.example.smartnotebook.databinding.ActivityCadastroBinding
+import com.example.smartnotebook.supabase
+import io.github.jan.supabase.auth.providers.builtin.Email
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 // Tela de Cadastro — criação de nova conta no app
 class CadastroActivity : AppCompatActivity() {
@@ -77,6 +83,7 @@ class CadastroActivity : AppCompatActivity() {
         binding.tvTermos.highlightColor = android.graphics.Color.TRANSPARENT
     }
 
+    // Valida os campos, cria a conta no Supabase e volta para o Login
     private fun configurarBotaoCadastrar() {
         binding.btnCadastrar.setOnClickListener {
             val nome           = binding.etNome.text.toString().trim()
@@ -87,8 +94,31 @@ class CadastroActivity : AppCompatActivity() {
 
             if (!validarCampos(nome, email, senha, confirmarSenha, termosAceitos)) return@setOnClickListener
 
-            Toast.makeText(this, "Conta criada com sucesso! Faça login.", Toast.LENGTH_LONG).show()
-            finish()
+            binding.btnCadastrar.isEnabled = false
+            lifecycleScope.launch {
+                try {
+                    supabase.auth.signUpWith(Email) {
+                        this.email = email
+                        password = senha
+                        // Salva o nome no user_metadata para exibição no perfil
+                        data = buildJsonObject { put("nome", nome) }
+                    }
+                    Toast.makeText(
+                        this@CadastroActivity,
+                        "Conta criada! Verifique seu e-mail para confirmar o cadastro.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finish()
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        this@CadastroActivity,
+                        "Erro ao criar conta. Tente novamente.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } finally {
+                    binding.btnCadastrar.isEnabled = true
+                }
+            }
         }
     }
 

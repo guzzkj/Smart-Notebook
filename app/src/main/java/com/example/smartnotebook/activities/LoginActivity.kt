@@ -6,7 +6,11 @@ import android.text.InputType
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.smartnotebook.databinding.ActivityLoginBinding
+import com.example.smartnotebook.supabase
+import io.github.jan.supabase.auth.providers.builtin.Email
+import kotlinx.coroutines.launch
 
 // TELA 2: Login — autenticação do usuário para acesso ao app
 class LoginActivity : AppCompatActivity() {
@@ -38,17 +42,34 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // Valida os campos e navega para a tela principal após login
+    // Valida os campos, autentica no Supabase e navega para a tela principal
     private fun configurarBotaoEntrar() {
         binding.btnEntrar.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val senha = binding.etSenha.text.toString().trim()
 
-            // if (!validarCampos(email, senha)) return@setOnClickListener
+            if (!validarCampos(email, senha)) return@setOnClickListener
 
-            // Intent explícita para a tela principal (Minhas Matérias)
-            startActivity(Intent(this, MinhasMateriasActivity::class.java))
-            finish() // Remove o Login da pilha — usuário não pode voltar
+            binding.btnEntrar.isEnabled = false
+            lifecycleScope.launch {
+                try {
+                    supabase.auth.signInWith(Email) {
+                        this.email = email
+                        password = senha
+                    }
+                    // Intent explícita para a tela principal (Minhas Matérias)
+                    startActivity(Intent(this@LoginActivity, MinhasMateriasActivity::class.java))
+                    finish() // Remove o Login da pilha — usuário não pode voltar
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "E-mail ou senha inválidos",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } finally {
+                    binding.btnEntrar.isEnabled = true
+                }
+            }
         }
     }
 

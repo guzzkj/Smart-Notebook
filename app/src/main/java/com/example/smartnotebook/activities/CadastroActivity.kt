@@ -12,14 +12,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
+import com.example.smartnotebook.CadastroResponse
 import com.example.smartnotebook.R
+import com.example.smartnotebook.RetrofitClient
 import com.example.smartnotebook.databinding.ActivityCadastroBinding
-import com.example.smartnotebook.supabase
-import io.github.jan.supabase.auth.providers.builtin.Email
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // Tela de Cadastro — criação de nova conta no app
 class CadastroActivity : AppCompatActivity() {
@@ -83,7 +82,7 @@ class CadastroActivity : AppCompatActivity() {
         binding.tvTermos.highlightColor = android.graphics.Color.TRANSPARENT
     }
 
-    // Valida os campos, cria a conta no Supabase e volta para o Login
+    // Valida os campos, cria a conta via PHP/MySQL e volta para o Login
     private fun configurarBotaoCadastrar() {
         binding.btnCadastrar.setOnClickListener {
             val nome           = binding.etNome.text.toString().trim()
@@ -95,30 +94,28 @@ class CadastroActivity : AppCompatActivity() {
             if (!validarCampos(nome, email, senha, confirmarSenha, termosAceitos)) return@setOnClickListener
 
             binding.btnCadastrar.isEnabled = false
-            lifecycleScope.launch {
-                try {
-                    supabase.auth.signUpWith(Email) {
-                        this.email = email
-                        password = senha
-                        // Salva o nome no user_metadata para exibição no perfil
-                        data = buildJsonObject { put("nome", nome) }
+
+            RetrofitClient.apiService.cadastrar(nome, email, senha)
+                .enqueue(object : Callback<CadastroResponse> {
+                    override fun onResponse(
+                        call: Call<CadastroResponse>,
+                        response: Response<CadastroResponse>
+                    ) {
+                        binding.btnCadastrar.isEnabled = true
+                        val body = response.body()
+                        if (response.isSuccessful && body?.sucesso == true) {
+                            Toast.makeText(this@CadastroActivity, "Conta criada com sucesso!", Toast.LENGTH_LONG).show()
+                            finish()
+                        } else {
+                            val msg = body?.mensagem ?: "Erro ao criar conta. Tente novamente."
+                            Toast.makeText(this@CadastroActivity, msg, Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    Toast.makeText(
-                        this@CadastroActivity,
-                        "Conta criada! Verifique seu e-mail para confirmar o cadastro.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    finish()
-                } catch (e: Exception) {
-                    Toast.makeText(
-                        this@CadastroActivity,
-                        "Erro ao criar conta. Tente novamente.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } finally {
-                    binding.btnCadastrar.isEnabled = true
-                }
-            }
+                    override fun onFailure(call: Call<CadastroResponse>, t: Throwable) {
+                        binding.btnCadastrar.isEnabled = true
+                        Toast.makeText(this@CadastroActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
     }
 

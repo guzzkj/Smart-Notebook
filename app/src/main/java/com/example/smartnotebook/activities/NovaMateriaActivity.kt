@@ -3,10 +3,13 @@ package com.example.smartnotebook.activities
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.example.smartnotebook.SupabaseRepository
+import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.SessionManager
 import com.example.smartnotebook.databinding.ActivityNovaMateriaBinding
-import kotlinx.coroutines.launch
+import com.example.smartnotebook.models.Materia
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TELA 7: Nova Matéria — formulário para cadastrar uma nova matéria acadêmica
 class NovaMateriaActivity : AppCompatActivity() {
@@ -53,7 +56,7 @@ class NovaMateriaActivity : AppCompatActivity() {
         }
     }
 
-    // Valida os campos e cadastra a matéria no Supabase
+    // Valida os campos e cadastra a matéria via PHP/MySQL
     private fun configurarBotaoCadastrar() {
         binding.btnCadastrarMateria.setOnClickListener {
             val nome = binding.etNomeMateria.text.toString().trim()
@@ -71,23 +74,31 @@ class NovaMateriaActivity : AppCompatActivity() {
             // Desabilita o botão durante a operação para evitar cliques duplicados
             binding.btnCadastrarMateria.isEnabled = false
 
-            lifecycleScope.launch {
-                try {
-                    SupabaseRepository.inserirMateria(
-                        nome      = nome,
-                        professor = "",
-                        diasAula  = diasSelecionados.toList(),
-                        corHex    = "#5C6BC0"
-                    )
-                    setResult(RESULT_OK)
-                    finish()
-                } catch (e: Exception) {
-                    Toast.makeText(this@NovaMateriaActivity,
-                        "Erro ao cadastrar matéria: ${e.message}", Toast.LENGTH_SHORT).show()
-                } finally {
+            // Dias enviados como string separada por vírgula — PHP faz o split e armazena
+            val diasAula = diasSelecionados.joinToString(",")
+            val userId   = SessionManager.getUserId(this)
+
+            RetrofitClient.apiService.inserirMateria(
+                userId    = userId,
+                nome      = nome,
+                professor = "",
+                diasAula  = diasAula,
+                corHex    = "#5C6BC0"
+            ).enqueue(object : Callback<Materia> {
+                override fun onResponse(call: Call<Materia>, response: Response<Materia>) {
                     binding.btnCadastrarMateria.isEnabled = true
+                    if (response.isSuccessful && response.body() != null) {
+                        setResult(RESULT_OK)
+                        finish()
+                    } else {
+                        Toast.makeText(this@NovaMateriaActivity, "Erro ao cadastrar matéria", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+                override fun onFailure(call: Call<Materia>, t: Throwable) {
+                    binding.btnCadastrarMateria.isEnabled = true
+                    Toast.makeText(this@NovaMateriaActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 }

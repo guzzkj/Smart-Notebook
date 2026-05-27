@@ -1,18 +1,15 @@
 package com.example.smartnotebook.models
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import com.google.gson.annotations.SerializedName
 
 // Modelo de uma matéria acadêmica do semestre
-@Serializable
 data class Materia(
-    val id: String = "",
+    val id: Int = 0,
     val nome: String,
     val professor: String = "",
-    @SerialName("dias_aula") val diasAula: List<String> = emptyList(),
-    @SerialName("cor_hex") val corHex: String = "#5C6BC0",
-    @SerialName("user_id") val userId: String = "",
-    @SerialName("created_at") val createdAt: String = "",
-    @Transient val pendentes: Int = 0  // calculado localmente via contarPendentes()
+    @SerializedName("dias_aula") val diasAula: List<String> = emptyList(),
+    @SerializedName("cor_hex") val corHex: String = "#5C6BC0",
+    @SerializedName("user_id") val userId: Int = 0,
+    @SerializedName("created_at") val createdAt: String = "",
+    val pendentes: Int = 0  // calculado via JOIN no PHP (listar_materias.php)
 )

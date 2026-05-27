@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.smartnotebook.R
-import com.example.smartnotebook.SupabaseRepository
+import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.SessionManager
 import com.example.smartnotebook.databinding.ActivityNovaAtividadeBinding
+import com.example.smartnotebook.models.Atividade
 import com.example.smartnotebook.models.Materia
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TELA 9: Nova Atividade — formulário para cadastrar tarefa ou prova
 class NovaAtividadeActivity : AppCompatActivity() {
@@ -61,31 +64,33 @@ class NovaAtividadeActivity : AppCompatActivity() {
         }
     }
 
-    // Carrega as matérias do Supabase e popula o Spinner
+    // Carrega as matérias do servidor PHP e popula o Spinner
     private fun carregarMateriasSpinner() {
-        lifecycleScope.launch {
-            try {
-                materias = SupabaseRepository.listarMaterias()
-                val itens = listOf("Selecione a matéria") + materias.map { it.nome }
-                val adapter = android.widget.ArrayAdapter(
-                    this@NovaAtividadeActivity,
-                    android.R.layout.simple_spinner_item, itens
-                )
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.spinnerMateria.adapter = adapter
+        val userId = SessionManager.getUserId(this)
 
-            } catch (e: Exception) {
-                Toast.makeText(this@NovaAtividadeActivity,
-                    "Erro ao carregar matérias: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
+        RetrofitClient.apiService.listarMaterias(userId)
+            .enqueue(object : Callback<List<Materia>> {
+                override fun onResponse(call: Call<List<Materia>>, response: Response<List<Materia>>) {
+                    materias = response.body() ?: emptyList()
+                    val itens = listOf("Selecione a matéria") + materias.map { it.nome }
+                    val adapter = android.widget.ArrayAdapter(
+                        this@NovaAtividadeActivity,
+                        android.R.layout.simple_spinner_item, itens
+                    )
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    binding.spinnerMateria.adapter = adapter
+                }
+                override fun onFailure(call: Call<List<Materia>>, t: Throwable) {
+                    Toast.makeText(this@NovaAtividadeActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
-    // Valida os campos obrigatórios e salva a atividade no Supabase
+    // Valida os campos obrigatórios e salva a atividade via PHP/MySQL
     private fun configurarBotaoSalvar() {
         binding.btnSalvarAtividade.setOnClickListener {
-            val titulo = binding.etTituloAtividade.text.toString().trim()
-            val data   = binding.etData.text.toString().trim()
+            val titulo  = binding.etTituloAtividade.text.toString().trim()
+            val data    = binding.etData.text.toString().trim()
             val posicao = binding.spinnerMateria.selectedItemPosition
 
             if (titulo.isEmpty()) {
@@ -105,29 +110,34 @@ class NovaAtividadeActivity : AppCompatActivity() {
             }
 
             val materiaId = materias[posicao - 1].id
+            val userId    = SessionManager.getUserId(this)
 
             // Desabilita o botão durante a operação para evitar cliques duplicados
             binding.btnSalvarAtividade.isEnabled = false
 
-            lifecycleScope.launch {
-                try {
-                    SupabaseRepository.inserirAtividade(
-                        materiaId   = materiaId,
-                        titulo      = titulo,
-                        tipo        = tipoSelecionado,
-                        status      = "EM ANDAMENTO",
-                        dataEntrega = data,
-                        hora        = "23:59"
-                    )
-                    setResult(RESULT_OK)
-                    finish()
-                } catch (e: Exception) {
-                    Toast.makeText(this@NovaAtividadeActivity,
-                        "Erro ao salvar atividade: ${e.message}", Toast.LENGTH_SHORT).show()
-                } finally {
+            RetrofitClient.apiService.inserirAtividade(
+                userId      = userId,
+                materiaId   = materiaId,
+                titulo      = titulo,
+                tipo        = tipoSelecionado,
+                status      = "EM ANDAMENTO",
+                dataEntrega = data,
+                hora        = "23:59"
+            ).enqueue(object : Callback<Atividade> {
+                override fun onResponse(call: Call<Atividade>, response: Response<Atividade>) {
                     binding.btnSalvarAtividade.isEnabled = true
+                    if (response.isSuccessful && response.body() != null) {
+                        setResult(RESULT_OK)
+                        finish()
+                    } else {
+                        Toast.makeText(this@NovaAtividadeActivity, "Erro ao salvar atividade", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+                override fun onFailure(call: Call<Atividade>, t: Throwable) {
+                    binding.btnSalvarAtividade.isEnabled = true
+                    Toast.makeText(this@NovaAtividadeActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 

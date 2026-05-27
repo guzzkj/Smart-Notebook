@@ -4,13 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
-import com.example.smartnotebook.SupabaseRepository
+import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.SessionManager
 import com.example.smartnotebook.adapters.MateriasAdapter
 import com.example.smartnotebook.databinding.ActivityMinhasMateriasBinding
-import kotlinx.coroutines.launch
+import com.example.smartnotebook.models.Materia
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TELA 4: Minhas Matérias — tela principal exibida após o login
 class MinhasMateriasActivity : AppCompatActivity() {
@@ -32,33 +35,29 @@ class MinhasMateriasActivity : AppCompatActivity() {
         carregarMaterias()
     }
 
-    // Busca matérias do Supabase e preenche o RecyclerView
+    // Busca matérias do servidor PHP e preenche o RecyclerView
+    // O PHP já retorna o campo "pendentes" calculado via JOIN, sem N+1 calls
     private fun carregarMaterias() {
-        lifecycleScope.launch {
-            try {
-                val materias = SupabaseRepository.listarMaterias()
+        val userId = SessionManager.getUserId(this)
 
-                // Busca a contagem de pendentes de cada matéria e cria cópias atualizadas
-                val materiasComPendentes = materias.map { materia ->
-                    val count = SupabaseRepository.contarPendentes(materia.id)
-                    materia.copy(pendentes = count)
+        RetrofitClient.apiService.listarMaterias(userId)
+            .enqueue(object : Callback<List<Materia>> {
+                override fun onResponse(call: Call<List<Materia>>, response: Response<List<Materia>>) {
+                    val materias = response.body() ?: emptyList()
+                    val adapter = MateriasAdapter(materias) { materia ->
+                        // Intent explícita ao clicar em uma matéria → abre os Detalhes
+                        val intent = Intent(this@MinhasMateriasActivity, DetalhesMateriaActivity::class.java)
+                        intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_ID, materia.id)
+                        intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_NOME, materia.nome)
+                        startActivity(intent)
+                    }
+                    binding.rvMaterias.layoutManager = LinearLayoutManager(this@MinhasMateriasActivity)
+                    binding.rvMaterias.adapter = adapter
                 }
-
-                val adapter = MateriasAdapter(materiasComPendentes) { materia ->
-                    // Intent explícita ao clicar em uma matéria → abre os Detalhes
-                    val intent = Intent(this@MinhasMateriasActivity, DetalhesMateriaActivity::class.java)
-                    intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_ID, materia.id)
-                    intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_NOME, materia.nome)
-                    startActivity(intent)
+                override fun onFailure(call: Call<List<Materia>>, t: Throwable) {
+                    Toast.makeText(this@MinhasMateriasActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
                 }
-                binding.rvMaterias.layoutManager = LinearLayoutManager(this@MinhasMateriasActivity)
-                binding.rvMaterias.adapter = adapter
-
-            } catch (e: Exception) {
-                Toast.makeText(this@MinhasMateriasActivity,
-                    "Erro ao carregar matérias: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
+            })
     }
 
     // Configura as 3 abas do BottomNavigationView

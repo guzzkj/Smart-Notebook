@@ -4,19 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
-import com.example.smartnotebook.SupabaseRepository
+import com.example.smartnotebook.RetrofitClient
 import com.example.smartnotebook.adapters.AnotacoesAdapter
 import com.example.smartnotebook.databinding.ActivityTodasAnotacoesBinding
-import kotlinx.coroutines.launch
+import com.example.smartnotebook.models.Anotacao
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TELA 10: Todas as Anotações — lista completa de anotações de uma matéria
 class TodasAnotacoesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTodasAnotacoesBinding
-    private var materiaId = ""
+    private var materiaId = -1
 
     companion object {
         // Chaves para receber dados da matéria via Intent
@@ -29,7 +31,7 @@ class TodasAnotacoesActivity : AppCompatActivity() {
         binding = ActivityTodasAnotacoesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        materiaId = intent.getStringExtra(EXTRA_MATERIA_ID) ?: ""
+        materiaId = intent.getIntExtra(EXTRA_MATERIA_ID, -1)
         binding.tvNomeMateriaHeader.text = intent.getStringExtra(EXTRA_MATERIA_NOME) ?: "Anotações"
 
         carregarAnotacoes()
@@ -45,25 +47,23 @@ class TodasAnotacoesActivity : AppCompatActivity() {
 
     // Preenche o RecyclerView com todas as anotações da matéria
     private fun carregarAnotacoes() {
-        if (materiaId.isEmpty()) return
+        if (materiaId == -1) return
 
-        lifecycleScope.launch {
-            try {
-                val lista = SupabaseRepository.listarAnotacoes(materiaId)
-
-                val adapter = AnotacoesAdapter(lista) { _ ->
-                    // Ao clicar em uma anotação → feedback (futuro: abrir editor)
-                    Toast.makeText(this@TodasAnotacoesActivity,
-                        "Anotação selecionada", Toast.LENGTH_SHORT).show()
+        RetrofitClient.apiService.listarAnotacoes(materiaId)
+            .enqueue(object : Callback<List<Anotacao>> {
+                override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
+                    val lista = response.body() ?: emptyList()
+                    val adapter = AnotacoesAdapter(lista) { _ ->
+                        // Ao clicar em uma anotação → feedback (futuro: abrir editor)
+                        Toast.makeText(this@TodasAnotacoesActivity, "Anotação selecionada", Toast.LENGTH_SHORT).show()
+                    }
+                    binding.rvTodasAnotacoes.layoutManager = LinearLayoutManager(this@TodasAnotacoesActivity)
+                    binding.rvTodasAnotacoes.adapter = adapter
                 }
-                binding.rvTodasAnotacoes.layoutManager = LinearLayoutManager(this@TodasAnotacoesActivity)
-                binding.rvTodasAnotacoes.adapter = adapter
-
-            } catch (e: Exception) {
-                Toast.makeText(this@TodasAnotacoesActivity,
-                    "Erro ao carregar anotações: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
+                override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
+                    Toast.makeText(this@TodasAnotacoesActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun configurarBotoes() {

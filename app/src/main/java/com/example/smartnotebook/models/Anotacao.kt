@@ -1,15 +1,13 @@
 package com.example.smartnotebook.models
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
 // Modelo de uma anotação vinculada a uma matéria
-@Serializable
 data class Anotacao(
-    val id: String = "",
+    val id: Int = 0,
     val titulo: String,
     val conteudo: String = "",
-    @SerialName("created_at") val createdAt: String = "",
-    @SerialName("materia_id") val materiaId: String,
-    @SerialName("user_id") val userId: String = ""
+    @SerializedName("created_at") val createdAt: String = "",
+    @SerializedName("materia_id") val materiaId: Int,
+    @SerializedName("user_id") val userId: Int = 0
 )

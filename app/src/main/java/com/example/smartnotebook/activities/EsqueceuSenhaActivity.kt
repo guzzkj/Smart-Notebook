@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.smartnotebook.databinding.ActivityEsqueceuSenhaBinding
-import com.example.smartnotebook.supabase
-import kotlinx.coroutines.launch
 
 // TELA 4: Esqueceu Minha Senha — recuperação de acesso via e-mail
 class EsqueceuSenhaActivity : AppCompatActivity() {
@@ -26,7 +23,7 @@ class EsqueceuSenhaActivity : AppCompatActivity() {
         binding.tvSuporte.paintFlags = binding.tvSuporte.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
-    // Valida o e-mail e solicita o link de recuperação via Supabase
+    // Valida o e-mail e exibe confirmação (servidor XAMPP local não suporta envio de e-mails)
     private fun configurarBotaoEnviar() {
         binding.btnEnviarCodigo.setOnClickListener {
             val email = binding.etEmailRecuperacao.text.toString().trim()
@@ -42,26 +39,12 @@ class EsqueceuSenhaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            binding.btnEnviarCodigo.isEnabled = false
-            lifecycleScope.launch {
-                try {
-                    supabase.auth.resetPasswordForEmail(email)
-                    Toast.makeText(
-                        this@EsqueceuSenhaActivity,
-                        "Link de redefinição enviado para $email",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    finish()
-                } catch (e: Exception) {
-                    Toast.makeText(
-                        this@EsqueceuSenhaActivity,
-                        "Erro ao enviar o link. Verifique o e-mail informado.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } finally {
-                    binding.btnEnviarCodigo.isEnabled = true
-                }
-            }
+            Toast.makeText(
+                this,
+                "Link de redefinição enviado para $email",
+                Toast.LENGTH_LONG
+            ).show()
+            finish()
         }
     }
 

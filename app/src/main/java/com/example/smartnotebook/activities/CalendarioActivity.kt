@@ -11,14 +11,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
-import com.example.smartnotebook.SupabaseRepository
+import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.SessionManager
 import com.example.smartnotebook.adapters.EventosCalendarioAdapter
 import com.example.smartnotebook.databinding.ActivityCalendarioBinding
 import com.example.smartnotebook.models.Atividade
-import kotlinx.coroutines.launch
+import com.example.smartnotebook.models.Materia
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Calendar
 
 // TELA 11: Calendário — visualização mensal com eventos e atividades
@@ -35,13 +38,17 @@ class CalendarioActivity : AppCompatActivity() {
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     )
 
-    // Atividades e mapa de nomes carregados do Supabase
+    // Atividades e mapa de nomes carregados do servidor PHP
     private var todasAtividades   = listOf<Atividade>()
-    private var materiaIdParaNome = mapOf<String, String>()
+    private var materiaIdParaNome = mapOf<Int, String>()
 
     // Conjuntos de dias com eventos no mês atual (recalculados ao trocar de mês)
     private var datasAvaliacao = setOf<Int>()
     private var datasAtividade = setOf<Int>()
+
+    // Controla se os dois requests já terminaram antes de renderizar o calendário
+    private var atividadesCarregadas = false
+    private var materiasCarregadas   = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,23 +60,39 @@ class CalendarioActivity : AppCompatActivity() {
         carregarDados()
     }
 
-    // Busca atividades e matérias do Supabase e atualiza o calendário
+    // Busca atividades e matérias do servidor PHP e atualiza o calendário
     private fun carregarDados() {
-        lifecycleScope.launch {
-            try {
-                todasAtividades = SupabaseRepository.listarTodasAtividades()
+        val userId = SessionManager.getUserId(this)
 
-                // Monta mapa materiaId → nome para o adapter usar no subtítulo
-                val materias = SupabaseRepository.listarMaterias()
-                materiaIdParaNome = materias.associate { it.id to it.nome }
+        // Request 1: todas as atividades do usuário
+        RetrofitClient.apiService.listarTodasAtividades(userId)
+            .enqueue(object : Callback<List<Atividade>> {
+                override fun onResponse(call: Call<List<Atividade>>, response: Response<List<Atividade>>) {
+                    todasAtividades = response.body() ?: emptyList()
+                    atividadesCarregadas = true
+                    if (materiasCarregadas) atualizarCalendario()
+                }
+                override fun onFailure(call: Call<List<Atividade>>, t: Throwable) {
+                    Toast.makeText(this@CalendarioActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                }
+            })
 
-                atualizarCalendario()
-
-            } catch (e: Exception) {
-                Toast.makeText(this@CalendarioActivity,
-                    "Erro ao carregar eventos: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // Request 2: matérias para montar o mapa id→nome do adapter
+        RetrofitClient.apiService.listarMaterias(userId)
+            .enqueue(object : Callback<List<Materia>> {
+                override fun onResponse(call: Call<List<Materia>>, response: Response<List<Materia>>) {
+                    val materias = response.body() ?: emptyList()
+                    // Monta mapa materiaId → nome para o adapter usar no subtítulo
+                    materiaIdParaNome = materias.associate { it.id to it.nome }
+                    materiasCarregadas = true
+                    if (atividadesCarregadas) atualizarCalendario()
+                }
+                override fun onFailure(call: Call<List<Materia>>, t: Throwable) {
+                    // Calendário pode mostrar eventos sem nome da matéria
+                    materiasCarregadas = true
+                    if (atividadesCarregadas) atualizarCalendario()
+                }
+            })
     }
 
     // Recalcula os sets de dias e redesenha a grade + eventos do mês atual

@@ -6,11 +6,13 @@ import android.text.InputType
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.SessionManager
+import com.example.smartnotebook.UserResponse
 import com.example.smartnotebook.databinding.ActivityLoginBinding
-import com.example.smartnotebook.supabase
-import io.github.jan.supabase.auth.providers.builtin.Email
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TELA 2: Login — autenticação do usuário para acesso ao app
 class LoginActivity : AppCompatActivity() {
@@ -42,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // Valida os campos, autentica no Supabase e navega para a tela principal
+    // Valida os campos, autentica via PHP/MySQL e navega para a tela principal
     private fun configurarBotaoEntrar() {
         binding.btnEntrar.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
@@ -51,25 +53,30 @@ class LoginActivity : AppCompatActivity() {
             if (!validarCampos(email, senha)) return@setOnClickListener
 
             binding.btnEntrar.isEnabled = false
-            lifecycleScope.launch {
-                try {
-                    supabase.auth.signInWith(Email) {
-                        this.email = email
-                        password = senha
+
+            RetrofitClient.apiService.login(email, senha)
+                .enqueue(object : Callback<List<UserResponse>> {
+                    override fun onResponse(
+                        call: Call<List<UserResponse>>,
+                        response: Response<List<UserResponse>>
+                    ) {
+                        binding.btnEntrar.isEnabled = true
+                        val usuarios = response.body()
+                        if (response.isSuccessful && !usuarios.isNullOrEmpty()) {
+                            val user = usuarios[0]
+                            SessionManager.salvar(this@LoginActivity, user.id, user.nome, user.email)
+                            // Intent explícita para a tela principal (Minhas Matérias)
+                            startActivity(Intent(this@LoginActivity, MinhasMateriasActivity::class.java))
+                            finish() // Remove o Login da pilha — usuário não pode voltar
+                        } else {
+                            Toast.makeText(this@LoginActivity, "E-mail ou senha inválidos", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    // Intent explícita para a tela principal (Minhas Matérias)
-                    startActivity(Intent(this@LoginActivity, MinhasMateriasActivity::class.java))
-                    finish() // Remove o Login da pilha — usuário não pode voltar
-                } catch (e: Exception) {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "E-mail ou senha inválidos",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } finally {
-                    binding.btnEntrar.isEnabled = true
-                }
-            }
+                    override fun onFailure(call: Call<List<UserResponse>>, t: Throwable) {
+                        binding.btnEntrar.isEnabled = true
+                        Toast.makeText(this@LoginActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
     }
 

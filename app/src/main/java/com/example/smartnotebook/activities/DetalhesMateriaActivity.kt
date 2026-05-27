@@ -4,20 +4,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.smartnotebook.SupabaseRepository
+import com.example.smartnotebook.GenericResponse
+import com.example.smartnotebook.RetrofitClient
 import com.example.smartnotebook.adapters.AnotacoesAdapter
 import com.example.smartnotebook.adapters.AtividadesAdapter
 import com.example.smartnotebook.databinding.ActivityDetalhesMateriaBinding
-import kotlinx.coroutines.launch
+import com.example.smartnotebook.models.Anotacao
+import com.example.smartnotebook.models.Atividade
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TELA 6: Detalhes da Matéria — anotações e atividades de uma matéria específica
 class DetalhesMateriaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetalhesMateriaBinding
-    private var materiaId = ""
+    private var materiaId = -1
 
     companion object {
         // Chaves usadas para passar dados da matéria via Intent
@@ -30,13 +34,13 @@ class DetalhesMateriaActivity : AppCompatActivity() {
         binding = ActivityDetalhesMateriaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        materiaId = intent.getStringExtra(EXTRA_MATERIA_ID) ?: ""
+        materiaId = intent.getIntExtra(EXTRA_MATERIA_ID, -1)
         val materiaNome = intent.getStringExtra(EXTRA_MATERIA_NOME) ?: "Matéria"
 
         // Exibe o nome da matéria no header
         binding.tvNomeMateriaHeader.text = materiaNome
 
-        if (materiaId.isNotEmpty()) {
+        if (materiaId != -1) {
             carregarAnotacoes()
             carregarAtividades()
         }
@@ -47,43 +51,41 @@ class DetalhesMateriaActivity : AppCompatActivity() {
 
     // Preenche o RecyclerView de anotações com as 3 primeiras (prévia)
     private fun carregarAnotacoes() {
-        lifecycleScope.launch {
-            try {
-                val anotacoes = SupabaseRepository.listarAnotacoes(materiaId).take(3)
-
-                val adapter = AnotacoesAdapter(anotacoes) { _ ->
-                    // Clique em uma anotação → futura tela de edição
-                    Toast.makeText(this@DetalhesMateriaActivity,
-                        "Anotação selecionada", Toast.LENGTH_SHORT).show()
+        RetrofitClient.apiService.listarAnotacoes(materiaId)
+            .enqueue(object : Callback<List<Anotacao>> {
+                override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
+                    val anotacoes = (response.body() ?: emptyList()).take(3)
+                    val adapter = AnotacoesAdapter(anotacoes) { _ ->
+                        // Clique em uma anotação → futura tela de edição
+                        Toast.makeText(this@DetalhesMateriaActivity, "Anotação selecionada", Toast.LENGTH_SHORT).show()
+                    }
+                    binding.rvAnotacoes.layoutManager = LinearLayoutManager(this@DetalhesMateriaActivity)
+                    binding.rvAnotacoes.adapter = adapter
                 }
-                binding.rvAnotacoes.layoutManager = LinearLayoutManager(this@DetalhesMateriaActivity)
-                binding.rvAnotacoes.adapter = adapter
-
-            } catch (e: Exception) {
-                Toast.makeText(this@DetalhesMateriaActivity,
-                    "Erro ao carregar anotações: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
+                override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
+                    Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     // Preenche o RecyclerView de atividades da matéria
     private fun carregarAtividades() {
-        lifecycleScope.launch {
-            try {
-                val atividades = SupabaseRepository.listarAtividades(materiaId)
-                val adapter    = AtividadesAdapter(atividades)
-
-                binding.rvAtividades.layoutManager = LinearLayoutManager(this@DetalhesMateriaActivity)
-                binding.rvAtividades.adapter = adapter
-                // Divisor entre os itens de atividade dentro do container card
-                binding.rvAtividades.addItemDecoration(
-                    DividerItemDecoration(this@DetalhesMateriaActivity, LinearLayoutManager.VERTICAL)
-                )
-            } catch (e: Exception) {
-                Toast.makeText(this@DetalhesMateriaActivity,
-                    "Erro ao carregar atividades: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
+        RetrofitClient.apiService.listarAtividades(materiaId)
+            .enqueue(object : Callback<List<Atividade>> {
+                override fun onResponse(call: Call<List<Atividade>>, response: Response<List<Atividade>>) {
+                    val atividades = response.body() ?: emptyList()
+                    val adapter    = AtividadesAdapter(atividades)
+                    binding.rvAtividades.layoutManager = LinearLayoutManager(this@DetalhesMateriaActivity)
+                    binding.rvAtividades.adapter = adapter
+                    // Divisor entre os itens de atividade dentro do container card
+                    binding.rvAtividades.addItemDecoration(
+                        DividerItemDecoration(this@DetalhesMateriaActivity, LinearLayoutManager.VERTICAL)
+                    )
+                }
+                override fun onFailure(call: Call<List<Atividade>>, t: Throwable) {
+                    Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun configurarBotoes() {
@@ -109,22 +111,26 @@ class DetalhesMateriaActivity : AppCompatActivity() {
             Toast.makeText(this, "Edição de matéria em breve", Toast.LENGTH_SHORT).show()
         }
 
-        // Botão excluir — exclui a matéria no Supabase e volta para a tela anterior
+        // Botão excluir — exclui a matéria no servidor PHP e volta para a tela anterior
         binding.btnExcluir.setOnClickListener {
             binding.btnExcluir.isEnabled = false
 
-            lifecycleScope.launch {
-                try {
-                    SupabaseRepository.excluirMateria(materiaId)
-                    Toast.makeText(this@DetalhesMateriaActivity,
-                        "Matéria excluída", Toast.LENGTH_SHORT).show()
-                    finish()
-                } catch (e: Exception) {
-                    Toast.makeText(this@DetalhesMateriaActivity,
-                        "Erro ao excluir matéria: ${e.message}", Toast.LENGTH_SHORT).show()
-                    binding.btnExcluir.isEnabled = true
-                }
-            }
+            RetrofitClient.apiService.excluirMateria(materiaId)
+                .enqueue(object : Callback<GenericResponse> {
+                    override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
+                        if (response.isSuccessful && response.body()?.sucesso == true) {
+                            Toast.makeText(this@DetalhesMateriaActivity, "Matéria excluída", Toast.LENGTH_SHORT).show()
+                            finish()
+                        } else {
+                            Toast.makeText(this@DetalhesMateriaActivity, "Erro ao excluir matéria", Toast.LENGTH_SHORT).show()
+                            binding.btnExcluir.isEnabled = true
+                        }
+                    }
+                    override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
+                        Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                        binding.btnExcluir.isEnabled = true
+                    }
+                })
         }
     }
 

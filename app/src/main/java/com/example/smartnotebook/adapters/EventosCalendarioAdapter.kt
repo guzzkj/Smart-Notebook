@@ -10,7 +10,7 @@ import com.example.smartnotebook.models.Atividade
 // Adapter do RecyclerView para exibir eventos na tela do Calendário
 class EventosCalendarioAdapter(
     private val lista: List<Atividade>,
-    private val materiaIdParaNome: Map<String, String> = emptyMap()
+    private val materiaIdParaNome: Map<Int, String> = emptyMap()
 ) : RecyclerView.Adapter<EventosCalendarioAdapter.EventoViewHolder>() {
 
     // ViewHolder: guarda as referências das views de cada card de evento

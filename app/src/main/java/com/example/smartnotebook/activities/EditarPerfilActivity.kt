@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.smartnotebook.SessionManager
 import com.example.smartnotebook.databinding.ActivityEditarPerfilBinding
 
 // TELA 13: Editar Perfil — permite alterar nome, e-mail e foto do usuário
@@ -27,8 +28,15 @@ class EditarPerfilActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnVoltar.setOnClickListener { finish() }
+        carregarDadosUsuario()
         configurarBotaoSalvar()
         configurarAlterarFoto()
+    }
+
+    // Preenche os campos com os dados reais do usuário logado (sessão salva no SessionManager)
+    private fun carregarDadosUsuario() {
+        binding.etNomeCompleto.setText(SessionManager.getNome(this))
+        binding.etEmailPerfil.setText(SessionManager.getEmail(this))
     }
 
     // Abre o seletor de fotos do sistema para trocar o avatar
@@ -57,7 +65,15 @@ class EditarPerfilActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Simulação — em produção salvaria no banco de dados
+            // Atualiza nome/e-mail na sessão local, preservando userId e token
+            SessionManager.salvar(
+                context     = this,
+                userId      = SessionManager.getUserId(this),
+                nome        = nome,
+                email       = email,
+                accessToken = SessionManager.getAccessToken(this) ?: ""
+            )
+
             Toast.makeText(this, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show()
             finish()
         }

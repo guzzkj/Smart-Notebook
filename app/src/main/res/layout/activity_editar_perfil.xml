@@ -140,7 +140,6 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_campo"
                 android:paddingHorizontal="16dp"
-                android:text="Carlos Eduardo Silva"
                 android:textColor="@color/texto_primario"
                 android:textSize="15sp"
                 android:inputType="textPersonName|textCapWords" />
@@ -162,7 +161,6 @@
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/bg_campo"
                 android:paddingHorizontal="16dp"
-                android:text="carlos.eduardo@smartcaderno.com"
                 android:textColor="@color/texto_primario"
                 android:textSize="15sp"
                 android:inputType="textEmailAddress" />

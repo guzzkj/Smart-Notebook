@@ -17,8 +17,20 @@ class MenuInstitucionalActivity : AppCompatActivity() {
         binding = ActivityMenuInstitucionalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        exibirDadosUsuario()
         configurarItensMenu()
         configurarBottomNav()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        exibirDadosUsuario() // atualiza caso o usuário tenha editado o perfil
+    }
+
+    // Mostra nome e e-mail do usuário logado (sessão salva no SessionManager)
+    private fun exibirDadosUsuario() {
+        binding.tvNomeUsuario.text = SessionManager.getNome(this)
+        binding.tvEmailUsuario.text = SessionManager.getEmail(this)
     }
 
     private fun configurarItensMenu() {

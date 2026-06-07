@@ -56,6 +56,7 @@
                             android:layout_height="40dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_chevron_left"
+                            android:contentDescription="Mês anterior"
                             android:tint="@color/texto_secundario" />
 
                         <!-- Título do mês e ano (ex: "Outubro 2023") -->
@@ -77,6 +78,7 @@
                             android:layout_height="40dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_chevron_right"
+                            android:contentDescription="Próximo mês"
                             android:tint="@color/texto_secundario" />
                     </LinearLayout>
 

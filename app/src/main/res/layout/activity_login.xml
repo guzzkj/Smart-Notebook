@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F6F8">
+    android:background="@color/fundo_tela">
 
     <!-- ============================================================
          CONTAINER PRINCIPAL (centralizado verticalmente)
@@ -49,7 +49,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Smart Notebook"
-                android:textColor="#0F172A"
+                android:textColor="@color/texto_primario"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -61,7 +61,7 @@
                 android:layout_marginTop="6dp"
                 android:text="Bem-vindo ao Smart Notebook"
                 android:textSize="15sp"
-                android:textColor="#64748B"
+                android:textColor="@color/texto_secundario"
                 android:fontFamily="sans-serif" />
 
         </LinearLayout>
@@ -78,7 +78,7 @@
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/inter_medium"
             android:text="Email"
-            android:textColor="#334155"
+            android:textColor="@color/texto_rotulo"
             android:textSize="14sp" />
 
         <!-- Campo Email -->
@@ -111,8 +111,8 @@
                 android:layout_weight="1"
                 android:layout_marginStart="10dp"
                 android:hint="seuemail@exemplo.com"
-                android:textColorHint="#94A3B8"
-                android:textColor="#0F172A"
+                android:textColorHint="@color/texto_hint"
+                android:textColor="@color/texto_primario"
                 android:textSize="15sp"
 
                 android:inputType="textEmailAddress"
@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:text="Senha"
             android:textSize="14sp"
-            android:textColor="#334155"
+            android:textColor="@color/texto_rotulo"
             android:fontFamily="@font/inter_medium"
             android:layout_marginBottom="6dp" />
 
@@ -164,8 +164,8 @@
                 android:layout_weight="1"
                 android:layout_marginStart="10dp"
                 android:hint="Digite sua senha"
-                android:textColorHint="#94A3B8"
-                android:textColor="#0F172A"
+                android:textColorHint="@color/texto_hint"
+                android:textColor="@color/texto_primario"
                 android:textSize="15sp"
                 android:inputType="textPassword"
                 android:background="@null"
@@ -194,10 +194,10 @@
             android:layout_height="54dp"
             android:text="Entrar"
             android:textSize="16sp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:fontFamily="@font/inter"
-            android:backgroundTint="#5C6BC0"
+            android:backgroundTint="@color/roxo_primario"
             android:stateListAnimator="@null"
             app:cornerRadius="27dp" />
 
@@ -210,7 +210,7 @@
             android:layout_marginTop="14dp"
             android:text="Esqueceu a senha?"
             android:textSize="14sp"
-            android:textColor="#5C6BC0"
+            android:textColor="@color/roxo_primario"
             android:textStyle="bold"
             android:fontFamily="@font/inter"
             android:paddingVertical="6dp"
@@ -234,7 +234,7 @@
                 android:layout_height="wrap_content"
                 android:text="Não tem uma conta? "
                 android:textSize="14sp"
-                android:textColor="#64748B"
+                android:textColor="@color/texto_secundario"
                 android:fontFamily="@font/inter" />
 
             <TextView
@@ -246,7 +246,7 @@
                 android:focusable="true"
                 android:fontFamily="@font/inter_medium"
                 android:text="Cadastre-se"
-                android:textColor="#5C6BC0"
+                android:textColor="@color/roxo_primario"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 

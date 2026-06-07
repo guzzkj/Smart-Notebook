@@ -29,6 +29,7 @@
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Voltar"
             android:scaleType="centerInside"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -121,11 +122,14 @@
         android:layout_height="48dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="8dp"
-        android:text="✨ Melhorar com IA"
+        android:text="Melhorar com IA"
         android:textSize="14sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textStyle="bold"
-        android:backgroundTint="#5C6BC0"
+        android:backgroundTint="@color/roxo_primario"
+        app:icon="@drawable/ic_stars"
+        app:iconTint="@color/white"
+        app:iconGravity="textStart"
         app:cornerRadius="24dp"
         app:layout_constraintBottom_toTopOf="@id/barraFormatacao"
         app:layout_constraintEnd_toEndOf="parent"
@@ -186,6 +190,7 @@
             android:layout_margin="2dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_lista"
+            android:contentDescription="Lista com marcadores"
             android:scaleType="centerInside"
             android:tint="@color/texto_secundario" />
 
@@ -196,6 +201,7 @@
             android:layout_margin="2dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_checklist"
+            android:contentDescription="Checklist"
             android:scaleType="centerInside"
             android:tint="@color/texto_secundario" />
 
@@ -213,6 +219,7 @@
             android:layout_margin="2dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_imagem"
+            android:contentDescription="Inserir imagem"
             android:scaleType="centerInside"
             android:tint="@color/texto_secundario" />
 
@@ -229,6 +236,7 @@
             android:layout_margin="2dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_mais_opcoes"
+            android:contentDescription="Mais opções"
             android:scaleType="centerInside"
             android:tint="@color/texto_secundario" />
 

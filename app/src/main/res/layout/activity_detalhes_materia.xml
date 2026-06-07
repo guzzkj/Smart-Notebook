@@ -24,12 +24,13 @@
         <!-- Botão voltar -->
         <ImageButton
             android:id="@+id/btnVoltar"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
-            android:scaleType="fitCenter"
-            android:padding="4dp"
+            android:contentDescription="Voltar"
+            android:scaleType="centerInside"
+            android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -56,6 +57,7 @@
             android:layout_height="44dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_editar"
+            android:contentDescription="Editar matéria"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnExcluir"
             app:layout_constraintTop_toTopOf="parent" />
@@ -67,6 +69,7 @@
             android:layout_height="44dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_excluir"
+            android:contentDescription="Excluir matéria"
             android:tint="@color/cor_erro"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

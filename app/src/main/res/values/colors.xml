@@ -15,6 +15,7 @@
     <!-- Cores de texto -->
     <color name="texto_primario">#0F172A</color>
     <color name="texto_secundario">#64748B</color>
+    <color name="texto_rotulo">#334155</color>
     <color name="texto_hint">#94A3B8</color>
 
     <!-- Cor da estrela de favorito -->

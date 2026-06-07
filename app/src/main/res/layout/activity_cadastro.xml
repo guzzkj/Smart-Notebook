@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F6F8"
+    android:background="@color/fundo_tela"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,12 +29,12 @@
 
             <ImageButton
                 android:id="@+id/btn_voltar"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/ic_arrow_back"
                 android:contentDescription="Voltar"
-                android:scaleType="fitCenter"
-                android:padding="4dp"
+                android:scaleType="centerInside"
+                android:padding="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <TextView
@@ -44,7 +44,7 @@
                 android:layout_marginStart="8dp"
                 android:text="Criar Conta"
                 android:textSize="16sp"
-                android:textColor="#0F172A"
+                android:textColor="@color/texto_primario"
                 android:textStyle="bold"
                 android:fontFamily="@font/inter" />
 
@@ -61,7 +61,7 @@
             android:text="Comece sua jornada no\nSmart Notebook"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="#0F172A"
+            android:textColor="@color/texto_primario"
             android:fontFamily="@font/inter"
             android:lineSpacingExtra="2dp"
             app:layout_constraintTop_toBottomOf="@id/header"
@@ -75,7 +75,7 @@
             android:layout_marginTop="8dp"
             android:text="Preencha os dados abaixo para criar sua conta institucional."
             android:textSize="14sp"
-            android:textColor="#64748B"
+            android:textColor="@color/texto_secundario"
             android:fontFamily="@font/inter"
             android:lineSpacingExtra="2dp"
             app:layout_constraintTop_toBottomOf="@id/tv_titulo"
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nome Completo"
                 android:textSize="14sp"
-                android:textColor="#334155"
+                android:textColor="@color/texto_rotulo"
                 android:fontFamily="@font/inter"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
@@ -124,8 +124,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="Digite seu nome"
-                    android:textColorHint="#94A3B8"
-                    android:textColor="#0F172A"
+                    android:textColorHint="@color/texto_hint"
+                    android:textColor="@color/texto_primario"
                     android:textSize="15sp"
                     android:inputType="textPersonName|textCapWords"
                     android:background="@null"
@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:text="E-mail Institucional"
                 android:textSize="14sp"
-                android:textColor="#334155"
+                android:textColor="@color/texto_rotulo"
                 android:fontFamily="@font/inter"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
@@ -173,8 +173,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="exemplo@instituicao.edu"
-                    android:textColorHint="#94A3B8"
-                    android:textColor="#0F172A"
+                    android:textColorHint="@color/texto_hint"
+                    android:textColor="@color/texto_primario"
                     android:textSize="15sp"
                     android:inputType="textEmailAddress"
                     android:background="@null"
@@ -200,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:text="Senha"
                 android:textSize="14sp"
-                android:textColor="#334155"
+                android:textColor="@color/texto_rotulo"
                 android:fontFamily="@font/inter"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
@@ -222,8 +222,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="Crie uma senha forte"
-                    android:textColorHint="#94A3B8"
-                    android:textColor="#0F172A"
+                    android:textColorHint="@color/texto_hint"
+                    android:textColor="@color/texto_primario"
                     android:textSize="15sp"
                     android:inputType="textPassword"
                     android:background="@null"
@@ -251,7 +251,7 @@
                 android:layout_height="wrap_content"
                 android:text="Confirmar Senha"
                 android:textSize="14sp"
-                android:textColor="#334155"
+                android:textColor="@color/texto_rotulo"
                 android:fontFamily="@font/inter"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
@@ -273,8 +273,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="Repita sua senha"
-                    android:textColorHint="#94A3B8"
-                    android:textColor="#0F172A"
+                    android:textColorHint="@color/texto_hint"
+                    android:textColor="@color/texto_primario"
                     android:textSize="15sp"
                     android:inputType="textPassword"
                     android:background="@null"
@@ -306,7 +306,7 @@
                     android:id="@+id/cb_termos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="#5C6BC0"
+                    android:buttonTint="@color/roxo_primario"
                     android:layout_marginEnd="8dp" />
 
                 <!-- Texto com partes clicáveis (definido via SpannableString no Kotlin) -->
@@ -316,7 +316,7 @@
                     android:layout_height="wrap_content"
                     android:text="Eu li e aceito os Termos de Uso e a Política de Privacidade."
                     android:textSize="13sp"
-                    android:textColor="#64748B"
+                    android:textColor="@color/texto_secundario"
                     android:fontFamily="@font/inter"
                     android:lineSpacingExtra="2dp" />
 
@@ -329,10 +329,10 @@
                 android:layout_height="54dp"
                 android:text="Cadastrar"
                 android:textSize="16sp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 android:fontFamily="@font/inter"
-                android:backgroundTint="#5C6BC0"
+                android:backgroundTint="@color/roxo_primario"
                 android:stateListAnimator="@null"
                 app:cornerRadius="27dp" />
 
@@ -351,7 +351,7 @@
                     android:layout_height="wrap_content"
                     android:text="Já possui uma conta? "
                     android:textSize="14sp"
-                    android:textColor="#64748B"
+                    android:textColor="@color/texto_secundario"
                     android:fontFamily="@font/inter" />
 
                 <TextView
@@ -360,7 +360,7 @@
                     android:layout_height="wrap_content"
                     android:text="Fazer Login"
                     android:textSize="14sp"
-                    android:textColor="#5C6BC0"
+                    android:textColor="@color/roxo_primario"
                     android:textStyle="bold"
                     android:fontFamily="@font/inter"
                     android:clickable="true"

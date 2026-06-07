@@ -6,13 +6,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.smartnotebook.GenericResponse
-import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.adapters.AnotacoesAdapter
 import com.example.smartnotebook.adapters.AtividadesAdapter
 import com.example.smartnotebook.databinding.ActivityDetalhesMateriaBinding
+import com.example.smartnotebook.eq
 import com.example.smartnotebook.models.Anotacao
 import com.example.smartnotebook.models.Atividade
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,7 +52,7 @@ class DetalhesMateriaActivity : AppCompatActivity() {
 
     // Preenche o RecyclerView de anotações com as 3 primeiras (prévia)
     private fun carregarAnotacoes() {
-        RetrofitClient.apiService.listarAnotacoes(materiaId)
+        SupabaseClient.restApi.listarAnotacoes(eq(materiaId))
             .enqueue(object : Callback<List<Anotacao>> {
                 override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
                     val anotacoes = (response.body() ?: emptyList()).take(3)
@@ -63,14 +64,14 @@ class DetalhesMateriaActivity : AppCompatActivity() {
                     binding.rvAnotacoes.adapter = adapter
                 }
                 override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
-                    Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
     }
 
     // Preenche o RecyclerView de atividades da matéria
     private fun carregarAtividades() {
-        RetrofitClient.apiService.listarAtividades(materiaId)
+        SupabaseClient.restApi.listarAtividades(eq(materiaId))
             .enqueue(object : Callback<List<Atividade>> {
                 override fun onResponse(call: Call<List<Atividade>>, response: Response<List<Atividade>>) {
                     val atividades = response.body() ?: emptyList()
@@ -83,7 +84,7 @@ class DetalhesMateriaActivity : AppCompatActivity() {
                     )
                 }
                 override fun onFailure(call: Call<List<Atividade>>, t: Throwable) {
-                    Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
     }
@@ -111,14 +112,14 @@ class DetalhesMateriaActivity : AppCompatActivity() {
             Toast.makeText(this, "Edição de matéria em breve", Toast.LENGTH_SHORT).show()
         }
 
-        // Botão excluir — exclui a matéria no servidor PHP e volta para a tela anterior
+        // Botão excluir — exclui a matéria no Supabase (RLS garante que só o dono apaga) e volta para a tela anterior
         binding.btnExcluir.setOnClickListener {
             binding.btnExcluir.isEnabled = false
 
-            RetrofitClient.apiService.excluirMateria(materiaId)
-                .enqueue(object : Callback<GenericResponse> {
-                    override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
-                        if (response.isSuccessful && response.body()?.sucesso == true) {
+            SupabaseClient.restApi.excluirMateria(eq(materiaId))
+                .enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        if (response.isSuccessful) {
                             Toast.makeText(this@DetalhesMateriaActivity, "Matéria excluída", Toast.LENGTH_SHORT).show()
                             finish()
                         } else {
@@ -126,8 +127,8 @@ class DetalhesMateriaActivity : AppCompatActivity() {
                             binding.btnExcluir.isEnabled = true
                         }
                     }
-                    override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
-                        Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                         binding.btnExcluir.isEnabled = true
                     }
                 })

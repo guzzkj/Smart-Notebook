@@ -3,8 +3,9 @@ package com.example.smartnotebook.activities
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.MateriaInsert
 import com.example.smartnotebook.SessionManager
+import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.databinding.ActivityNovaMateriaBinding
 import com.example.smartnotebook.models.Materia
 import retrofit2.Call
@@ -56,7 +57,7 @@ class NovaMateriaActivity : AppCompatActivity() {
         }
     }
 
-    // Valida os campos e cadastra a matéria via PHP/MySQL
+    // Valida os campos e cadastra a matéria no Supabase (coluna dias_aula é text[])
     private fun configurarBotaoCadastrar() {
         binding.btnCadastrarMateria.setOnClickListener {
             val nome = binding.etNomeMateria.text.toString().trim()
@@ -74,29 +75,29 @@ class NovaMateriaActivity : AppCompatActivity() {
             // Desabilita o botão durante a operação para evitar cliques duplicados
             binding.btnCadastrarMateria.isEnabled = false
 
-            // Dias enviados como string separada por vírgula — PHP faz o split e armazena
-            val diasAula = diasSelecionados.joinToString(",")
-            val userId   = SessionManager.getUserId(this)
+            val userId = SessionManager.getUserId(this)
 
-            RetrofitClient.apiService.inserirMateria(
+            val body = MateriaInsert(
                 userId    = userId,
                 nome      = nome,
                 professor = "",
-                diasAula  = diasAula,
+                diasAula  = diasSelecionados.toList(),
                 corHex    = "#5C6BC0"
-            ).enqueue(object : Callback<Materia> {
-                override fun onResponse(call: Call<Materia>, response: Response<Materia>) {
+            )
+
+            SupabaseClient.restApi.inserirMateria(body).enqueue(object : Callback<List<Materia>> {
+                override fun onResponse(call: Call<List<Materia>>, response: Response<List<Materia>>) {
                     binding.btnCadastrarMateria.isEnabled = true
-                    if (response.isSuccessful && response.body() != null) {
+                    if (response.isSuccessful && !response.body().isNullOrEmpty()) {
                         setResult(RESULT_OK)
                         finish()
                     } else {
                         Toast.makeText(this@NovaMateriaActivity, "Erro ao cadastrar matéria", Toast.LENGTH_SHORT).show()
                     }
                 }
-                override fun onFailure(call: Call<Materia>, t: Throwable) {
+                override fun onFailure(call: Call<List<Materia>>, t: Throwable) {
                     binding.btnCadastrarMateria.isEnabled = true
-                    Toast.makeText(this@NovaMateriaActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@NovaMateriaActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
         }

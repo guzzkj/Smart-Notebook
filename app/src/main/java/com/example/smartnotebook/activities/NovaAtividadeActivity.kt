@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.smartnotebook.AtividadeInsert
 import com.example.smartnotebook.R
-import com.example.smartnotebook.RetrofitClient
 import com.example.smartnotebook.SessionManager
+import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.databinding.ActivityNovaAtividadeBinding
+import com.example.smartnotebook.eq
 import com.example.smartnotebook.models.Atividade
 import com.example.smartnotebook.models.Materia
 import retrofit2.Call
@@ -64,11 +66,11 @@ class NovaAtividadeActivity : AppCompatActivity() {
         }
     }
 
-    // Carrega as matérias do servidor PHP e popula o Spinner
+    // Carrega as matérias do Supabase e popula o Spinner
     private fun carregarMateriasSpinner() {
         val userId = SessionManager.getUserId(this)
 
-        RetrofitClient.apiService.listarMaterias(userId)
+        SupabaseClient.restApi.listarMaterias(eq(userId))
             .enqueue(object : Callback<List<Materia>> {
                 override fun onResponse(call: Call<List<Materia>>, response: Response<List<Materia>>) {
                     materias = response.body() ?: emptyList()
@@ -81,7 +83,7 @@ class NovaAtividadeActivity : AppCompatActivity() {
                     binding.spinnerMateria.adapter = adapter
                 }
                 override fun onFailure(call: Call<List<Materia>>, t: Throwable) {
-                    Toast.makeText(this@NovaAtividadeActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@NovaAtividadeActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
     }
@@ -115,7 +117,7 @@ class NovaAtividadeActivity : AppCompatActivity() {
             // Desabilita o botão durante a operação para evitar cliques duplicados
             binding.btnSalvarAtividade.isEnabled = false
 
-            RetrofitClient.apiService.inserirAtividade(
+            val body = AtividadeInsert(
                 userId      = userId,
                 materiaId   = materiaId,
                 titulo      = titulo,
@@ -123,19 +125,21 @@ class NovaAtividadeActivity : AppCompatActivity() {
                 status      = "EM ANDAMENTO",
                 dataEntrega = data,
                 hora        = "23:59"
-            ).enqueue(object : Callback<Atividade> {
-                override fun onResponse(call: Call<Atividade>, response: Response<Atividade>) {
+            )
+
+            SupabaseClient.restApi.inserirAtividade(body).enqueue(object : Callback<List<Atividade>> {
+                override fun onResponse(call: Call<List<Atividade>>, response: Response<List<Atividade>>) {
                     binding.btnSalvarAtividade.isEnabled = true
-                    if (response.isSuccessful && response.body() != null) {
+                    if (response.isSuccessful && !response.body().isNullOrEmpty()) {
                         setResult(RESULT_OK)
                         finish()
                     } else {
                         Toast.makeText(this@NovaAtividadeActivity, "Erro ao salvar atividade", Toast.LENGTH_SHORT).show()
                     }
                 }
-                override fun onFailure(call: Call<Atividade>, t: Throwable) {
+                override fun onFailure(call: Call<List<Atividade>>, t: Throwable) {
                     binding.btnSalvarAtividade.isEnabled = true
-                    Toast.makeText(this@NovaAtividadeActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@NovaAtividadeActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
         }

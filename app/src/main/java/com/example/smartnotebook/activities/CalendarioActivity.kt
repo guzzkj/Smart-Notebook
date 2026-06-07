@@ -13,10 +13,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
-import com.example.smartnotebook.RetrofitClient
 import com.example.smartnotebook.SessionManager
+import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.adapters.EventosCalendarioAdapter
 import com.example.smartnotebook.databinding.ActivityCalendarioBinding
+import com.example.smartnotebook.eq
 import com.example.smartnotebook.models.Atividade
 import com.example.smartnotebook.models.Materia
 import retrofit2.Call
@@ -60,12 +61,12 @@ class CalendarioActivity : AppCompatActivity() {
         carregarDados()
     }
 
-    // Busca atividades e matérias do servidor PHP e atualiza o calendário
+    // Busca atividades e matérias do Supabase e atualiza o calendário
     private fun carregarDados() {
         val userId = SessionManager.getUserId(this)
 
         // Request 1: todas as atividades do usuário
-        RetrofitClient.apiService.listarTodasAtividades(userId)
+        SupabaseClient.restApi.listarTodasAtividades(eq(userId))
             .enqueue(object : Callback<List<Atividade>> {
                 override fun onResponse(call: Call<List<Atividade>>, response: Response<List<Atividade>>) {
                     todasAtividades = response.body() ?: emptyList()
@@ -73,12 +74,12 @@ class CalendarioActivity : AppCompatActivity() {
                     if (materiasCarregadas) atualizarCalendario()
                 }
                 override fun onFailure(call: Call<List<Atividade>>, t: Throwable) {
-                    Toast.makeText(this@CalendarioActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@CalendarioActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
 
         // Request 2: matérias para montar o mapa id→nome do adapter
-        RetrofitClient.apiService.listarMaterias(userId)
+        SupabaseClient.restApi.listarMaterias(eq(userId))
             .enqueue(object : Callback<List<Materia>> {
                 override fun onResponse(call: Call<List<Materia>>, response: Response<List<Materia>>) {
                     val materias = response.body() ?: emptyList()

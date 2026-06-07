@@ -9,7 +9,7 @@ data class Materia(
     val professor: String = "",
     @SerializedName("dias_aula") val diasAula: List<String> = emptyList(),
     @SerializedName("cor_hex") val corHex: String = "#5C6BC0",
-    @SerializedName("user_id") val userId: Int = 0,
+    @SerializedName("user_id") val userId: String = "",
     @SerializedName("created_at") val createdAt: String = "",
     val pendentes: Int = 0  // calculado via JOIN no PHP (listar_materias.php)
 )

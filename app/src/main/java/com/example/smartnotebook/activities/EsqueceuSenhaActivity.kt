@@ -23,7 +23,7 @@ class EsqueceuSenhaActivity : AppCompatActivity() {
         binding.tvSuporte.paintFlags = binding.tvSuporte.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
-    // Valida o e-mail e exibe confirmação (servidor XAMPP local não suporta envio de e-mails)
+    // Valida o e-mail e exibe confirmação (envio real via Supabase Auth fica para uma próxima etapa)
     private fun configurarBotaoEnviar() {
         binding.btnEnviarCodigo.setOnClickListener {
             val email = binding.etEmailRecuperacao.text.toString().trim()

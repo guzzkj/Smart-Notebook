@@ -3,7 +3,7 @@ package com.example.smartnotebook
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-// Cliente Retrofit exclusivo para a API do Google Gemini — separado do RetrofitClient do XAMPP
+// Cliente Retrofit exclusivo para a API do Google Gemini — separado do SupabaseClient
 object GeminiClient {
 
     private const val BASE_URL = "https://generativelanguage.googleapis.com/"

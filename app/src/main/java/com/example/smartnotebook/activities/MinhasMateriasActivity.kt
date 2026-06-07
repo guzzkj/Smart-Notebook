@@ -6,9 +6,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
-import com.example.smartnotebook.RetrofitClient
 import com.example.smartnotebook.SessionManager
+import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.adapters.MateriasAdapter
+import com.example.smartnotebook.eq
 import com.example.smartnotebook.databinding.ActivityMinhasMateriasBinding
 import com.example.smartnotebook.models.Materia
 import retrofit2.Call
@@ -35,12 +36,11 @@ class MinhasMateriasActivity : AppCompatActivity() {
         carregarMaterias()
     }
 
-    // Busca matérias do servidor PHP e preenche o RecyclerView
-    // O PHP já retorna o campo "pendentes" calculado via JOIN, sem N+1 calls
+    // Busca matérias do Supabase (view materias_com_pendentes já traz "pendentes" calculado, sem N+1 calls)
     private fun carregarMaterias() {
         val userId = SessionManager.getUserId(this)
 
-        RetrofitClient.apiService.listarMaterias(userId)
+        SupabaseClient.restApi.listarMaterias(eq(userId))
             .enqueue(object : Callback<List<Materia>> {
                 override fun onResponse(call: Call<List<Materia>>, response: Response<List<Materia>>) {
                     val materias = response.body() ?: emptyList()
@@ -55,7 +55,7 @@ class MinhasMateriasActivity : AppCompatActivity() {
                     binding.rvMaterias.adapter = adapter
                 }
                 override fun onFailure(call: Call<List<Materia>>, t: Throwable) {
-                    Toast.makeText(this@MinhasMateriasActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MinhasMateriasActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
     }

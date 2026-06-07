@@ -1,5 +1,6 @@
 package com.example.smartnotebook.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.text.SpannableString
@@ -12,9 +13,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.smartnotebook.CadastroResponse
+import com.example.smartnotebook.AuthResponse
 import com.example.smartnotebook.R
-import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.SessionManager
+import com.example.smartnotebook.SignUpRequest
+import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.databinding.ActivityCadastroBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -82,7 +85,7 @@ class CadastroActivity : AppCompatActivity() {
         binding.tvTermos.highlightColor = android.graphics.Color.TRANSPARENT
     }
 
-    // Valida os campos, cria a conta via PHP/MySQL e volta para o Login
+    // Valida os campos, cria a conta via Supabase Auth e segue para a tela principal (ou pede confirmação por e-mail)
     private fun configurarBotaoCadastrar() {
         binding.btnCadastrar.setOnClickListener {
             val nome           = binding.etNome.text.toString().trim()
@@ -95,25 +98,32 @@ class CadastroActivity : AppCompatActivity() {
 
             binding.btnCadastrar.isEnabled = false
 
-            RetrofitClient.apiService.cadastrar(nome, email, senha)
-                .enqueue(object : Callback<CadastroResponse> {
-                    override fun onResponse(
-                        call: Call<CadastroResponse>,
-                        response: Response<CadastroResponse>
-                    ) {
+            val body = SignUpRequest(email = email, password = senha, data = mapOf("nome" to nome))
+
+            SupabaseClient.authApi.cadastrar(body)
+                .enqueue(object : Callback<AuthResponse> {
+                    override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                         binding.btnCadastrar.isEnabled = true
-                        val body = response.body()
-                        if (response.isSuccessful && body?.sucesso == true) {
-                            Toast.makeText(this@CadastroActivity, "Conta criada com sucesso!", Toast.LENGTH_LONG).show()
+                        val resposta = response.body()
+                        val user = resposta?.user
+                        val token = resposta?.accessToken
+
+                        if (response.isSuccessful && user != null && token != null) {
+                            // Confirmação de e-mail desativada no projeto: já entra logado
+                            SessionManager.salvar(this@CadastroActivity, user.id, nome, user.email ?: email, token)
+                            startActivity(Intent(this@CadastroActivity, MinhasMateriasActivity::class.java))
+                            finish()
+                        } else if (response.isSuccessful && user != null) {
+                            Toast.makeText(this@CadastroActivity, "Conta criada! Confirme seu e-mail para entrar.", Toast.LENGTH_LONG).show()
                             finish()
                         } else {
-                            val msg = body?.mensagem ?: "Erro ao criar conta. Tente novamente."
+                            val msg = resposta?.errorDescription ?: resposta?.msg ?: "Erro ao criar conta. Tente novamente."
                             Toast.makeText(this@CadastroActivity, msg, Toast.LENGTH_SHORT).show()
                         }
                     }
-                    override fun onFailure(call: Call<CadastroResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                         binding.btnCadastrar.isEnabled = true
-                        Toast.makeText(this@CadastroActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CadastroActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                     }
                 })
         }

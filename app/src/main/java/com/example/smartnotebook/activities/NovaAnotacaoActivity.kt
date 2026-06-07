@@ -9,9 +9,10 @@ import com.example.smartnotebook.GeminiContent
 import com.example.smartnotebook.GeminiPart
 import com.example.smartnotebook.GeminiRequest
 import com.example.smartnotebook.GeminiResponse
+import com.example.smartnotebook.AnotacaoInsert
 import com.example.smartnotebook.R
-import com.example.smartnotebook.RetrofitClient
 import com.example.smartnotebook.SessionManager
+import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.databinding.ActivityNovaAnotacaoBinding
 import com.example.smartnotebook.models.Anotacao
 import retrofit2.Call
@@ -115,7 +116,7 @@ class NovaAnotacaoActivity : AppCompatActivity() {
         }
     }
 
-    // Valida os campos e salva a anotação via PHP/MySQL
+    // Valida os campos e salva a anotação no Supabase
     private fun configurarBotaoSalvar() {
         binding.btnSalvar.setOnClickListener {
             val materiaId = intent.getIntExtra(EXTRA_MATERIA_ID, -1)
@@ -140,21 +141,22 @@ class NovaAnotacaoActivity : AppCompatActivity() {
             binding.btnSalvar.isEnabled = false
 
             val userId = SessionManager.getUserId(this)
+            val body = AnotacaoInsert(userId = userId, materiaId = materiaId, titulo = titulo, conteudo = conteudo)
 
-            RetrofitClient.apiService.inserirAnotacao(userId, materiaId, titulo, conteudo)
-                .enqueue(object : Callback<Anotacao> {
-                    override fun onResponse(call: Call<Anotacao>, response: Response<Anotacao>) {
+            SupabaseClient.restApi.inserirAnotacao(body)
+                .enqueue(object : Callback<List<Anotacao>> {
+                    override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
                         binding.btnSalvar.isEnabled = true
-                        if (response.isSuccessful && response.body() != null) {
+                        if (response.isSuccessful && !response.body().isNullOrEmpty()) {
                             setResult(RESULT_OK)
                             finish()
                         } else {
                             Toast.makeText(this@NovaAnotacaoActivity, "Erro ao salvar anotação", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    override fun onFailure(call: Call<Anotacao>, t: Throwable) {
+                    override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
                         binding.btnSalvar.isEnabled = true
-                        Toast.makeText(this@NovaAnotacaoActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@NovaAnotacaoActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                     }
                 })
         }

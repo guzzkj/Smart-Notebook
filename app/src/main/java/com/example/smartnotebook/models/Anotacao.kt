@@ -9,5 +9,5 @@ data class Anotacao(
     val conteudo: String = "",
     @SerializedName("created_at") val createdAt: String = "",
     @SerializedName("materia_id") val materiaId: Int,
-    @SerializedName("user_id") val userId: Int = 0
+    @SerializedName("user_id") val userId: String = ""
 )

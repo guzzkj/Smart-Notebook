@@ -6,9 +6,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
-import com.example.smartnotebook.RetrofitClient
+import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.adapters.AnotacoesAdapter
 import com.example.smartnotebook.databinding.ActivityTodasAnotacoesBinding
+import com.example.smartnotebook.eq
 import com.example.smartnotebook.models.Anotacao
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,7 +50,7 @@ class TodasAnotacoesActivity : AppCompatActivity() {
     private fun carregarAnotacoes() {
         if (materiaId == -1) return
 
-        RetrofitClient.apiService.listarAnotacoes(materiaId)
+        SupabaseClient.restApi.listarAnotacoes(eq(materiaId))
             .enqueue(object : Callback<List<Anotacao>> {
                 override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
                     val lista = response.body() ?: emptyList()
@@ -61,7 +62,7 @@ class TodasAnotacoesActivity : AppCompatActivity() {
                     binding.rvTodasAnotacoes.adapter = adapter
                 }
                 override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
-                    Toast.makeText(this@TodasAnotacoesActivity, "Sem conexão. Verifique se o XAMPP está ativo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@TodasAnotacoesActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
     }

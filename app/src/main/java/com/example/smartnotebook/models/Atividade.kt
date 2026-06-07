@@ -11,6 +11,6 @@ data class Atividade(
     @SerializedName("data_entrega") val dataEntrega: String,  // formato AAAA-MM-DD
     val hora: String = "23:59",
     @SerializedName("materia_id") val materiaId: Int,
-    @SerializedName("user_id") val userId: Int = 0,
+    @SerializedName("user_id") val userId: String = "",
     val atrasada: Boolean = false                          // true = ponto vermelho | false = ponto verde
 )

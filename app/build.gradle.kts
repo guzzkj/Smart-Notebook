@@ -11,6 +11,8 @@ val localProperties = Properties().apply {
     if (file.exists()) load(file.inputStream())
 }
 val geminiApiKey: String = localProperties.getProperty("GEMINI_API_KEY", "")
+val supabaseUrl: String = localProperties.getProperty("SUPABASE_URL", "")
+val supabaseAnonKey: String = localProperties.getProperty("SUPABASE_ANON_KEY", "")
 
 android {
     namespace = "com.example.smartnotebook"
@@ -26,6 +28,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
+        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"$supabaseAnonKey\"")
     }
 
     buildFeatures {

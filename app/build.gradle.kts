@@ -1,7 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
+
+// Lê GEMINI_API_KEY de local.properties (arquivo fora do git) — evita expor a chave no código-fonte
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) load(file.inputStream())
+}
+val geminiApiKey: String = localProperties.getProperty("GEMINI_API_KEY", "")
 
 android {
     namespace = "com.example.smartnotebook"
@@ -15,6 +24,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
     }
 
     buildFeatures {

@@ -50,15 +50,20 @@ class NovaAnotacaoActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (GeminiClient.API_KEY.isBlank()) {
+                Toast.makeText(this, "Configure GEMINI_API_KEY em local.properties", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
             btnMelhorarIA.isEnabled = false
             btnMelhorarIA.text = "Melhorando..."
 
             val prompt = """
                 Você é um assistente de estudos. O usuário escreveu a seguinte anotação:
 
-                \"\"\"
+                ---
                 $texto
-                \"\"\"
+                ---
 
                 Melhore esta anotação seguindo estas regras:
                 - Organize o conteúdo em tópicos com títulos

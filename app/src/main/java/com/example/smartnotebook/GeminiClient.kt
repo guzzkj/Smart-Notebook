@@ -7,8 +7,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 object GeminiClient {
 
     private const val BASE_URL = "https://generativelanguage.googleapis.com/"
-    const val API_KEY = "AIzaSyA4WjG2AMwanY63o9sXKbyocVYxV0UIbzw"
-    const val MODEL   = "gemini-1.5-flash"
+    // Chave lida de local.properties via BuildConfig — nunca commitar a chave no código-fonte
+    val API_KEY: String = BuildConfig.GEMINI_API_KEY
+    const val MODEL = "gemini-2.5-flash"
 
     val service: GeminiService by lazy {
         Retrofit.Builder()

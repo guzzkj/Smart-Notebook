@@ -67,7 +67,7 @@ class CadastroActivity : AppCompatActivity() {
         spannable.setSpan(ForegroundColorSpan(corRoxa), inicioTermos, fimTermos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
-                Toast.makeText(this@CadastroActivity, "Termos de Uso", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@CadastroActivity, TermosUsoActivity::class.java))
             }
         }, inicioTermos, fimTermos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
@@ -76,7 +76,7 @@ class CadastroActivity : AppCompatActivity() {
         spannable.setSpan(ForegroundColorSpan(corRoxa), inicioPriv, fimPriv, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
-                Toast.makeText(this@CadastroActivity, "Política de Privacidade", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@CadastroActivity, TermosUsoActivity::class.java))
             }
         }, inicioPriv, fimPriv, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
@@ -110,7 +110,7 @@ class CadastroActivity : AppCompatActivity() {
 
                         if (response.isSuccessful && user != null && token != null) {
                             // Confirmação de e-mail desativada no projeto: já entra logado
-                            SessionManager.salvar(this@CadastroActivity, user.id, nome, user.email ?: email, token)
+                            SessionManager.salvar(this@CadastroActivity, user.id, nome, user.email ?: email, token, resposta.refreshToken)
                             startActivity(Intent(this@CadastroActivity, MinhasMateriasActivity::class.java))
                             finish()
                         } else if (response.isSuccessful && user != null) {

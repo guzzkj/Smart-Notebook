@@ -201,23 +201,6 @@
             android:stateListAnimator="@null"
             app:cornerRadius="27dp" />
 
-        <!-- Link Esqueceu a senha -->
-        <TextView
-            android:id="@+id/tv_esqueceu_senha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="14dp"
-            android:text="Esqueceu a senha?"
-            android:textSize="14sp"
-            android:textColor="@color/roxo_primario"
-            android:textStyle="bold"
-            android:fontFamily="@font/inter"
-            android:paddingVertical="6dp"
-            android:paddingHorizontal="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless" />
         <!-- Linha: Não tem uma conta? Cadastre-se -->
         <LinearLayout
             android:id="@+id/container_cadastro"

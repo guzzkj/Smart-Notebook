@@ -1,7 +1,9 @@
 package com.example.smartnotebook.activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smartnotebook.R
 import com.example.smartnotebook.SessionManager
@@ -27,10 +29,19 @@ class MenuInstitucionalActivity : AppCompatActivity() {
         exibirDadosUsuario() // atualiza caso o usuário tenha editado o perfil
     }
 
-    // Mostra nome e e-mail do usuário logado (sessão salva no SessionManager)
+    // Mostra nome, e-mail e avatar do usuário logado (sessão salva no SessionManager)
     private fun exibirDadosUsuario() {
         binding.tvNomeUsuario.text = SessionManager.getNome(this)
         binding.tvEmailUsuario.text = SessionManager.getEmail(this)
+
+        SessionManager.getAvatarUri(this)?.let { uriSalva ->
+            try {
+                binding.imgAvatarMenu.scaleType = ImageView.ScaleType.CENTER_CROP
+                binding.imgAvatarMenu.setImageURI(Uri.parse(uriSalva))
+            } catch (e: SecurityException) {
+                // Permissão de leitura da URI expirou — mantém o avatar padrão
+            }
+        }
     }
 
     private fun configurarItensMenu() {

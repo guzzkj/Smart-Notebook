@@ -11,5 +11,5 @@ data class Materia(
     @SerializedName("cor_hex") val corHex: String = "#5C6BC0",
     @SerializedName("user_id") val userId: String = "",
     @SerializedName("created_at") val createdAt: String = "",
-    val pendentes: Int = 0  // calculado via JOIN no PHP (listar_materias.php)
+    val pendentes: Int = 0  // calculado pela view "materias_com_pendentes" no Supabase
 )

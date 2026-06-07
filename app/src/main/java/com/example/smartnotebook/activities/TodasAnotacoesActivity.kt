@@ -14,6 +14,7 @@ import com.example.smartnotebook.adapters.AnotacoesAdapter
 import com.example.smartnotebook.databinding.ActivityTodasAnotacoesBinding
 import com.example.smartnotebook.eq
 import com.example.smartnotebook.models.Anotacao
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -86,7 +87,11 @@ class TodasAnotacoesActivity : AppCompatActivity() {
             Ordem.TITULO_AZ     -> lista.sortedBy { it.titulo.lowercase() }
         }
 
-        val adapter = AnotacoesAdapter(lista) { anotacao -> abrirEdicaoAnotacao(anotacao) }
+        val adapter = AnotacoesAdapter(
+            lista,
+            aoClicar = { anotacao -> abrirEdicaoAnotacao(anotacao) },
+            aoExcluir = { anotacao -> confirmarExclusao(anotacao) }
+        )
         binding.rvTodasAnotacoes.layoutManager = LinearLayoutManager(this@TodasAnotacoesActivity)
         binding.rvTodasAnotacoes.adapter = adapter
     }
@@ -99,6 +104,34 @@ class TodasAnotacoesActivity : AppCompatActivity() {
         intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_TITULO, anotacao.titulo)
         intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_CONTEUDO, anotacao.conteudo)
         startActivity(intent)
+    }
+
+    // Pede confirmação antes de excluir — toque longo no item dispara este fluxo
+    private fun confirmarExclusao(anotacao: Anotacao) {
+        AlertDialog.Builder(this)
+            .setTitle("Excluir anotação")
+            .setMessage("Tem certeza que deseja excluir \"${anotacao.titulo}\"? Esta ação não pode ser desfeita.")
+            .setPositiveButton("Excluir") { _, _ -> excluirAnotacao(anotacao) }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    // Remove a anotação no Supabase (RLS garante que só o dono apaga) e recarrega a lista
+    private fun excluirAnotacao(anotacao: Anotacao) {
+        SupabaseClient.restApi.excluirAnotacao(eq(anotacao.id))
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@TodasAnotacoesActivity, "Anotação excluída", Toast.LENGTH_SHORT).show()
+                        carregarAnotacoes()
+                    } else {
+                        Toast.makeText(this@TodasAnotacoesActivity, "Erro ao excluir anotação", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(this@TodasAnotacoesActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     // Mostra um diálogo com campo de texto para filtrar as anotações pelo título

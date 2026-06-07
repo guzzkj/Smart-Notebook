@@ -28,7 +28,6 @@ class LoginActivity : AppCompatActivity() {
 
         configurarToggleSenha()
         configurarBotaoEntrar()
-        configurarEsqueceuSenha()
         configurarCadastreSe()
     }
 
@@ -64,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
                         val user = body?.user
                         if (response.isSuccessful && token != null && user != null) {
                             val nome = user.userMetadata?.get("nome") ?: ""
-                            SessionManager.salvar(this@LoginActivity, user.id, nome, user.email ?: email, token)
+                            SessionManager.salvar(this@LoginActivity, user.id, nome, user.email ?: email, token, body.refreshToken)
                             // Intent explícita para a tela principal (Minhas Matérias)
                             startActivity(Intent(this@LoginActivity, MinhasMateriasActivity::class.java))
                             finish() // Remove o Login da pilha — usuário não pode voltar
@@ -102,13 +101,6 @@ class LoginActivity : AppCompatActivity() {
             return false
         }
         return true
-    }
-
-    // Link "Esqueceu a senha?" → abre a tela de recuperação via Intent explícita
-    private fun configurarEsqueceuSenha() {
-        binding.tvEsqueceuSenha.setOnClickListener {
-            startActivity(Intent(this, EsqueceuSenhaActivity::class.java))
-        }
     }
 
     // Link "Cadastre-se" → abre a tela de Cadastro via Intent explícita

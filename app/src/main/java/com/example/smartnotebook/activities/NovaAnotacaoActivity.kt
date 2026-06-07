@@ -1,7 +1,6 @@
 package com.example.smartnotebook.activities
 
 import android.os.Bundle
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smartnotebook.GeminiClient
@@ -11,7 +10,6 @@ import com.example.smartnotebook.GeminiRequest
 import com.example.smartnotebook.GeminiResponse
 import com.example.smartnotebook.AnotacaoInsert
 import com.example.smartnotebook.AnotacaoUpdate
-import com.example.smartnotebook.R
 import com.example.smartnotebook.SessionManager
 import com.example.smartnotebook.SupabaseClient
 import com.example.smartnotebook.eq
@@ -58,7 +56,7 @@ class NovaAnotacaoActivity : AppCompatActivity() {
 
     // Envia o conteúdo da anotação para o Gemini e substitui pelo texto melhorado
     private fun configurarBotaoMelhorarIA() {
-        val btnMelhorarIA = findViewById<Button>(R.id.btn_melhorar_ia)
+        val btnMelhorarIA = binding.btnMelhorarIa
 
         btnMelhorarIA.setOnClickListener {
             val texto = binding.etConteudoAnotacao.text.toString().trim()

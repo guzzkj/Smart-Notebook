@@ -43,11 +43,6 @@
             android:name=".activities.SobreActivity"
             android:exported="false" />
 
-        <!-- TELA 3: Esqueci Minha Senha — recuperação via e-mail acadêmico -->
-        <activity
-            android:name=".activities.EsqueceuSenhaActivity"
-            android:exported="false" />
-
         <!-- TELA 4: Minhas Matérias — tela principal (Home) com lista de matérias -->
         <!-- Classe MinhasMateriasActivity está no arquivo HomeActivity.kt -->
         <activity

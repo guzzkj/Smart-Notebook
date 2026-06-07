@@ -78,6 +78,10 @@ interface RestApi {
     @POST("rest/v1/atividades")
     fun inserirAtividade(@Body body: AtividadeInsert): Call<List<Atividade>>
 
+    @Headers("Prefer: return=representation")
+    @PATCH("rest/v1/atividades")
+    fun atualizarAtividade(@Query("id") idFiltro: String, @Body body: AtividadeUpdate): Call<List<Atividade>>
+
     @DELETE("rest/v1/atividades")
     fun excluirAtividade(@Query("id") idFiltro: String): Call<ResponseBody>
 }

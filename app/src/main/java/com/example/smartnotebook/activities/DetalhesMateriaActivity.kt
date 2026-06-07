@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -61,8 +62,11 @@ class DetalhesMateriaActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Recarrega a prévia de anotações ao voltar de criar/editar uma anotação
-        if (materiaId != -1) carregarAnotacoes()
+        // Recarrega anotações e atividades ao voltar de criar/editar/excluir algo
+        if (materiaId != -1) {
+            carregarAnotacoes()
+            carregarAtividades()
+        }
     }
 
     // Preenche o RecyclerView de anotações com as 3 primeiras (prévia)
@@ -71,7 +75,7 @@ class DetalhesMateriaActivity : AppCompatActivity() {
             .enqueue(object : Callback<List<Anotacao>> {
                 override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
                     val anotacoes = (response.body() ?: emptyList()).take(3)
-                    val adapter = AnotacoesAdapter(anotacoes) { anotacao ->
+                    val adapter = AnotacoesAdapter(anotacoes, aoClicar = { anotacao ->
                         // Clique em uma anotação → abre o editor já preenchido
                         val intent = Intent(this@DetalhesMateriaActivity, NovaAnotacaoActivity::class.java)
                         intent.putExtra(NovaAnotacaoActivity.EXTRA_MATERIA_ID, materiaId)
@@ -79,7 +83,7 @@ class DetalhesMateriaActivity : AppCompatActivity() {
                         intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_TITULO, anotacao.titulo)
                         intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_CONTEUDO, anotacao.conteudo)
                         startActivity(intent)
-                    }
+                    })
                     binding.rvAnotacoes.layoutManager = LinearLayoutManager(this@DetalhesMateriaActivity)
                     binding.rvAnotacoes.adapter = adapter
                 }
@@ -95,7 +99,11 @@ class DetalhesMateriaActivity : AppCompatActivity() {
             .enqueue(object : Callback<List<Atividade>> {
                 override fun onResponse(call: Call<List<Atividade>>, response: Response<List<Atividade>>) {
                     val atividades = response.body() ?: emptyList()
-                    val adapter    = AtividadesAdapter(atividades)
+                    val adapter    = AtividadesAdapter(
+                        atividades,
+                        aoClicar  = { atividade -> abrirEdicaoAtividade(atividade) },
+                        aoExcluir = { atividade -> confirmarExclusaoAtividade(atividade) }
+                    )
                     binding.rvAtividades.layoutManager = LinearLayoutManager(this@DetalhesMateriaActivity)
                     binding.rvAtividades.adapter = adapter
                     // Divisor entre os itens de atividade dentro do container card
@@ -104,6 +112,47 @@ class DetalhesMateriaActivity : AppCompatActivity() {
                     )
                 }
                 override fun onFailure(call: Call<List<Atividade>>, t: Throwable) {
+                    Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    // Abre o editor de atividade já preenchido com os dados da atividade selecionada
+    private fun abrirEdicaoAtividade(atividade: Atividade) {
+        val intent = Intent(this, NovaAtividadeActivity::class.java)
+        intent.putExtra(NovaAtividadeActivity.EXTRA_MATERIA_ID, materiaId)
+        intent.putExtra(NovaAtividadeActivity.EXTRA_ATIVIDADE_ID, atividade.id)
+        intent.putExtra(NovaAtividadeActivity.EXTRA_ATIVIDADE_TITULO, atividade.titulo)
+        intent.putExtra(NovaAtividadeActivity.EXTRA_ATIVIDADE_TIPO, atividade.tipo)
+        intent.putExtra(NovaAtividadeActivity.EXTRA_ATIVIDADE_STATUS, atividade.status)
+        intent.putExtra(NovaAtividadeActivity.EXTRA_ATIVIDADE_DATA, atividade.dataEntrega)
+        intent.putExtra(NovaAtividadeActivity.EXTRA_ATIVIDADE_HORA, atividade.hora)
+        startActivity(intent)
+    }
+
+    // Pede confirmação antes de excluir — toque longo no item dispara este fluxo
+    private fun confirmarExclusaoAtividade(atividade: Atividade) {
+        AlertDialog.Builder(this)
+            .setTitle("Excluir atividade")
+            .setMessage("Tem certeza que deseja excluir \"${atividade.titulo}\"? Esta ação não pode ser desfeita.")
+            .setPositiveButton("Excluir") { _, _ -> excluirAtividade(atividade) }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    // Remove a atividade no Supabase (RLS garante que só o dono apaga) e recarrega a lista
+    private fun excluirAtividade(atividade: Atividade) {
+        SupabaseClient.restApi.excluirAtividade(eq(atividade.id))
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@DetalhesMateriaActivity, "Atividade excluída", Toast.LENGTH_SHORT).show()
+                        carregarAtividades()
+                    } else {
+                        Toast.makeText(this@DetalhesMateriaActivity, "Erro ao excluir atividade", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })

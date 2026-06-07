@@ -9,7 +9,8 @@ import com.example.smartnotebook.models.Anotacao
 // Adapter do RecyclerView para exibir anotações (Detalhes da Matéria e Todas as Anotações)
 class AnotacoesAdapter(
     private val lista: List<Anotacao>,
-    private val aoClicar: (Anotacao) -> Unit
+    private val aoClicar: (Anotacao) -> Unit,
+    private val aoExcluir: ((Anotacao) -> Unit)? = null
 ) : RecyclerView.Adapter<AnotacoesAdapter.AnotacaoViewHolder>() {
 
     // ViewHolder: guarda as referências das views de cada item de anotação
@@ -21,8 +22,16 @@ class AnotacoesAdapter(
             binding.tvTituloAnotacao.text = anotacao.titulo
             binding.tvDataAnotacao.text   = anotacao.createdAt.take(10)
 
-            // Dispara o callback ao clicar — navega para os detalhes
+            // Toque → abre os detalhes/edição | Toque longo → solicita exclusão (quando habilitada)
             binding.root.setOnClickListener { aoClicar(anotacao) }
+            binding.root.setOnLongClickListener {
+                if (aoExcluir != null) {
+                    aoExcluir.invoke(anotacao)
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 

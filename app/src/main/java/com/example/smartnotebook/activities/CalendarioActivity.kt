@@ -39,7 +39,7 @@ class CalendarioActivity : AppCompatActivity() {
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     )
 
-    // Atividades e mapa de nomes carregados do servidor PHP
+    // Atividades e mapa de nomes carregados do Supabase
     private var todasAtividades   = listOf<Atividade>()
     private var materiaIdParaNome = mapOf<Int, String>()
 

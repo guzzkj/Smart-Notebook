@@ -9,7 +9,9 @@ import com.example.smartnotebook.models.Atividade
 
 // Adapter do RecyclerView para exibir atividades na tela de Detalhes da Matéria
 class AtividadesAdapter(
-    private val lista: List<Atividade>
+    private val lista: List<Atividade>,
+    private val aoClicar: ((Atividade) -> Unit)? = null,
+    private val aoExcluir: ((Atividade) -> Unit)? = null
 ) : RecyclerView.Adapter<AtividadesAdapter.AtividadeViewHolder>() {
 
     // ViewHolder: guarda as referências das views de cada item de atividade
@@ -28,6 +30,17 @@ class AtividadesAdapter(
                       else                    Color.parseColor("#22C55E")
             binding.viewDot.setBackgroundColor(cor)
             binding.tvTipoStatus.setTextColor(cor)
+
+            // Toque → abre a edição | Toque longo → solicita exclusão (quando habilitados)
+            binding.root.setOnClickListener { aoClicar?.invoke(atividade) }
+            binding.root.setOnLongClickListener {
+                if (aoExcluir != null) {
+                    aoExcluir.invoke(atividade)
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 

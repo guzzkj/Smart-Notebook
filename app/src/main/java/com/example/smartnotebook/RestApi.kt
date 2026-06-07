@@ -9,6 +9,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -28,6 +29,14 @@ interface RestApi {
     @POST("rest/v1/materias")
     fun inserirMateria(@Body body: MateriaInsert): Call<List<Materia>>
 
+    // Busca uma única matéria pelo id (usada para pré-preencher a tela de edição)
+    @GET("rest/v1/materias?select=*")
+    fun buscarMateria(@Query("id") idFiltro: String): Call<List<Materia>>
+
+    @Headers("Prefer: return=representation")
+    @PATCH("rest/v1/materias")
+    fun atualizarMateria(@Query("id") idFiltro: String, @Body body: MateriaUpdate): Call<List<Materia>>
+
     @DELETE("rest/v1/materias")
     fun excluirMateria(@Query("id") idFiltro: String): Call<ResponseBody>
 
@@ -42,6 +51,10 @@ interface RestApi {
     @Headers("Prefer: return=representation")
     @POST("rest/v1/anotacoes")
     fun inserirAnotacao(@Body body: AnotacaoInsert): Call<List<Anotacao>>
+
+    @Headers("Prefer: return=representation")
+    @PATCH("rest/v1/anotacoes")
+    fun atualizarAnotacao(@Query("id") idFiltro: String, @Body body: AnotacaoUpdate): Call<List<Anotacao>>
 
     @DELETE("rest/v1/anotacoes")
     fun excluirAnotacao(@Query("id") idFiltro: String): Call<ResponseBody>

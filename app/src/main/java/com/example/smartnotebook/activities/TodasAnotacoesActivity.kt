@@ -2,7 +2,10 @@ package com.example.smartnotebook.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.EditText
+import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
@@ -20,6 +23,13 @@ class TodasAnotacoesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTodasAnotacoesBinding
     private var materiaId = -1
+
+    // Lista completa vinda do Supabase — busca e ordenação operam sobre uma cópia filtrada dela
+    private var listaCompleta: List<Anotacao> = emptyList()
+    private var filtroBusca = ""
+    private var ordemAtual = Ordem.MAIS_RECENTES
+
+    private enum class Ordem { MAIS_RECENTES, MAIS_ANTIGAS, TITULO_AZ }
 
     companion object {
         // Chaves para receber dados da matéria via Intent
@@ -53,18 +63,83 @@ class TodasAnotacoesActivity : AppCompatActivity() {
         SupabaseClient.restApi.listarAnotacoes(eq(materiaId))
             .enqueue(object : Callback<List<Anotacao>> {
                 override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
-                    val lista = response.body() ?: emptyList()
-                    val adapter = AnotacoesAdapter(lista) { _ ->
-                        // Ao clicar em uma anotação → feedback (futuro: abrir editor)
-                        Toast.makeText(this@TodasAnotacoesActivity, "Anotação selecionada", Toast.LENGTH_SHORT).show()
-                    }
-                    binding.rvTodasAnotacoes.layoutManager = LinearLayoutManager(this@TodasAnotacoesActivity)
-                    binding.rvTodasAnotacoes.adapter = adapter
+                    listaCompleta = response.body() ?: emptyList()
+                    exibirLista()
                 }
                 override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
                     Toast.makeText(this@TodasAnotacoesActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    // Aplica o filtro de busca e a ordenação atuais sobre listaCompleta e atualiza o RecyclerView
+    private fun exibirLista() {
+        var lista = if (filtroBusca.isBlank()) {
+            listaCompleta
+        } else {
+            listaCompleta.filter { it.titulo.contains(filtroBusca, ignoreCase = true) }
+        }
+
+        lista = when (ordemAtual) {
+            Ordem.MAIS_RECENTES -> lista.sortedByDescending { it.createdAt }
+            Ordem.MAIS_ANTIGAS  -> lista.sortedBy { it.createdAt }
+            Ordem.TITULO_AZ     -> lista.sortedBy { it.titulo.lowercase() }
+        }
+
+        val adapter = AnotacoesAdapter(lista) { anotacao -> abrirEdicaoAnotacao(anotacao) }
+        binding.rvTodasAnotacoes.layoutManager = LinearLayoutManager(this@TodasAnotacoesActivity)
+        binding.rvTodasAnotacoes.adapter = adapter
+    }
+
+    // Abre o editor já preenchido com os dados da anotação selecionada
+    private fun abrirEdicaoAnotacao(anotacao: Anotacao) {
+        val intent = Intent(this, NovaAnotacaoActivity::class.java)
+        intent.putExtra(NovaAnotacaoActivity.EXTRA_MATERIA_ID, materiaId)
+        intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_ID, anotacao.id)
+        intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_TITULO, anotacao.titulo)
+        intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_CONTEUDO, anotacao.conteudo)
+        startActivity(intent)
+    }
+
+    // Mostra um diálogo com campo de texto para filtrar as anotações pelo título
+    private fun abrirDialogoBusca() {
+        val campo = EditText(this)
+        campo.hint = "Buscar por título..."
+        campo.setText(filtroBusca)
+        val padding = (16 * resources.displayMetrics.density).toInt()
+        campo.setPadding(padding, padding, padding, padding)
+
+        AlertDialog.Builder(this)
+            .setTitle("Buscar anotação")
+            .setView(campo)
+            .setPositiveButton("Buscar") { _, _ ->
+                filtroBusca = campo.text.toString().trim()
+                exibirLista()
+            }
+            .setNegativeButton("Limpar") { _, _ ->
+                filtroBusca = ""
+                exibirLista()
+            }
+            .show()
+    }
+
+    // Mostra um menu com as opções de ordenação da lista
+    private fun abrirMenuOrdenacao() {
+        val menu = PopupMenu(this, binding.btnOrdenar)
+        menu.menu.add(0, 0, 0, "Mais recentes primeiro")
+        menu.menu.add(0, 1, 1, "Mais antigas primeiro")
+        menu.menu.add(0, 2, 2, "Título (A-Z)")
+
+        menu.setOnMenuItemClickListener { item ->
+            ordemAtual = when (item.itemId) {
+                1 -> Ordem.MAIS_ANTIGAS
+                2 -> Ordem.TITULO_AZ
+                else -> Ordem.MAIS_RECENTES
+            }
+            exibirLista()
+            true
+        }
+        menu.show()
     }
 
     private fun configurarBotoes() {
@@ -77,15 +152,11 @@ class TodasAnotacoesActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Botão de busca — futura funcionalidade
-        binding.btnBuscar.setOnClickListener {
-            Toast.makeText(this, "Busca em breve", Toast.LENGTH_SHORT).show()
-        }
+        // Botão de busca — abre diálogo para filtrar pelo título
+        binding.btnBuscar.setOnClickListener { abrirDialogoBusca() }
 
-        // Ordenação — futura funcionalidade
-        binding.btnOrdenar.setOnClickListener {
-            Toast.makeText(this, "Ordenação em breve", Toast.LENGTH_SHORT).show()
-        }
+        // Ordenação — abre menu com as opções de ordenação da lista
+        binding.btnOrdenar.setOnClickListener { abrirMenuOrdenacao() }
     }
 
     // Configura a navegação pelo BottomNavigationView

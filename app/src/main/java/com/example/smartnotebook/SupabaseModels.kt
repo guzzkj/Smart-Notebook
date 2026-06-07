@@ -38,9 +38,20 @@ data class MateriaInsert(
     @SerializedName("cor_hex") val corHex: String
 )
 
+data class MateriaUpdate(
+    val nome: String,
+    val professor: String,
+    @SerializedName("dias_aula") val diasAula: List<String>
+)
+
 data class AnotacaoInsert(
     @SerializedName("user_id") val userId: String,
     @SerializedName("materia_id") val materiaId: Int,
+    val titulo: String,
+    val conteudo: String
+)
+
+data class AnotacaoUpdate(
     val titulo: String,
     val conteudo: String
 )

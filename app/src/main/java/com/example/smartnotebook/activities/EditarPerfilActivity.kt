@@ -1,14 +1,25 @@
 package com.example.smartnotebook.activities
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smartnotebook.databinding.ActivityEditarPerfilBinding
 
-// TELA 13: Editar Perfil — permite alterar nome e e-mail do usuário
+// TELA 13: Editar Perfil — permite alterar nome, e-mail e foto do usuário
 class EditarPerfilActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditarPerfilBinding
+
+    // Seletor de imagens do sistema (Photo Picker) — não exige permissão de armazenamento
+    private val seletorDeFoto = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            binding.imgAvatarPerfil.scaleType = ImageView.ScaleType.CENTER_CROP
+            binding.imgAvatarPerfil.setImageURI(uri)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,14 +31,13 @@ class EditarPerfilActivity : AppCompatActivity() {
         configurarAlterarFoto()
     }
 
-    // Simula a alteração da foto de perfil
+    // Abre o seletor de fotos do sistema para trocar o avatar
     private fun configurarAlterarFoto() {
-        binding.layoutAvatar.setOnClickListener {
-            Toast.makeText(this, "Selecionar foto em breve", Toast.LENGTH_SHORT).show()
+        val abrirSeletor = {
+            seletorDeFoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-        binding.tvAltararFoto.setOnClickListener {
-            Toast.makeText(this, "Selecionar foto em breve", Toast.LENGTH_SHORT).show()
-        }
+        binding.layoutAvatar.setOnClickListener { abrirSeletor() }
+        binding.tvAltararFoto.setOnClickListener { abrirSeletor() }
     }
 
     // Valida os campos e simula o salvamento das alterações

@@ -1,8 +1,10 @@
 package com.example.smartnotebook.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +25,13 @@ class DetalhesMateriaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetalhesMateriaBinding
     private var materiaId = -1
+
+    // Recarrega os dados da matéria quando a edição é concluída com sucesso
+    private val editarMateriaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            recarregarNomeMateria()
+        }
+    }
 
     companion object {
         // Chaves usadas para passar dados da matéria via Intent
@@ -50,15 +59,26 @@ class DetalhesMateriaActivity : AppCompatActivity() {
         configurarBottomNav()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Recarrega a prévia de anotações ao voltar de criar/editar uma anotação
+        if (materiaId != -1) carregarAnotacoes()
+    }
+
     // Preenche o RecyclerView de anotações com as 3 primeiras (prévia)
     private fun carregarAnotacoes() {
         SupabaseClient.restApi.listarAnotacoes(eq(materiaId))
             .enqueue(object : Callback<List<Anotacao>> {
                 override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
                     val anotacoes = (response.body() ?: emptyList()).take(3)
-                    val adapter = AnotacoesAdapter(anotacoes) { _ ->
-                        // Clique em uma anotação → futura tela de edição
-                        Toast.makeText(this@DetalhesMateriaActivity, "Anotação selecionada", Toast.LENGTH_SHORT).show()
+                    val adapter = AnotacoesAdapter(anotacoes) { anotacao ->
+                        // Clique em uma anotação → abre o editor já preenchido
+                        val intent = Intent(this@DetalhesMateriaActivity, NovaAnotacaoActivity::class.java)
+                        intent.putExtra(NovaAnotacaoActivity.EXTRA_MATERIA_ID, materiaId)
+                        intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_ID, anotacao.id)
+                        intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_TITULO, anotacao.titulo)
+                        intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_CONTEUDO, anotacao.conteudo)
+                        startActivity(intent)
                     }
                     binding.rvAnotacoes.layoutManager = LinearLayoutManager(this@DetalhesMateriaActivity)
                     binding.rvAnotacoes.adapter = adapter
@@ -89,6 +109,23 @@ class DetalhesMateriaActivity : AppCompatActivity() {
             })
     }
 
+    // Atualiza o nome exibido no header após a edição da matéria
+    private fun recarregarNomeMateria() {
+        SupabaseClient.restApi.buscarMateria(eq(materiaId)).enqueue(object : Callback<List<com.example.smartnotebook.models.Materia>> {
+            override fun onResponse(
+                call: Call<List<com.example.smartnotebook.models.Materia>>,
+                response: Response<List<com.example.smartnotebook.models.Materia>>
+            ) {
+                response.body()?.firstOrNull()?.let { materia ->
+                    binding.tvNomeMateriaHeader.text = materia.nome
+                }
+            }
+            override fun onFailure(call: Call<List<com.example.smartnotebook.models.Materia>>, t: Throwable) {
+                // Silencioso: o nome no header só será atualizado na próxima abertura da tela
+            }
+        })
+    }
+
     private fun configurarBotoes() {
         binding.btnVoltar.setOnClickListener { finish() }
 
@@ -107,9 +144,33 @@ class DetalhesMateriaActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Botão editar
+        // Botão editar — busca os dados completos da matéria e abre a tela de edição
         binding.btnEditar.setOnClickListener {
-            Toast.makeText(this, "Edição de matéria em breve", Toast.LENGTH_SHORT).show()
+            binding.btnEditar.isEnabled = false
+
+            SupabaseClient.restApi.buscarMateria(eq(materiaId)).enqueue(object : Callback<List<com.example.smartnotebook.models.Materia>> {
+                override fun onResponse(
+                    call: Call<List<com.example.smartnotebook.models.Materia>>,
+                    response: Response<List<com.example.smartnotebook.models.Materia>>
+                ) {
+                    binding.btnEditar.isEnabled = true
+                    val materia = response.body()?.firstOrNull()
+                    if (response.isSuccessful && materia != null) {
+                        val intent = Intent(this@DetalhesMateriaActivity, EditarMateriaActivity::class.java)
+                        intent.putExtra(EditarMateriaActivity.EXTRA_MATERIA_ID, materiaId)
+                        intent.putExtra(EditarMateriaActivity.EXTRA_MATERIA_NOME, materia.nome)
+                        intent.putExtra(EditarMateriaActivity.EXTRA_MATERIA_PROFESSOR, materia.professor)
+                        intent.putStringArrayListExtra(EditarMateriaActivity.EXTRA_MATERIA_DIAS, ArrayList(materia.diasAula))
+                        editarMateriaLauncher.launch(intent)
+                    } else {
+                        Toast.makeText(this@DetalhesMateriaActivity, "Erro ao carregar dados da matéria", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<List<com.example.smartnotebook.models.Materia>>, t: Throwable) {
+                    binding.btnEditar.isEnabled = true
+                    Toast.makeText(this@DetalhesMateriaActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
         // Botão excluir — exclui a matéria no Supabase (RLS garante que só o dono apaga) e volta para a tela anterior

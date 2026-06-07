@@ -43,7 +43,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="2dp"
         android:text="TAREFA • ATRASADA"
-        android:textColor="#EF4444"
+        android:textColor="@color/cor_erro"
         android:textSize="11sp"
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@id/tvDataAtividade"

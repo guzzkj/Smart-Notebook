@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_tela"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="32dp">
+
+        <!-- HEADER -->
+        <LinearLayout
+            android:id="@+id/header"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btnVoltar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="Voltar"
+                android:scaleType="centerInside"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Termos de Uso"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_primario"
+                android:fontFamily="@font/inter" />
+
+        </LinearLayout>
+
+        <!-- ÚLTIMA ATUALIZAÇÃO -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="24dp"
+            android:text="Última atualização: junho de 2026"
+            android:textSize="12sp"
+            android:textColor="@color/texto_hint"
+            android:fontFamily="@font/inter" />
+
+        <!-- SEÇÕES -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp"
+            android:layout_marginTop="20dp">
+
+            <!-- Seção 1 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1. Aceitação dos Termos"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_primario"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
+                android:text="Ao criar uma conta e utilizar o Smart Notebook, você concorda com estes Termos de Uso. Caso não concorde com algum ponto, recomendamos não utilizar o aplicativo."
+                android:textSize="14sp"
+                android:textColor="@color/texto_rotulo"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="@font/inter" />
+
+            <!-- Seção 2 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2. Uso da Conta"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_primario"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
+                android:text="Você é responsável por manter a confidencialidade da sua senha e por todas as atividades realizadas na sua conta. Avise-nos imediatamente em caso de uso não autorizado."
+                android:textSize="14sp"
+                android:textColor="@color/texto_rotulo"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="@font/inter" />
+
+            <!-- Seção 3 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3. Conteúdo do Usuário"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_primario"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
+                android:text="As anotações, matérias e atividades que você cria continuam sendo suas. O Smart Notebook armazena esse conteúdo apenas para oferecer os recursos do aplicativo."
+                android:textSize="14sp"
+                android:textColor="@color/texto_rotulo"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="@font/inter" />
+
+            <!-- Seção 4 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="4. Privacidade dos Dados"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_primario"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
+                android:text="Seus dados são utilizados exclusivamente para o funcionamento do aplicativo e não são compartilhados com terceiros sem o seu consentimento."
+                android:textSize="14sp"
+                android:textColor="@color/texto_rotulo"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="@font/inter" />
+
+            <!-- Seção 5 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="5. Alterações nos Termos"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/texto_primario"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Estes termos podem ser atualizados periodicamente. Mudanças relevantes serão comunicadas dentro do próprio aplicativo."
+                android:textSize="14sp"
+                android:textColor="@color/texto_rotulo"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="@font/inter" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

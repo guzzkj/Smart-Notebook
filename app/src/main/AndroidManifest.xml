@@ -66,6 +66,11 @@
             android:name=".activities.DetalhesMateriaActivity"
             android:exported="false" />
 
+        <!-- TELA: Editar Matéria — altera nome, professor e dias de aula de uma matéria -->
+        <activity
+            android:name=".activities.EditarMateriaActivity"
+            android:exported="false" />
+
         <!-- TELA 7: Todas as Anotações — lista completa de anotações de uma matéria -->
         <!-- Classe TodasAnotacoesActivity está no arquivo NotasActivity.kt -->
         <activity
@@ -99,6 +104,16 @@
         <!-- Classe EditarPerfilActivity está no arquivo PerfilActivity.kt -->
         <activity
             android:name=".activities.EditarPerfilActivity"
+            android:exported="false" />
+
+        <!-- Termos de Uso — texto institucional acessível pelo Menu -->
+        <activity
+            android:name=".activities.TermosUsoActivity"
+            android:exported="false" />
+
+        <!-- Guia de Produtividade — dicas de uso do app acessíveis pelo Menu -->
+        <activity
+            android:name=".activities.GuiaProdutividadeActivity"
             android:exported="false" />
 
         <meta-data

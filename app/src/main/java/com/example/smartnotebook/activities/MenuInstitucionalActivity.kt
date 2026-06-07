@@ -2,7 +2,6 @@ package com.example.smartnotebook.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smartnotebook.R
 import com.example.smartnotebook.SessionManager
@@ -35,12 +34,12 @@ class MenuInstitucionalActivity : AppCompatActivity() {
 
         // Item: Guia de Produtividade
         binding.itemGuia.setOnClickListener {
-            Toast.makeText(this, "Guia em breve", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, GuiaProdutividadeActivity::class.java))
         }
 
         // Item: Termos de Uso
         binding.itemTermos.setOnClickListener {
-            Toast.makeText(this, "Termos de Uso em breve", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, TermosUsoActivity::class.java))
         }
 
         // Botão Sair: limpa a sessão local e retorna ao Login

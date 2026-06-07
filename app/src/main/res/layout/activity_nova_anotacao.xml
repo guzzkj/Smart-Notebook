@@ -38,6 +38,7 @@
 
         <!-- Título da tela: preenche o espaço entre os dois botões, texto centralizado -->
         <TextView
+            android:id="@+id/tvTituloTela"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Nova Anotação"

@@ -10,29 +10,46 @@ import com.example.smartnotebook.GeminiPart
 import com.example.smartnotebook.GeminiRequest
 import com.example.smartnotebook.GeminiResponse
 import com.example.smartnotebook.AnotacaoInsert
+import com.example.smartnotebook.AnotacaoUpdate
 import com.example.smartnotebook.R
 import com.example.smartnotebook.SessionManager
 import com.example.smartnotebook.SupabaseClient
+import com.example.smartnotebook.eq
 import com.example.smartnotebook.databinding.ActivityNovaAnotacaoBinding
 import com.example.smartnotebook.models.Anotacao
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-// TELA 8: Nova Anotação — editor de texto simples com título e conteúdo
+// TELA 8: Nova Anotação — editor de texto simples com título e conteúdo (também usado para editar)
 class NovaAnotacaoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNovaAnotacaoBinding
 
+    // ID > -1 indica modo de edição de uma anotação existente
+    private var anotacaoId = -1
+
     companion object {
         // Chave para receber o ID da matéria via Intent
         const val EXTRA_MATERIA_ID = "extra_materia_id"
+
+        // Chaves para abrir a tela em modo de edição com os dados já preenchidos
+        const val EXTRA_ANOTACAO_ID       = "extra_anotacao_id"
+        const val EXTRA_ANOTACAO_TITULO   = "extra_anotacao_titulo"
+        const val EXTRA_ANOTACAO_CONTEUDO = "extra_anotacao_conteudo"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNovaAnotacaoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        anotacaoId = intent.getIntExtra(EXTRA_ANOTACAO_ID, -1)
+        if (anotacaoId != -1) {
+            binding.tvTituloTela.text = "Editar Anotação"
+            binding.etTituloAnotacao.setText(intent.getStringExtra(EXTRA_ANOTACAO_TITULO) ?: "")
+            binding.etConteudoAnotacao.setText(intent.getStringExtra(EXTRA_ANOTACAO_CONTEUDO) ?: "")
+        }
 
         binding.btnVoltar.setOnClickListener { finish() }
         configurarBotaoSalvar()
@@ -116,7 +133,7 @@ class NovaAnotacaoActivity : AppCompatActivity() {
         }
     }
 
-    // Valida os campos e salva a anotação no Supabase
+    // Valida os campos e salva (insere ou atualiza, dependendo do modo) a anotação no Supabase
     private fun configurarBotaoSalvar() {
         binding.btnSalvar.setOnClickListener {
             val materiaId = intent.getIntExtra(EXTRA_MATERIA_ID, -1)
@@ -132,33 +149,67 @@ class NovaAnotacaoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Escreva o conteúdo da anotação", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (materiaId == -1) {
-                Toast.makeText(this, "Matéria não identificada", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+
+            if (anotacaoId != -1) {
+                salvarEdicao(titulo, conteudo)
+            } else {
+                salvarNova(materiaId, titulo, conteudo)
             }
-
-            // Desabilita o botão durante a operação para evitar cliques duplicados
-            binding.btnSalvar.isEnabled = false
-
-            val userId = SessionManager.getUserId(this)
-            val body = AnotacaoInsert(userId = userId, materiaId = materiaId, titulo = titulo, conteudo = conteudo)
-
-            SupabaseClient.restApi.inserirAnotacao(body)
-                .enqueue(object : Callback<List<Anotacao>> {
-                    override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
-                        binding.btnSalvar.isEnabled = true
-                        if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                            setResult(RESULT_OK)
-                            finish()
-                        } else {
-                            Toast.makeText(this@NovaAnotacaoActivity, "Erro ao salvar anotação", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
-                        binding.btnSalvar.isEnabled = true
-                        Toast.makeText(this@NovaAnotacaoActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
-                    }
-                })
         }
+    }
+
+    // Insere uma nova anotação vinculada à matéria
+    private fun salvarNova(materiaId: Int, titulo: String, conteudo: String) {
+        if (materiaId == -1) {
+            Toast.makeText(this, "Matéria não identificada", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Desabilita o botão durante a operação para evitar cliques duplicados
+        binding.btnSalvar.isEnabled = false
+
+        val userId = SessionManager.getUserId(this)
+        val body = AnotacaoInsert(userId = userId, materiaId = materiaId, titulo = titulo, conteudo = conteudo)
+
+        SupabaseClient.restApi.inserirAnotacao(body)
+            .enqueue(object : Callback<List<Anotacao>> {
+                override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
+                    binding.btnSalvar.isEnabled = true
+                    if (response.isSuccessful && !response.body().isNullOrEmpty()) {
+                        setResult(RESULT_OK)
+                        finish()
+                    } else {
+                        Toast.makeText(this@NovaAnotacaoActivity, "Erro ao salvar anotação", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
+                    binding.btnSalvar.isEnabled = true
+                    Toast.makeText(this@NovaAnotacaoActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    // Atualiza título e conteúdo de uma anotação existente via PATCH
+    private fun salvarEdicao(titulo: String, conteudo: String) {
+        binding.btnSalvar.isEnabled = false
+
+        val body = AnotacaoUpdate(titulo = titulo, conteudo = conteudo)
+
+        SupabaseClient.restApi.atualizarAnotacao(eq(anotacaoId), body)
+            .enqueue(object : Callback<List<Anotacao>> {
+                override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
+                    binding.btnSalvar.isEnabled = true
+                    if (response.isSuccessful && !response.body().isNullOrEmpty()) {
+                        setResult(RESULT_OK)
+                        finish()
+                    } else {
+                        Toast.makeText(this@NovaAnotacaoActivity, "Erro ao salvar alterações", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<List<Anotacao>>, t: Throwable) {
+                    binding.btnSalvar.isEnabled = true
+                    Toast.makeText(this@NovaAnotacaoActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }

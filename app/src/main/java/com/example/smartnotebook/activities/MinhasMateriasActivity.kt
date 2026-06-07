@@ -2,7 +2,9 @@ package com.example.smartnotebook.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartnotebook.R
@@ -20,6 +22,10 @@ import retrofit2.Response
 class MinhasMateriasActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMinhasMateriasBinding
+
+    // Lista completa vinda do Supabase — a busca filtra uma cópia dela sem refazer a requisição
+    private var listaCompleta: List<Materia> = emptyList()
+    private var filtroBusca = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,21 +49,54 @@ class MinhasMateriasActivity : AppCompatActivity() {
         SupabaseClient.restApi.listarMaterias(eq(userId))
             .enqueue(object : Callback<List<Materia>> {
                 override fun onResponse(call: Call<List<Materia>>, response: Response<List<Materia>>) {
-                    val materias = response.body() ?: emptyList()
-                    val adapter = MateriasAdapter(materias) { materia ->
-                        // Intent explícita ao clicar em uma matéria → abre os Detalhes
-                        val intent = Intent(this@MinhasMateriasActivity, DetalhesMateriaActivity::class.java)
-                        intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_ID, materia.id)
-                        intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_NOME, materia.nome)
-                        startActivity(intent)
-                    }
-                    binding.rvMaterias.layoutManager = LinearLayoutManager(this@MinhasMateriasActivity)
-                    binding.rvMaterias.adapter = adapter
+                    listaCompleta = response.body() ?: emptyList()
+                    exibirLista()
                 }
                 override fun onFailure(call: Call<List<Materia>>, t: Throwable) {
                     Toast.makeText(this@MinhasMateriasActivity, "Sem conexão com o Supabase. Verifique sua internet.", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    // Aplica o filtro de busca atual sobre listaCompleta e atualiza o RecyclerView
+    private fun exibirLista() {
+        val lista = if (filtroBusca.isBlank()) {
+            listaCompleta
+        } else {
+            listaCompleta.filter { it.nome.contains(filtroBusca, ignoreCase = true) }
+        }
+
+        val adapter = MateriasAdapter(lista) { materia ->
+            // Intent explícita ao clicar em uma matéria → abre os Detalhes
+            val intent = Intent(this@MinhasMateriasActivity, DetalhesMateriaActivity::class.java)
+            intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_ID, materia.id)
+            intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_NOME, materia.nome)
+            startActivity(intent)
+        }
+        binding.rvMaterias.layoutManager = LinearLayoutManager(this@MinhasMateriasActivity)
+        binding.rvMaterias.adapter = adapter
+    }
+
+    // Mostra um diálogo com campo de texto para filtrar as matérias pelo nome
+    private fun abrirDialogoBusca() {
+        val campo = EditText(this)
+        campo.hint = "Buscar por nome da matéria..."
+        campo.setText(filtroBusca)
+        val padding = (16 * resources.displayMetrics.density).toInt()
+        campo.setPadding(padding, padding, padding, padding)
+
+        AlertDialog.Builder(this)
+            .setTitle("Buscar matéria")
+            .setView(campo)
+            .setPositiveButton("Buscar") { _, _ ->
+                filtroBusca = campo.text.toString().trim()
+                exibirLista()
+            }
+            .setNegativeButton("Limpar") { _, _ ->
+                filtroBusca = ""
+                exibirLista()
+            }
+            .show()
     }
 
     // Configura as 3 abas do BottomNavigationView
@@ -86,9 +125,7 @@ class MinhasMateriasActivity : AppCompatActivity() {
             startActivity(Intent(this, NovaMateriaActivity::class.java))
         }
 
-        // Busca no header → futura tela de busca
-        binding.btnBuscarHeader.setOnClickListener {
-            Toast.makeText(this, "Busca em breve", Toast.LENGTH_SHORT).show()
-        }
+        // Busca no header → abre diálogo para filtrar matérias pelo nome
+        binding.btnBuscarHeader.setOnClickListener { abrirDialogoBusca() }
     }
 }

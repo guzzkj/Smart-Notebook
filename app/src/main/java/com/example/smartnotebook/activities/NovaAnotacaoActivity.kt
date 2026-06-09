@@ -83,10 +83,11 @@ class NovaAnotacaoActivity : AppCompatActivity() {
 
                 Melhore esta anotação seguindo estas regras:
                 - Organize o conteúdo em tópicos com títulos
-                - Complemente com informações relevantes e corretas
-                - Corrija erros gramaticais e melhore a clareza
-                - Adicione exemplos práticos se aplicável
-                - Inclua um resumo curto no final
+                - Complemente com informações relevantes e corretas, mas sem exagerar — no máximo o dobro do tamanho original
+                - Corrija erros gramaticais, melhore a clareza e aplique maiúsculas corretamente (início de frases, nomes próprios, siglas)
+                - Adicione exemplos práticos curtos se aplicável
+                - Inclua um resumo de 2 a 3 linhas no final
+                - Use texto simples, sem markdown, sem asteriscos, sem hashtags, sem símbolos de formatação
                 - Responda APENAS com a anotação melhorada, sem explicações adicionais
                 - Mantenha o idioma original do texto
             """.trimIndent()
@@ -98,6 +99,7 @@ class NovaAnotacaoActivity : AppCompatActivity() {
             )
 
             GeminiClient.service.melhorarAnotacao(
+                model   = GeminiClient.MODEL,
                 apiKey  = GeminiClient.API_KEY,
                 request = request
             ).enqueue(object : Callback<GeminiResponse> {
@@ -118,14 +120,20 @@ class NovaAnotacaoActivity : AppCompatActivity() {
                             Toast.makeText(this@NovaAnotacaoActivity, "A IA não retornou resposta", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(this@NovaAnotacaoActivity, "Erro ao conectar com a IA (${response.code()})", Toast.LENGTH_LONG).show()
+                        val msg = when (response.code()) {
+                            429 -> "IA sobrecarregada — aguarde alguns segundos e tente novamente"
+                            503 -> "IA temporariamente indisponível — tente novamente em instantes"
+                            401 -> "Chave de API inválida — verifique GEMINI_API_KEY"
+                            else -> "Erro ao conectar com a IA (${response.code()})"
+                        }
+                        Toast.makeText(this@NovaAnotacaoActivity, msg, Toast.LENGTH_LONG).show()
                     }
                 }
 
                 override fun onFailure(call: Call<GeminiResponse>, t: Throwable) {
                     btnMelhorarIA.isEnabled = true
                     btnMelhorarIA.text = "✨ Melhorar com IA"
-                    Toast.makeText(this@NovaAnotacaoActivity, "Sem conexão com a internet", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@NovaAnotacaoActivity, "Erro na IA: ${t.message}", Toast.LENGTH_LONG).show()
                 }
             })
         }

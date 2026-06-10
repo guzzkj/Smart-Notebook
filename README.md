@@ -31,6 +31,27 @@ app/src/main/java/com/example/smartnotebook/
 └── SmartNotebookApp.kt # Application class
 ```
 
+## Pré-requisitos
+
+- [Android Studio](https://developer.android.com/studio) (Koala ou superior)
+- JDK 11
+- Conta/projeto Supabase (URL + anon key)
+- Chave de API do Google Gemini
+
+## Como rodar
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/<seu-usuario>/Smart-Notebook.git
+   ```
+2. Abra a pasta no Android Studio (aguarde o sync do Gradle).
+3. Crie o arquivo `local.properties` na raiz do projeto (veja seção [Configuração do ambiente](#configuração-do-ambiente)).
+4. Selecione um emulador ou conecte um dispositivo físico (USB debugging ativado).
+5. Rode o app com o botão **Run** ▶ ou:
+   ```bash
+   ./gradlew installDebug
+   ```
+
 ## Configuração do ambiente
 
 O projeto lê chaves sensíveis de `local.properties` (não versionado). Crie/edite o arquivo na raiz do projeto com:

@@ -15,11 +15,9 @@ class MateriasAdapter(
     private val aoClicar: (Materia) -> Unit
 ) : RecyclerView.Adapter<MateriasAdapter.MateriaViewHolder>() {
 
-    // ViewHolder: guarda as referências das views de cada card de matéria
     inner class MateriaViewHolder(private val binding: ItemMateriaBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        // Preenche o card com os dados da matéria
         fun bind(materia: Materia) {
             binding.tvNomeMateria.text = materia.nome
             binding.tvProfessor.text   = materia.professor
@@ -27,7 +25,6 @@ class MateriasAdapter(
             // Exibe apenas a data (primeiros 10 caracteres do ISO timestamp)
             binding.tvUltimaAtualizacao.text = "Última atualização: ${materia.createdAt.take(10)}"
 
-            // Dias de aula: oculta a linha se a matéria não tiver dias cadastrados
             if (materia.diasAula.isEmpty()) {
                 binding.tvDiasAula.visibility = View.GONE
             } else {
@@ -35,7 +32,6 @@ class MateriasAdapter(
                 binding.tvDiasAula.text = materia.diasAula.joinToString(" e ")
             }
 
-            // Badge: vermelho com fundo rose se houver pendências, cinza se não houver
             val ctx = binding.root.context
             if (materia.pendentes > 0) {
                 binding.tvPendentes.setBackgroundResource(R.drawable.bg_badge_pendente)
@@ -45,13 +41,11 @@ class MateriasAdapter(
                 binding.tvPendentes.setTextColor(ContextCompat.getColor(ctx, R.color.texto_secundario))
             }
 
-            // Clique no card ou no botão "Ver Matéria" — ambos abrem os detalhes
             binding.root.setOnClickListener { aoClicar(materia) }
             binding.btnVerMateria.setOnClickListener { aoClicar(materia) }
         }
     }
 
-    // Infla o layout item_materia.xml e cria o ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MateriaViewHolder {
         val binding = ItemMateriaBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -59,11 +53,9 @@ class MateriasAdapter(
         return MateriaViewHolder(binding)
     }
 
-    // Vincula os dados ao ViewHolder na posição correta da lista
     override fun onBindViewHolder(holder: MateriaViewHolder, position: Int) {
         holder.bind(lista[position])
     }
 
-    // Informa ao RecyclerView o total de itens na lista
     override fun getItemCount(): Int = lista.size
 }

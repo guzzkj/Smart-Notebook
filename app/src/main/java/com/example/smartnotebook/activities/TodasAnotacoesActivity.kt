@@ -33,7 +33,6 @@ class TodasAnotacoesActivity : AppCompatActivity() {
     private enum class Ordem { MAIS_RECENTES, MAIS_ANTIGAS, TITULO_AZ }
 
     companion object {
-        // Chaves para receber dados da matéria via Intent
         const val EXTRA_MATERIA_ID   = "extra_materia_id"
         const val EXTRA_MATERIA_NOME = "extra_materia_nome"
     }

@@ -37,7 +37,6 @@ class NovaAtividadeActivity : AppCompatActivity() {
         // Chave para indicar a matéria (pré-seleção na criação | matéria fixa na edição)
         const val EXTRA_MATERIA_ID = "extra_materia_id"
 
-        // Chaves para abrir a tela em modo de edição com os dados já preenchidos
         const val EXTRA_ATIVIDADE_ID     = "extra_atividade_id"
         const val EXTRA_ATIVIDADE_TITULO = "extra_atividade_titulo"
         const val EXTRA_ATIVIDADE_TIPO   = "extra_atividade_tipo"
@@ -85,19 +84,15 @@ class NovaAtividadeActivity : AppCompatActivity() {
     private fun configurarAbas() {
         binding.tabTarefa.setOnClickListener {
             tipoSelecionado = "TAREFA"
-            // Tarefa selecionada: fundo branco + texto roxo
             binding.tabTarefa.setBackgroundResource(R.drawable.bg_tab_ativo)
             binding.tabTarefa.setTextColor(getColor(R.color.roxo_primario))
-            // Prova não selecionada: sem fundo + texto secundário
             binding.tabProva.background = null
             binding.tabProva.setTextColor(getColor(R.color.texto_secundario))
         }
         binding.tabProva.setOnClickListener {
             tipoSelecionado = "PROVA"
-            // Prova selecionada: fundo branco + texto roxo
             binding.tabProva.setBackgroundResource(R.drawable.bg_tab_ativo)
             binding.tabProva.setTextColor(getColor(R.color.roxo_primario))
-            // Tarefa não selecionada: sem fundo + texto secundário
             binding.tabTarefa.background = null
             binding.tabTarefa.setTextColor(getColor(R.color.texto_secundario))
         }

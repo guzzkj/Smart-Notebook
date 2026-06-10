@@ -129,7 +129,7 @@ class CalendarioActivity : AppCompatActivity() {
     // Preenche a grade com células vazias de alinhamento + dias do mês
     private fun preencherGradeCalendario() {
         val grid = binding.gridCalendario
-        grid.removeAllViews() // limpa a grade ao trocar de mês
+        grid.removeAllViews()
 
         /*
          * java.util.Calendar.DAY_OF_WEEK retorna:
@@ -169,7 +169,6 @@ class CalendarioActivity : AppCompatActivity() {
             celula.orientation  = LinearLayout.VERTICAL
             celula.gravity      = Gravity.CENTER
 
-            // Número do dia
             val tvDia = TextView(this)
             tvDia.text     = dia.toString()
             tvDia.textSize = 13f
@@ -180,13 +179,11 @@ class CalendarioActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
 
-            // Destaca o dia de hoje no mês corrente
             if (ehMesAtual && dia == hoje.get(Calendar.DAY_OF_MONTH)) {
                 tvDia.setBackgroundColor(Color.parseColor("#E8EAF6"))
                 tvDia.setTypeface(tvDia.typeface, Typeface.BOLD)
             }
 
-            // Ponto oval abaixo do número (começa invisível)
             val pontoDp = (4 * resources.displayMetrics.density).toInt()
             val ponto   = android.view.View(this)
             val pontoParams = LinearLayout.LayoutParams(pontoDp, pontoDp)
@@ -194,7 +191,6 @@ class CalendarioActivity : AppCompatActivity() {
             ponto.layoutParams = pontoParams
             ponto.visibility   = android.view.View.INVISIBLE
 
-            // Ponto vermelho: dia tem prova
             if (datasAvaliacao.contains(dia)) {
                 ponto.visibility = android.view.View.VISIBLE
                 ponto.setBackgroundResource(R.drawable.bg_dot_vermelho)
@@ -211,7 +207,6 @@ class CalendarioActivity : AppCompatActivity() {
             grid.addView(celula)
         }
 
-        // Atualiza o título "Outubro 2023", "Novembro 2023", etc.
         val mes = calAtual.get(Calendar.MONTH)
         val ano = calAtual.get(Calendar.YEAR)
         binding.tvMesAno.text = "${nomesMeses[mes]} $ano"
@@ -263,7 +258,7 @@ class CalendarioActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.nav_calendario -> true // já está no Calendário
+                R.id.nav_calendario -> true
                 R.id.nav_menu -> {
                     startActivity(Intent(this, MenuInstitucionalActivity::class.java))
                     true

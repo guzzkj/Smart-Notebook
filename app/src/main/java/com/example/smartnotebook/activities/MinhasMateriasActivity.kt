@@ -67,7 +67,6 @@ class MinhasMateriasActivity : AppCompatActivity() {
         }
 
         val adapter = MateriasAdapter(lista) { materia ->
-            // Intent explícita ao clicar em uma matéria → abre os Detalhes
             val intent = Intent(this@MinhasMateriasActivity, DetalhesMateriaActivity::class.java)
             intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_ID, materia.id)
             intent.putExtra(DetalhesMateriaActivity.EXTRA_MATERIA_NOME, materia.nome)
@@ -105,7 +104,7 @@ class MinhasMateriasActivity : AppCompatActivity() {
 
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_inicio    -> true // já está na Home
+                R.id.nav_inicio    -> true
                 R.id.nav_calendario -> {
                     startActivity(Intent(this, CalendarioActivity::class.java))
                     true

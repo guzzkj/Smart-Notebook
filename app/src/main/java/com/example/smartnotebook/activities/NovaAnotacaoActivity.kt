@@ -28,10 +28,8 @@ class NovaAnotacaoActivity : AppCompatActivity() {
     private var anotacaoId = -1
 
     companion object {
-        // Chave para receber o ID da matéria via Intent
         const val EXTRA_MATERIA_ID = "extra_materia_id"
 
-        // Chaves para abrir a tela em modo de edição com os dados já preenchidos
         const val EXTRA_ANOTACAO_ID       = "extra_anotacao_id"
         const val EXTRA_ANOTACAO_TITULO   = "extra_anotacao_titulo"
         const val EXTRA_ANOTACAO_CONTEUDO = "extra_anotacao_conteudo"

@@ -13,16 +13,13 @@ class EventosCalendarioAdapter(
     private val materiaIdParaNome: Map<Int, String> = emptyMap()
 ) : RecyclerView.Adapter<EventosCalendarioAdapter.EventoViewHolder>() {
 
-    // ViewHolder: guarda as referências das views de cada card de evento
     inner class EventoViewHolder(private val binding: ItemEventoCalendarioBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        // Preenche o card com os dados do evento
         fun bind(atividade: Atividade) {
             binding.tvTituloEvento.text = atividade.titulo
             binding.tvHoraEvento.text   = atividade.hora
 
-            // Subtítulo: tipo formatado + nome da matéria
             val nomeMateria = materiaIdParaNome[atividade.materiaId] ?: ""
             val tipoFormatado = when (atividade.tipo) {
                 "PROVA"   -> "Avaliação"
@@ -32,7 +29,6 @@ class EventosCalendarioAdapter(
             }
             binding.tvSubtituloEvento.text = "$tipoFormatado • $nomeMateria"
 
-            // Fundo e ícone: vermelho + ic_prova para provas, teal + ic_atividade para o resto
             if (atividade.tipo == "PROVA") {
                 binding.layoutIcone.setBackgroundResource(R.drawable.bg_icone_avaliacao)
                 binding.imgIconeEvento.setImageResource(R.drawable.ic_prova)
@@ -45,7 +41,6 @@ class EventosCalendarioAdapter(
         }
     }
 
-    // Infla o layout item_evento_calendario.xml e cria o ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventoViewHolder {
         val binding = ItemEventoCalendarioBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -53,11 +48,9 @@ class EventosCalendarioAdapter(
         return EventoViewHolder(binding)
     }
 
-    // Vincula os dados ao ViewHolder na posição correta
     override fun onBindViewHolder(holder: EventoViewHolder, position: Int) {
         holder.bind(lista[position])
     }
 
-    // Informa ao RecyclerView o total de eventos
     override fun getItemCount(): Int = lista.size
 }

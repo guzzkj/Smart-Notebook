@@ -35,7 +35,6 @@ class DetalhesMateriaActivity : AppCompatActivity() {
     }
 
     companion object {
-        // Chaves usadas para passar dados da matéria via Intent
         const val EXTRA_MATERIA_ID   = "extra_materia_id"
         const val EXTRA_MATERIA_NOME = "extra_materia_nome"
     }
@@ -48,7 +47,6 @@ class DetalhesMateriaActivity : AppCompatActivity() {
         materiaId = intent.getIntExtra(EXTRA_MATERIA_ID, -1)
         val materiaNome = intent.getStringExtra(EXTRA_MATERIA_NOME) ?: "Matéria"
 
-        // Exibe o nome da matéria no header
         binding.tvNomeMateriaHeader.text = materiaNome
 
         if (materiaId != -1) {
@@ -76,7 +74,6 @@ class DetalhesMateriaActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<List<Anotacao>>, response: Response<List<Anotacao>>) {
                     val anotacoes = (response.body() ?: emptyList()).take(3)
                     val adapter = AnotacoesAdapter(anotacoes, aoClicar = { anotacao ->
-                        // Clique em uma anotação → abre o editor já preenchido
                         val intent = Intent(this@DetalhesMateriaActivity, NovaAnotacaoActivity::class.java)
                         intent.putExtra(NovaAnotacaoActivity.EXTRA_MATERIA_ID, materiaId)
                         intent.putExtra(NovaAnotacaoActivity.EXTRA_ANOTACAO_ID, anotacao.id)
@@ -106,7 +103,6 @@ class DetalhesMateriaActivity : AppCompatActivity() {
                     )
                     binding.rvAtividades.layoutManager = LinearLayoutManager(this@DetalhesMateriaActivity)
                     binding.rvAtividades.adapter = adapter
-                    // Divisor entre os itens de atividade dentro do container card
                     binding.rvAtividades.addItemDecoration(
                         DividerItemDecoration(this@DetalhesMateriaActivity, LinearLayoutManager.VERTICAL)
                     )

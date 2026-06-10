@@ -77,7 +77,9 @@
                 android:id="@+id/imgAvatarPerfil"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:scaleType="fitCenter"
+                android:background="@drawable/bg_avatar"
+                android:scaleType="centerCrop"
+                android:clipToOutline="true"
                 android:src="@drawable/ic_avatar_placeholder" />
 
             <!-- Badge de câmera (verde circular) -->

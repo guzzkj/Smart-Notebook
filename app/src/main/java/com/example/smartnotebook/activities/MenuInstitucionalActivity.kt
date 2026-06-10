@@ -55,12 +55,10 @@ class MenuInstitucionalActivity : AppCompatActivity() {
             startActivity(Intent(this, SobreActivity::class.java))
         }
 
-        // Item: Guia de Produtividade
         binding.itemGuia.setOnClickListener {
             startActivity(Intent(this, GuiaProdutividadeActivity::class.java))
         }
 
-        // Item: Termos de Uso
         binding.itemTermos.setOnClickListener {
             startActivity(Intent(this, TermosUsoActivity::class.java))
         }
@@ -91,7 +89,7 @@ class MenuInstitucionalActivity : AppCompatActivity() {
                     startActivity(Intent(this, CalendarioActivity::class.java))
                     true
                 }
-                R.id.nav_menu -> true // já está no Menu
+                R.id.nav_menu -> true
                 else -> false
             }
         }

@@ -64,7 +64,6 @@ class LoginActivity : AppCompatActivity() {
                         if (response.isSuccessful && token != null && user != null) {
                             val nome = user.userMetadata?.get("nome") ?: ""
                             SessionManager.salvar(this@LoginActivity, user.id, nome, user.email ?: email, token, body.refreshToken)
-                            // Intent explícita para a tela principal (Minhas Matérias)
                             startActivity(Intent(this@LoginActivity, MinhasMateriasActivity::class.java))
                             finish() // Remove o Login da pilha — usuário não pode voltar
                         } else {

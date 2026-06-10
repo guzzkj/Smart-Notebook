@@ -14,11 +14,9 @@ class AtividadesAdapter(
     private val aoExcluir: ((Atividade) -> Unit)? = null
 ) : RecyclerView.Adapter<AtividadesAdapter.AtividadeViewHolder>() {
 
-    // ViewHolder: guarda as referências das views de cada item de atividade
     inner class AtividadeViewHolder(private val binding: ItemAtividadeBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        // Preenche as views com os dados da atividade
         fun bind(atividade: Atividade) {
             binding.tvTituloAtividade.text = atividade.titulo
             binding.tvTipoStatus.text      = "${atividade.tipo} • ${atividade.status}"
@@ -31,7 +29,6 @@ class AtividadesAdapter(
             binding.viewDot.setBackgroundColor(cor)
             binding.tvTipoStatus.setTextColor(cor)
 
-            // Toque → abre a edição | Toque longo → solicita exclusão (quando habilitados)
             binding.root.setOnClickListener { aoClicar?.invoke(atividade) }
             binding.root.setOnLongClickListener {
                 if (aoExcluir != null) {
@@ -44,7 +41,6 @@ class AtividadesAdapter(
         }
     }
 
-    // Infla o layout item_atividade.xml e cria o ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AtividadeViewHolder {
         val binding = ItemAtividadeBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -52,11 +48,9 @@ class AtividadesAdapter(
         return AtividadeViewHolder(binding)
     }
 
-    // Vincula os dados ao ViewHolder na posição correta
     override fun onBindViewHolder(holder: AtividadeViewHolder, position: Int) {
         holder.bind(lista[position])
     }
 
-    // Informa ao RecyclerView o total de atividades
     override fun getItemCount(): Int = lista.size
 }

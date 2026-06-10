@@ -25,7 +25,6 @@ class SobreActivity : AppCompatActivity() {
         colorirNomeNoTexto()
     }
 
-    // Botão voltar — fecha a Activity e retorna à tela anterior
     private fun configurarBotaoVoltar() {
         binding.btnVoltar.setOnClickListener { finish() }
     }
